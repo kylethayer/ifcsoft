@@ -42,7 +42,7 @@ public class ScatterPlot {
 	private LinkedList<String> rawSetNames;
 
 	/**
-	 * Construct a ScatterPlot.
+	 * Construct a scatter plot.
 	 * @param dsp - the data set to use
 	 * @param dimension - the dimension to use
 	 * @param numBars - the number of bars to split the data into
@@ -60,7 +60,7 @@ public class ScatterPlot {
 	}
 
 	/**
-	 * Get the name of the scatter plot(currently the data set name).
+	 * Get the name of the scatter plot (currently the data set name).
 	 * @return
 	 */
 	public String getScatterName(){
@@ -170,4 +170,161 @@ public class ScatterPlot {
 		//Todo: Add this to the job queue
 		pntTotalSizes = new int[xRes][yRes];
 		pntSetSizes = new int[rawSetNames.size()][xRes][yRes];
-		xlowerLimits = ne
+		xlowerLimits = new double[xRes+1];
+		ylowerLimits = new double[yRes+1];
+		DataSet ds = dsp.getData();
+		double minX = ds.getMin(xDim);
+		double maxX = ds.getMax(xDim);
+		double minY = ds.getMin(yDim);
+		double maxY = ds.getMax(yDim);
+		/*if(minX == maxX){
+			//Just one bar with everything
+			System.out.println("Histogram: xMin == xMax");
+			xRes = 1;
+			barTotalSizes = new int[1];
+			for(int i = 0; i < rawSetNames.size(); i++){
+				barSetSizes[i] = new int[1];
+				barSetSizes[i][0] = 1; // ds.
+			}
+
+			lowerLimits = new double[2];
+			barTotalSizes[0] = ds.length();
+			lowerLimits[0] = min;
+			lowerLimits[1] = max;
+			return;
+		}*/
+
+		if(scaleType == 0){
+			calculateScatterLinear(minX, maxX, minY, maxY, ds);
+		}else if(scaleType == 1){
+			calculateHistogramLogarithmic(minX, maxX, minY, maxY, ds);
+		}else{
+			System.out.println("Invalid scale option: "+ scaleType);
+			return;
+		}
+		findMaxBarSize();
+
+	}
+
+
+	private void calculateScatterLinear(double minX, double maxX, double minY, double maxY, DataSet ds){
+		double xPntWidth = (maxX - minX) / xRes;
+
+		for(int i = 0; i < xRes; i++){
+			xlowerLimits[i] = minX + xPntWidth*i;
+		}
+		xlowerLimits[xRes] = maxX; //In case of rounding errors, this makes max exact
+
+		double yPntWidth = (maxY - minY) / yRes;
+		for(int i = 0; i < yRes; i++){
+			ylowerLimits[i] = minY + yPntWidth*i;
+		}
+		ylowerLimits[yRes] = maxY; //In case of rounding errors, this makes max exact
+
+
+		placeDataPointsLinear(xPntWidth, yPntWidth, ds);
+		findMaxBarSize();
+	}
+
+	private void calculateHistogramLogarithmic(double minX, double maxX, double minY, double maxY, DataSet ds){
+		/*double logBarWidth = 1.0 / numBars; //after log scaling (scale to 1..10, then log10) I get 0 to 1
+		//Math.log(max)
+		System.out.println("numBars:"+numBars+" barWidth(log):"+logBarWidth+" min"+min+" max"+max);
+		for(int i = 0; i < numBars; i++){ //TODO: make log scale accurate
+			lowerLimits[i] = min + (max-min)*(Math.pow(10,i*logBarWidth) - 1)/9.0;
+		}
+		lowerLimits[numBars] = max; //In case of rounding errors, this makes max exact
+		lowerLimits[0] = min;
+		placeDataPointsLogarithmic(logBarWidth, ds);
+		findMaxBarSize();*/
+
+	}
+
+	private void placeDataPointsLinear(double xPntWidth, double yPntWidth, DataSet ds){
+		double minX = xlowerLimits[0];
+		double maxX = xlowerLimits[xRes];
+
+		double xWidth = xlowerLimits[1] - xlowerLimits[0];
+
+		double minY = ylowerLimits[0];
+		double maxY = ylowerLimits[yRes];
+
+		double yWidth = ylowerLimits[1] - ylowerLimits[0];
+
+		for(int i = 0; i < ds.length(); i++){
+
+			int xNum = (int) ((ds.getVals(i)[xDim] - minX) / xWidth);
+			int yNum = (int) ((ds.getVals(i)[yDim] - minY) / yWidth);
+
+			if(xNum >= xRes){ //if it placed it out of our range on x
+				if(ds.getVals(i)[xDim] > maxX){
+					System.out.println("point "+i+" truly too large");
+				}
+				xNum = xRes - 1;
+			}
+			if(xNum < 0){
+				if(ds.getVals(i)[xDim] < minX){
+					System.out.println("point "+i+" truly too small");
+				}
+				xNum = 0;
+			}
+			if(yNum >= yRes){ //if it placed it out of our range on x
+				if(ds.getVals(i)[yDim] > maxY){
+					System.out.println("point "+i+" truly too large");
+				}
+				yNum = yRes - 1;
+			}
+			if(yNum < 0){
+				if(ds.getVals(i)[yDim] < minY){
+					System.out.println("point "+i+" truly too small");
+				}
+				yNum = 0;
+			}
+
+			pntTotalSizes[xNum][yNum]++;
+			String set = ds.getPointSetName(i);
+			int setNum = rawSetNames.indexOf(set);
+			pntSetSizes[setNum][xNum][yNum]++;
+		}
+	}
+
+	private void placeDataPointsLogarithmic(double logBarWidth, DataSet ds){
+		/*double min = lowerLimits[0];
+		double max = lowerLimits[numBars];
+		for(int i = 0; i < ds.length(); i++){
+			int barNum = (int) (
+					Math.log10(
+						(ds.getVals(i)[dimension] - min)*9.0 / (max - min) + 1
+					)
+				/ logBarWidth);
+			if(barNum >= numBars){ //if it placed it out of our range
+				if(ds.getVals(i)[dimension] > max){
+					System.out.println("point "+i+" truly too large");
+				}
+				barNum = numBars - 1;
+			}
+			if(barNum < 0){
+				if(ds.getVals(i)[dimension] < min){
+					System.out.println("point "+i+" truly too small");
+				}
+				barNum = 0;
+			}
+
+			barTotalSizes[barNum]++;
+			String set = ds.getPointSetName(i);
+			int setNum = rawSetNames.indexOf(set);
+			barSetSizes[setNum][barNum]++;
+		}*/
+	}
+
+	private void findMaxBarSize(){
+		maxPntSize = pntTotalSizes[0][0];
+		for(int i = 1; i < xRes; i++){
+			for(int j = 0; j < yRes; j++){
+				if(pntTotalSizes[i][j] > maxPntSize){
+					maxPntSize = pntTotalSizes[i][j];
+				}
+			}
+		}
+	}
+}
