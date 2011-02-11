@@ -28,46 +28,46 @@ import ifcSoft.view.som.SOMTile;
 
 public class SOMTileDataSetsDense extends SOMTile{
 
-	public-init var selectedSubSets:Boolean[] = null;
-	public-init var selectedDataSets:Boolean[] = null;
+  public-init var selectedSubSets:Boolean[] = null;
+  public-init var selectedDataSets:Boolean[] = null;
 
-	override public function updateDenseMap():Void{
-		//a different Data Set
-		var placed:Integer = somMaps.mediator.getComboDenstiyMapPlaced(selectedSubSets, selectedDataSets);
-		if(placed > super.lastDenseDisplayed){;
-			var newimg:BufferedImage = somMaps.mediator.getComboDenstiyMapImg(selectedSubSets, selectedDataSets);
-			img =newimg;
-			placed = lastDenseDisplayed;
-			if(somMaps.clusterImg == null){
-				updatePointStats();
-			}else{
-				updateClusterStats();
-			}
-		}
+  override public function updateDenseMap():Void{
+    //a different Data Set
+    var placed:Integer = somMaps.mediator.getComboDenstiyMapPlaced(selectedSubSets, selectedDataSets);
+    if(placed > super.lastDenseDisplayed){;
+      var newimg:BufferedImage = somMaps.mediator.getComboDenstiyMapImg(selectedSubSets, selectedDataSets);
+      img =newimg;
+      placed = lastDenseDisplayed;
+      if(somMaps.clusterImg == null){
+        updatePointStats();
+      }else{
+        updateClusterStats();
+      }
+    }
 
-	}
-	
+  }
+  
 
     override public function updateClusterStats () : Void {
-		var clustMembs:Integer =  somMaps.mediator.getTotalClusterMembs(selectedSubSets, selectedDataSets);
-		var totalPlaced:Float = somMaps.mediator.getComboDenstiyMapPlaced(selectedSubSets, selectedDataSets);
-		if(totalPlaced == 0){
-			setBottomText("");
-		}else{
-			setBottomText("{clustMembs * 100 / totalPlaced}%");
-		}
+    var clustMembs:Integer =  somMaps.mediator.getTotalClusterMembs(selectedSubSets, selectedDataSets);
+    var totalPlaced:Float = somMaps.mediator.getComboDenstiyMapPlaced(selectedSubSets, selectedDataSets);
+    if(totalPlaced == 0){
+      setBottomText("");
+    }else{
+      setBottomText("{clustMembs * 100 / totalPlaced}%");
+    }
 
 
-		
+    
     }
 
     override public function updatePointStats () : Void {
-		var val = somMaps.mediator.getDenseCellVal(selectedSubSets, selectedDataSets);
-		if(val == -1){
-			setBottomText("");
-		}else{
-			setBottomText("{val}");
-		}
+    var val = somMaps.mediator.getDenseCellVal(selectedSubSets, selectedDataSets);
+    if(val == -1){
+      setBottomText("");
+    }else{
+      setBottomText("{val}");
+    }
     }
 
 }

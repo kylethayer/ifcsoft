@@ -26,32 +26,32 @@ import ifcSoft.model.DataSetProxy;
  */
 public class RemoveOutliersJob implements ThreadJob{
 
-	/**
-	 * The data set to remove outliers from.
-	 */
-	public DataSetProxy dsp;
-	/**
-	 * The number of standard deviations, above which points are removed.
-	 */
-	public double stdDevs;
+  /**
+   * The data set to remove outliers from.
+   */
+  public DataSetProxy dsp;
+  /**
+   * The number of standard deviations, above which points are removed.
+   */
+  public double stdDevs;
 
-	/**
-	 * Create the job holder for a Remove Outliers job.
-	 * @param dsp - The data set to remove outliers from.
-	 * @param stdDevs - The number of standard deviations, above which points are removed.
-	 */
-	public RemoveOutliersJob(DataSetProxy dsp, double stdDevs){
-		this.dsp = dsp;
-		this.stdDevs = stdDevs;
-	}
+  /**
+   * Create the job holder for a Remove Outliers job.
+   * @param dsp - The data set to remove outliers from.
+   * @param stdDevs - The number of standard deviations, above which points are removed.
+   */
+  public RemoveOutliersJob(DataSetProxy dsp, double stdDevs){
+    this.dsp = dsp;
+    this.stdDevs = stdDevs;
+  }
 
-	/**
-	 * Return that the job type is a "Remove Outliers" job.
-	 * @return
-	 */
-	@Override
-	public int getJobType() {
-		return REMOVEOUTLEIRSJOB;
-	}
+  /**
+   * Return that the job type is a "Remove Outliers" job.
+   * @return
+   */
+  @Override
+  public int getJobType() {
+    return REMOVEOUTLEIRSJOB;
+  }
 
 }

@@ -23,14 +23,14 @@ package ifcSoft.view.blankTab;
  * @author Kyle Thayer <kthayer@emory.edu>
  */
 public interface BlankTabI {
-	/**
-	 * Display the tab on the screen.
-	 */
-	public void displayTab();
+  /**
+   * Display the tab on the screen.
+   */
+  public void displayTab();
 
-	/**
-	 * Let the view know there is a new Data Set
-	 */
-	public void informNewDsp();
+  /**
+   * Let the view know there is a new Data Set
+   */
+  public void informNewDsp();
 
 }

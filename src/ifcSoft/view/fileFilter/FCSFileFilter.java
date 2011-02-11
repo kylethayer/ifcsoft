@@ -26,24 +26,24 @@ import javax.swing.filechooser.*;
  */
 public class FCSFileFilter extends FileFilter {
 
-	@Override
-	public boolean accept(File f) {
-		if (f.isDirectory()) { //so that you can change directories (I think)
-			return true;
-		}
-		String name = f.getName();
-		if(name.endsWith(".fcs")){
-			return true;
-		}
+  @Override
+  public boolean accept(File f) {
+    if (f.isDirectory()) { //so that you can change directories (I think)
+      return true;
+    }
+    String name = f.getName();
+    if(name.endsWith(".fcs")){
+      return true;
+    }
 
-		return false;
-	}
+    return false;
+  }
 
 
 
-	@Override
-	public String getDescription() {
-		return ".fcs - Raw Flow Cytometry File";
-	}
+  @Override
+  public String getDescription() {
+    return ".fcs - Raw Flow Cytometry File";
+  }
 
 }

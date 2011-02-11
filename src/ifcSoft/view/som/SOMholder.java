@@ -30,113 +30,113 @@ import java.awt.image.BufferedImage;
  */
 public class SOMholder {
 
-	/**
-	 * The width of the images (in pxls).
-	 */
-	public int imgwidth;
-	/**
-	 * The height of the images (in pxls).
-	 */
-	public int imgheight;
-	/**
-	 * The name of the data set
-	 */
-	public String setName;
+  /**
+   * The width of the images (in pxls).
+   */
+  public int imgwidth;
+  /**
+   * The height of the images (in pxls).
+   */
+  public int imgheight;
+  /**
+   * The name of the data set
+   */
+  public String setName;
 
-	/**
-	 * The names of the raw data sets that comprise the data set
-	 */
-	public String rawSetNames[];
+  /**
+   * The names of the raw data sets that comprise the data set
+   */
+  public String rawSetNames[];
 
-	/**
-	 * The images for the different dimensions
-	 */
-	public BufferedImage dimMapImages[];
+  /**
+   * The images for the different dimensions
+   */
+  public BufferedImage dimMapImages[];
 
-	/**
-	 * The names of the dimensions
-	 */
-	public String dimNames[];
+  /**
+   * The names of the dimensions
+   */
+  public String dimNames[];
 
-	/**
-	 * The mins of each dimension
-	 */
-	public float dimMins[];
-	/**
-	 * The maxes of each dimension
-	 */
-	public float dimMaxes[];
-	
-	/**
-	 * The uMap image
-	 */
-	public BufferedImage uMap;
+  /**
+   * The mins of each dimension
+   */
+  public float dimMins[];
+  /**
+   * The maxes of each dimension
+   */
+  public float dimMaxes[];
+  
+  /**
+   * The uMap image
+   */
+  public BufferedImage uMap;
 
-	/**
-	 * The min uMap value
-	 */
-	public float uMapMin;
+  /**
+   * The min uMap value
+   */
+  public float uMapMin;
 
-	/**
-	 * The max uMap value
-	 */
-	public float uMapMax;
+  /**
+   * The max uMap value
+   */
+  public float uMapMax;
 
-	/**
-	 * The Edge UMap
-	 */
-	public BufferedImage euMap;
+  /**
+   * The Edge UMap
+   */
+  public BufferedImage euMap;
 
-	/**
-	 * The min Edge UMap value
-	 */
-	public float euMapMin;
+  /**
+   * The min Edge UMap value
+   */
+  public float euMapMin;
 
-	/**
-	 * The max Edge UMap value
-	 */
-	public float euMapMax;
+  /**
+   * The max Edge UMap value
+   */
+  public float euMapMax;
 
-	/**
-	 * A blank image (for using whenever a blank is needed to be displayed).
-	 */
-	public BufferedImage blankmap;
-	
+  /**
+   * A blank image (for using whenever a blank is needed to be displayed).
+   */
+  public BufferedImage blankmap;
+  
 
-	/**
-	 * Add a dimension SOM Map image to the SOMholder
-	 * @param img The image of the map
-	 * @param name The name of the dimension
-	 * @param min
-	 * @param max
-	 */
-	public void addDimImg(BufferedImage img, String name, float min, float max){
-		int length = 0;
-		if(dimMapImages != null){
-			length = dimMapImages.length;
-		}
-		//make the arrays one longer
-		BufferedImage newMapImages[] = new BufferedImage[length+1];
-		String newNames[] = new String[length+1];
-		float newMins[] = new float[length+1];
-		float newMaxes[] = new float[length+1];
+  /**
+   * Add a dimension SOM Map image to the SOMholder
+   * @param img The image of the map
+   * @param name The name of the dimension
+   * @param min
+   * @param max
+   */
+  public void addDimImg(BufferedImage img, String name, float min, float max){
+    int length = 0;
+    if(dimMapImages != null){
+      length = dimMapImages.length;
+    }
+    //make the arrays one longer
+    BufferedImage newMapImages[] = new BufferedImage[length+1];
+    String newNames[] = new String[length+1];
+    float newMins[] = new float[length+1];
+    float newMaxes[] = new float[length+1];
 
-		if(length > 0){ //if there was something there before
-			System.arraycopy(dimMapImages, 0, newMapImages, 0, length);
-			System.arraycopy(dimNames, 0, newNames, 0, length);
-			System.arraycopy(dimMins, 0, newMins, 0, length);
-			System.arraycopy(dimMaxes, 0, newMaxes, 0, length);
-		}
+    if(length > 0){ //if there was something there before
+      System.arraycopy(dimMapImages, 0, newMapImages, 0, length);
+      System.arraycopy(dimNames, 0, newNames, 0, length);
+      System.arraycopy(dimMins, 0, newMins, 0, length);
+      System.arraycopy(dimMaxes, 0, newMaxes, 0, length);
+    }
 
-		newMapImages[length] = img;
-		newNames[length] = name;
-		newMins[length] = min;
-		newMaxes[length] = max;
+    newMapImages[length] = img;
+    newNames[length] = name;
+    newMins[length] = min;
+    newMaxes[length] = max;
 
-		dimMapImages = newMapImages;
-		dimNames = newNames;
-		dimMins = newMins;
-		dimMaxes = newMaxes;
-	}
-	
+    dimMapImages = newMapImages;
+    dimNames = newNames;
+    dimMins = newMins;
+    dimMaxes = newMaxes;
+  }
+  
 }

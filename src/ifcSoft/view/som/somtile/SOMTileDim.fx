@@ -27,28 +27,28 @@ import java.lang.UnsupportedOperationException;
 
 public class SOMTileDim extends SOMTile{
 
-	public-init var dim:Integer = -1; //-1 is not a dense map, 0 is the main one, above are the subset ones
+  public-init var dim:Integer = -1; //-1 is not a dense map, 0 is the main one, above are the subset ones
 
     override public function updateDenseMap () : Void {
-		var cellVals = somMaps.mediator.getDimCellVals();
-		if(cellVals == null){
-			setBottomText("");
-		}else{
-			setBottomText("{somMaps.mediator.getDimCellVals()[dim]}");
-		}
+    var cellVals = somMaps.mediator.getDimCellVals();
+    if(cellVals == null){
+      setBottomText("");
+    }else{
+      setBottomText("{somMaps.mediator.getDimCellVals()[dim]}");
+    }
     }
 
     override public function updateClusterStats () : Void {
-		setBottomText("{somMaps.mediator.getDimClusterVals()[dim] as Float}");
+    setBottomText("{somMaps.mediator.getDimClusterVals()[dim] as Float}");
     }
 
     override public function updatePointStats () : Void {
-		var cellVals = somMaps.mediator.getDimCellVals();
-		if(cellVals == null){
-			setBottomText("");
-		}else{
-			setBottomText("{somMaps.mediator.getDimCellVals()[dim]}");
-		}
+    var cellVals = somMaps.mediator.getDimCellVals();
+    if(cellVals == null){
+      setBottomText("");
+    }else{
+      setBottomText("{somMaps.mediator.getDimCellVals()[dim]}");
+    }
     }
 
 

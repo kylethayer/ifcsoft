@@ -32,79 +32,79 @@ import ifcSoft.model.DataSetProxy;
  */
 
 public class ifcDialogDataSetSelect extends ifcDialogItem{
-	public-init var mainApp:MainApp;
-	public-init var initialDataSets:DataSetProxy[];
-	var datasets:DataSetProxy[];
-	var datasetNames:String = bind
-		"{
-			for(dataset in datasets){
-				[dataset.getDataSetName(), ", "];
-			}
-		}";
+  public-init var mainApp:MainApp;
+  public-init var initialDataSets:DataSetProxy[];
+  var datasets:DataSetProxy[];
+  var datasetNames:String = bind
+    "{
+      for(dataset in datasets){
+        [dataset.getDataSetName(), ", "];
+      }
+    }";
 
-	var dataSetSelectDialog: ifcDialogDataSetSelectBox;
+  var dataSetSelectDialog: ifcDialogDataSetSelectBox;
 
-	public-init var openAction:function():Void;
-	public-init var okAction:function():Void;
-	public-init var cancelAction:function():Void;
-
-
-	init{
-		if(mainApp == null){ //This needs mainApp to be able to ask about data sets and display the
-			throw new Exception("ifcDialogDataSetSelect: mainApp must be initialized");
-		}
+  public-init var openAction:function():Void;
+  public-init var okAction:function():Void;
+  public-init var cancelAction:function():Void;
 
 
-		if(initialDataSets != null){
-			datasets = initialDataSets;
-		}else{
-			var mainMed:MainMediator = mainApp.getMainMediator();
-			datasets = mainMed.getDSP(mainMed.numDSPs()-1);
-		}
+  init{
+    if(mainApp == null){ //This needs mainApp to be able to ask about data sets and display the
+      throw new Exception("ifcDialogDataSetSelect: mainApp must be initialized");
+    }
 
 
-		children =
-			HBox{
-				spacing:3
-				content:[
-					ifcDialogButton{text:"Data Set(s)" action: selectDataSetDialog}
-					Label {text: bind datasetNames
-							layoutInfo: LayoutInfo { width: 150 }
-							textOverrun: OverrunStyle.ELLIPSES
-							},
-				]
-			}
-	}
+    if(initialDataSets != null){
+      datasets = initialDataSets;
+    }else{
+      var mainMed:MainMediator = mainApp.getMainMediator();
+      datasets = mainMed.getDSP(mainMed.numDSPs()-1);
+    }
 
 
-	
-	function selectDataSetDialog(){
-		dataSetSelectDialog =
-			ifcDialogDataSetSelectBox{
-				mainApp:mainApp
-				initialDataSets:datasets
-				okAction:selectDataSetOK
-				cancelAction:function():Void{mainApp.removeDialog(dataSetSelectDialog); cancelAction()}
-				blocksMouse: true
-				//disable: bind ReRemoveOutliersBoxDisabled;
-				layoutX: bind (mainApp.contentWidth - 200) / 2
-				layoutY: bind (mainApp.contentHeight - 125) / 2
-			}
-		mainApp.addDialog(dataSetSelectDialog);
-		openAction();
-	}
-
-	function selectDataSetOK():Void{
-		//get the data set
-		datasets = dataSetSelectDialog.getDataSets();
-		mainApp.removeDialog(dataSetSelectDialog);
-		okAction();
-	}
+    children =
+      HBox{
+        spacing:3
+        content:[
+          ifcDialogButton{text:"Data Set(s)" action: selectDataSetDialog}
+          Label {text: bind datasetNames
+              layoutInfo: LayoutInfo { width: 150 }
+              textOverrun: OverrunStyle.ELLIPSES
+              },
+        ]
+      }
+  }
 
 
-	public function getDataSets():DataSetProxy[]{
-		return datasets;
-	}
+  
+  function selectDataSetDialog(){
+    dataSetSelectDialog =
+      ifcDialogDataSetSelectBox{
+        mainApp:mainApp
+        initialDataSets:datasets
+        okAction:selectDataSetOK
+        cancelAction:function():Void{mainApp.removeDialog(dataSetSelectDialog); cancelAction()}
+        blocksMouse: true
+        //disable: bind ReRemoveOutliersBoxDisabled;
+        layoutX: bind (mainApp.contentWidth - 200) / 2
+        layoutY: bind (mainApp.contentHeight - 125) / 2
+      }
+    mainApp.addDialog(dataSetSelectDialog);
+    openAction();
+  }
+
+  function selectDataSetOK():Void{
+    //get the data set
+    datasets = dataSetSelectDialog.getDataSets();
+    mainApp.removeDialog(dataSetSelectDialog);
+    okAction();
+  }
+
+
+  public function getDataSets():DataSetProxy[]{
+    return datasets;
+  }
 
 
 }

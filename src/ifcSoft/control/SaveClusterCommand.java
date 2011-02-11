@@ -34,72 +34,72 @@ import org.puremvc.java.patterns.command.SimpleCommand;
  * @author Kyle Thayer <kthayer@emory.edu>
  */
 public class SaveClusterCommand  extends SimpleCommand{
-	
-	
-	/**
-	 * Save a cluster as a new data set.
-	 * @param note - Arg 1: DataSetProxy, Arg 2: Cluster (boolean[][])
-	 */
-	@Override 
-	public void execute(INotification note){
-		
-		Object[] noteData = (Object []) note.getBody();
-		MainAppI mainApp = (MainAppI) noteData[0];
-		SOMProxy SOMp = (SOMProxy) noteData[1];
-		boolean[][] cluster = (boolean[][]) noteData[2];
-		
-		//Need to wait until it is done getting density
-		
-		int[][] denseMap = SOMp.getDensityMap();
-		int membSize = 0;
-		for(int i = 0; i < cluster.length; i++){
-			for(int j = 0; j < cluster[0].length; j++){
-				if(cluster[i][j]){ //if it is in the cluster
-					membSize += denseMap[i][j]; //add the number we need
-				}
-			}
-		}
-		
-		
-		if(membSize == 0){
-			String msg = "No data points in cluster.";
-			facade.sendNotification(ifcSoft.ApplicationFacade.STRINGALERT, msg, null);
-			return;
-		}
+  
+  
+  /**
+   * Save a cluster as a new data set.
+   * @param note - Arg 1: DataSetProxy, Arg 2: Cluster (boolean[][])
+   */
+  @Override 
+  public void execute(INotification note){
+    
+    Object[] noteData = (Object []) note.getBody();
+    MainAppI mainApp = (MainAppI) noteData[0];
+    SOMProxy SOMp = (SOMProxy) noteData[1];
+    boolean[][] cluster = (boolean[][]) noteData[2];
+    
+    //Need to wait until it is done getting density
+    
+    int[][] denseMap = SOMp.getDensityMap();
+    int membSize = 0;
+    for(int i = 0; i < cluster.length; i++){
+      for(int j = 0; j < cluster[0].length; j++){
+        if(cluster[i][j]){ //if it is in the cluster
+          membSize += denseMap[i][j]; //add the number we need
+        }
+      }
+    }
+    
+    
+    if(membSize == 0){
+      String msg = "No data points in cluster.";
+      facade.sendNotification(ifcSoft.ApplicationFacade.STRINGALERT, msg, null);
+      return;
+    }
 
 
-		int[] membMap = new int[membSize];
-		int memPos = 0; 
-		//add all the points
-		for(int i = 0; i < cluster.length; i++){
-			for(int j = 0; j < cluster[0].length; j++){
-				if(cluster[i][j]){ //if it is in the cluster
-					int cellMembs[] = SOMp.getCellMembers(new Point(i,j));
-					if(cellMembs.length != denseMap[i][j]){
-						System.out.println("Error: SOMofCluster, Densemap:"+denseMap[i][j]+
-								" cellMembers:"+ cellMembs.length);
-					}
-					for(int k = 0; k < denseMap[i][j]; k++){
-						membMap[memPos] = cellMembs[k];
-						memPos++;
-					}
-				}
-			}
-		}
-		
-		
-		//membSize
+    int[] membMap = new int[membSize];
+    int memPos = 0; 
+    //add all the points
+    for(int i = 0; i < cluster.length; i++){
+      for(int j = 0; j < cluster[0].length; j++){
+        if(cluster[i][j]){ //if it is in the cluster
+          int cellMembs[] = SOMp.getCellMembers(new Point(i,j));
+          if(cellMembs.length != denseMap[i][j]){
+            System.out.println("Error: SOMofCluster, Densemap:"+denseMap[i][j]+
+                " cellMembers:"+ cellMembs.length);
+          }
+          for(int k = 0; k < denseMap[i][j]; k++){
+            membMap[memPos] = cellMembs[k];
+            memPos++;
+          }
+        }
+      }
+    }
+    
+    
+    //membSize
 
-		String msg = membSize + " of "+ SOMp.getDataSet().length()+" data points selected";
-		//facade.sendNotification(ifcSoft.ApplicationFacade.STRINGALERT, msg, null);
-		
-		//we should now have the membership map
-		DataSet newDataSet = (DataSet) new SubsetData(SOMp.getDataSet(), membMap);
-		DataSetProxy newdsp = new DataSetProxy();
-		newdsp.setDataSet(newDataSet);
+    String msg = membSize + " of "+ SOMp.getDataSet().length()+" data points selected";
+    //facade.sendNotification(ifcSoft.ApplicationFacade.STRINGALERT, msg, null);
+    
+    //we should now have the membership map
+    DataSet newDataSet = (DataSet) new SubsetData(SOMp.getDataSet(), membMap);
+    DataSetProxy newdsp = new DataSetProxy();
+    newdsp.setDataSet(newDataSet);
 
-		mainApp.nameDSP(newdsp, msg, "Cluster");
-		
+    mainApp.nameDSP(newdsp, msg, "Cluster");
+    
 
-	}
+  }
 }

@@ -26,24 +26,24 @@ import javax.swing.filechooser.*;
  */
 public class CSVFileFilter extends FileFilter {
 
-	@Override
-	public boolean accept(File f) {
-		if (f.isDirectory()) { //so that you can change directories (I think)
-			return true;
-		}
-		String name = f.getName();
-		if(name.endsWith(".csv")){
-			return true;
-		}
+  @Override
+  public boolean accept(File f) {
+    if (f.isDirectory()) { //so that you can change directories (I think)
+      return true;
+    }
+    String name = f.getName();
+    if(name.endsWith(".csv")){
+      return true;
+    }
 
-		return false;
-	}
+    return false;
+  }
 
 
 
-	@Override
-	public String getDescription() {
-		return ".csv - Comma Separated Variables";
-	}
+  @Override
+  public String getDescription() {
+    return ".csv - Comma Separated Variables";
+  }
 
 }

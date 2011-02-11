@@ -27,209 +27,209 @@ import java.util.LinkedList;
  */
 public class LogScaleNormalized implements DataSetScalar{
 
-	private DataSet dataset;
+  private DataSet dataset;
 
-	private double stddevs[] = null;
-	private double means[] = null;
+  private double stddevs[] = null;
+  private double means[] = null;
 
-	public LogScaleNormalized(DataSet dataset){
-		this.dataset = dataset;
-	}
+  public LogScaleNormalized(DataSet dataset){
+    this.dataset = dataset;
+  }
 
-	@Override
-	public String getName() {
-		return dataset.getName();
-	}
+  @Override
+  public String getName() {
+    return dataset.getName();
+  }
 
-	@Override
-	public int length() {
-		return dataset.length();
-	}
+  @Override
+  public int length() {
+    return dataset.length();
+  }
 
-	@Override
-	public int getDimensions() {
-		return dataset.getDimensions();
-	}
+  @Override
+  public int getDimensions() {
+    return dataset.getDimensions();
+  }
 
-	@Override
-	public int getUnscaledDimensions() {
-		return getDimensions();
-	}
+  @Override
+  public int getUnscaledDimensions() {
+    return getDimensions();
+  }
 
-	@Override
-	public float getMax(int dim) {
-		return 1;
-	}
+  @Override
+  public float getMax(int dim) {
+    return 1;
+  }
 
-	@Override
-	public float getMin(int dim) {
-		return 0;
-	}
+  @Override
+  public float getMin(int dim) {
+    return 0;
+  }
 
-	@Override
-	public double getStdDev(int dim) {
-		if(stddevs == null){
-			findStandardDevs();
-		}
-		return stddevs[dim];
-	}
+  @Override
+  public double getStdDev(int dim) {
+    if(stddevs == null){
+      findStandardDevs();
+    }
+    return stddevs[dim];
+  }
 
-	@Override
-	public double getMean(int dim) {
-		if(means == null){
-			findmeans();
-		}
-		return means[dim];
-	}
+  @Override
+  public double getMean(int dim) {
+    if(means == null){
+      findmeans();
+    }
+    return means[dim];
+  }
 
-	@Override
-	public float[] getPoint(int index) {
-		return scalePoint(dataset.getVals(index));
-	}
+  @Override
+  public float[] getPoint(int index) {
+    return scalePoint(dataset.getVals(index));
+  }
 
-	@Override
-	public float[] getUnscaledPoint(int index) {
-		return dataset.getVals(index);
-	}
+  @Override
+  public float[] getUnscaledPoint(int index) {
+    return dataset.getVals(index);
+  }
 
-	@Override
-	public float[] scalePoint(float[] weights) {
-		float [] scaledpt = new float[weights.length];
-		for(int i = 0; i < weights.length; i++){
-			scaledpt[i] = (float) scaleDim(weights[i], i);
-		}
-		return scaledpt;
-	}
+  @Override
+  public float[] scalePoint(float[] weights) {
+    float [] scaledpt = new float[weights.length];
+    for(int i = 0; i < weights.length; i++){
+      scaledpt[i] = (float) scaleDim(weights[i], i);
+    }
+    return scaledpt;
+  }
 
-	@Override
-	public float[] unscalePoint(float[] weights) {
-		float [] scaledpt = new float[weights.length];
-		for(int i = 0; i < weights.length; i++){
-			scaledpt[i] = (float) unscaleDim(weights[i], i);
-		}
-		return scaledpt;
-	}
+  @Override
+  public float[] unscalePoint(float[] weights) {
+    float [] scaledpt = new float[weights.length];
+    for(int i = 0; i < weights.length; i++){
+      scaledpt[i] = (float) unscaleDim(weights[i], i);
+    }
+    return scaledpt;
+  }
 
-	@Override
-	public String[] getColLabels() {
-		return dataset.getColLabels();
-	}
+  @Override
+  public String[] getColLabels() {
+    return dataset.getColLabels();
+  }
 
-	@Override
-	public LinkedList<String> getRawSetNames() {
-		return dataset.getRawSetNames();
-	}
+  @Override
+  public LinkedList<String> getRawSetNames() {
+    return dataset.getRawSetNames();
+  }
 
-	@Override
-	public String getPointSetName(int index) {
-		return dataset.getPointSetName(index);
-	}
+  @Override
+  public String getPointSetName(int index) {
+    return dataset.getPointSetName(index);
+  }
 
-	private double scaleDim(double val, int dim){
-		double returnval;
-		float delta = dataset.getMax(dim)- dataset.getMin(dim);
-		if(delta == 0){
-			returnval = 0;
-		}else{
-			double scaled = ( val - getMin(dim)) / delta;
-			if(9*scaled+1 < 1){
-				returnval = 0;
-			}else{
-				returnval = Math.log10((9*scaled+1)); //9*scales+1 gives range 1-10
-			}
-		}
+  private double scaleDim(double val, int dim){
+    double returnval;
+    float delta = dataset.getMax(dim)- dataset.getMin(dim);
+    if(delta == 0){
+      returnval = 0;
+    }else{
+      double scaled = ( val - getMin(dim)) / delta;
+      if(9*scaled+1 < 1){
+        returnval = 0;
+      }else{
+        returnval = Math.log10((9*scaled+1)); //9*scales+1 gives range 1-10
+      }
+    }
 
-		return returnval;
-	}
+    return returnval;
+  }
 
-	private double unscaleDim(double val, int dim){
-		if(dataset.getMax(dim) == dataset.getMin(dim)){
-			return dataset.getMax(dim);
-		}
-		return Math.pow(10, val) / 9 * (dataset.getMax(dim) - dataset.getMin(dim)) + dataset.getMin(dim);
-	}
+  private double unscaleDim(double val, int dim){
+    if(dataset.getMax(dim) == dataset.getMin(dim)){
+      return dataset.getMax(dim);
+    }
+    return Math.pow(10, val) / 9 * (dataset.getMax(dim) - dataset.getMin(dim)) + dataset.getMin(dim);
+  }
 
-	@Override
-	public DataSet getDataSet(){
-		return dataset;
-	}
+  @Override
+  public DataSet getDataSet(){
+    return dataset;
+  }
 
-	private void findmeans() {
-		means = new double[getDimensions()];
-		for(int k = 0; k < getDimensions(); k++){
-			means[k] = 0; //for now we'll use it to keep sums
-		}
+  private void findmeans() {
+    means = new double[getDimensions()];
+    for(int k = 0; k < getDimensions(); k++){
+      means[k] = 0; //for now we'll use it to keep sums
+    }
 
-		for(int i = 0; i < length(); i++){
-			for(int k = 0; k < getDimensions(); k++){
-				//compute averages(at each step it's the current avg. of pts given)
-				double weight = getPoint(i)[k];
-				means[k] = weight / (i+1) + (means[k]*i)/(i+1);
-			}
-		}
-	}
-
-
-	private void findStandardDevs() {
-		//find means first
-		if (means == null){
-			findmeans();
-		}
-
-		stddevs = new double[getDimensions()];
-
-		for(int i = 0; i < getDimensions(); i++){
-			stddevs[i] =0;
-		}
-
-		// find the variance (avg of [dist to mean]^2)
-		//do this on SegSize at a time, then average those values together, just to reduce rounding errors
-		int numSegs = (int) Math.ceil(length() / (double) DataSet.SEGSIZE);
-		int segLengths[] = new int[numSegs];
-		for(int i = 0; i < numSegs; i++){
-			if(i != numSegs-1){
-				segLengths[i] = DataSet.SEGSIZE;
-			}else{ //last one is remainder
-				segLengths[i] = length() -  DataSet.SEGSIZE*(numSegs-1);
-			}
-		}
+    for(int i = 0; i < length(); i++){
+      for(int k = 0; k < getDimensions(); k++){
+        //compute averages(at each step it's the current avg. of pts given)
+        double weight = getPoint(i)[k];
+        means[k] = weight / (i+1) + (means[k]*i)/(i+1);
+      }
+    }
+  }
 
 
-		double [][] segVars = new double[numSegs][getDimensions()];
-		//0 it out
-		for(int i = 0; i < numSegs; i++){
-			for(int k = 0; k < getDimensions(); k++){
-				segVars[i][k] = 0;
-			}
-		}
-		int sofar = 0;
-		for(int i = 0; i < numSegs; i++){
-			for(int j = 0; j < segLengths[i]; j++){
-				float[] vals = getPoint(sofar);
-				sofar++;
-				for(int k = 0; k < getDimensions(); k++){
-					//compute average of the squares (at each step it's the current avg. of pts given)
-					double distToAvg = vals[k] - means[k];
-					segVars[i][k] = distToAvg*distToAvg / (j+1) + (segVars[i][k]*j)/(j+1);
-				}
-			}
-		}
+  private void findStandardDevs() {
+    //find means first
+    if (means == null){
+      findmeans();
+    }
 
-		//compute actual varience from the segments
-		double variance[] = new double[getDimensions()];
-		for(int k = 0; k < getDimensions(); k++){
-			variance[k] = 0;
-		}
-		for(int i = 0; i < numSegs; i++){
-			for(int k = 0; k < getDimensions(); k++){
-				variance[k] += segVars[i][k] * (segLengths[i] / (double) length());
-			}
-		}
+    stddevs = new double[getDimensions()];
 
-		//find actual standard devs from the variance we computed
-		for(int k = 0; k < getDimensions(); k++){
-			stddevs[k] = Math.sqrt(variance[k]);
-		}
-	}
+    for(int i = 0; i < getDimensions(); i++){
+      stddevs[i] =0;
+    }
+
+    // find the variance (avg of [dist to mean]^2)
+    //do this on SegSize at a time, then average those values together, just to reduce rounding errors
+    int numSegs = (int) Math.ceil(length() / (double) DataSet.SEGSIZE);
+    int segLengths[] = new int[numSegs];
+    for(int i = 0; i < numSegs; i++){
+      if(i != numSegs-1){
+        segLengths[i] = DataSet.SEGSIZE;
+      }else{ //last one is remainder
+        segLengths[i] = length() -  DataSet.SEGSIZE*(numSegs-1);
+      }
+    }
+
+
+    double [][] segVars = new double[numSegs][getDimensions()];
+    //0 it out
+    for(int i = 0; i < numSegs; i++){
+      for(int k = 0; k < getDimensions(); k++){
+        segVars[i][k] = 0;
+      }
+    }
+    int sofar = 0;
+    for(int i = 0; i < numSegs; i++){
+      for(int j = 0; j < segLengths[i]; j++){
+        float[] vals = getPoint(sofar);
+        sofar++;
+        for(int k = 0; k < getDimensions(); k++){
+          //compute average of the squares (at each step it's the current avg. of pts given)
+          double distToAvg = vals[k] - means[k];
+          segVars[i][k] = distToAvg*distToAvg / (j+1) + (segVars[i][k]*j)/(j+1);
+        }
+      }
+    }
+
+    //compute actual varience from the segments
+    double variance[] = new double[getDimensions()];
+    for(int k = 0; k < getDimensions(); k++){
+      variance[k] = 0;
+    }
+    for(int i = 0; i < numSegs; i++){
+      for(int k = 0; k < getDimensions(); k++){
+        variance[k] += segVars[i][k] * (segLengths[i] / (double) length());
+      }
+    }
+
+    //find actual standard devs from the variance we computed
+    for(int k = 0; k < getDimensions(); k++){
+      stddevs[k] = Math.sqrt(variance[k]);
+    }
+  }
 
 }

@@ -28,39 +28,39 @@ import javafx.scene.layout.HBox;
  */
 
 public class ifcDialogIntInput extends ifcDialogItem{
-	public-init var name:String;
-	public-init var initialInt:Integer = 0;
+  public-init var name:String;
+  public-init var initialInt:Integer = 0;
 
-	var intInput:TextBox;
+  var intInput:TextBox;
 
-	init{
-		children =
-			HBox{
-				content:[
-					Text {content: name},
-					intInput = TextBox{
-						text:  "{initialInt}"
-					}
-				]
-			}
-	}
+  init{
+    children =
+      HBox{
+        content:[
+          Text {content: name},
+          intInput = TextBox{
+            text:  "{initialInt}"
+          }
+        ]
+      }
+  }
 
-	public function getInput():Integer{
-		return Integer.parseInt(intInput.text);;
-	}
+  public function getInput():Integer{
+    return Integer.parseInt(intInput.text);;
+  }
 
-	override function validate():Boolean{
-		try{
-			Integer.parseInt(intInput.text);
-		}catch(e:Exception){
-			return false;
-		}
-		return true;
-	}
+  override function validate():Boolean{
+    try{
+      Integer.parseInt(intInput.text);
+    }catch(e:Exception){
+      return false;
+    }
+    return true;
+  }
 
-	override function getName():String{
-		return name;
-	}
+  override function getName():String{
+    return name;
+  }
 
 }
 

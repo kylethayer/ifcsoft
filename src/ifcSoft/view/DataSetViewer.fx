@@ -28,43 +28,43 @@ import ifcSoft.view.dialogBox.ifcDialogDataTable;
  */
 
 public class DataSetViewer {
-	public-init var mainMediator:MainMediator;
-	public-init var mainApp:MainApp;
+  public-init var mainMediator:MainMediator;
+  public-init var mainApp:MainApp;
 
 
-	//var shrinkAmtInput:ifcDialogFloatInput;
-	var dataSetSelect:ifcDialogDataSetSelect= ifcDialogDataSetSelect{
-						mainApp:mainApp,
-						okAction: function():Void{dataSetTable = getTable()}
-						};
-	var dataSetTable:ifcDialogDataTable = getTable();
-	//var saveAsNewDS:ifcDialogRadioButtons;
-	var dataSetViewerDlg:ifcDialogBox =
-		ifcDialogBox{
-			name: "Data Set Viewer"
-			content:bind [
-				dataSetSelect,
-				dataSetTable
-				]
-			cancelName: "Close"
-			cancelAction: function():Void{mainApp.removeDialog(dataSetViewerDlg)}
-		};
+  //var shrinkAmtInput:ifcDialogFloatInput;
+  var dataSetSelect:ifcDialogDataSetSelect= ifcDialogDataSetSelect{
+            mainApp:mainApp,
+            okAction: function():Void{dataSetTable = getTable()}
+            };
+  var dataSetTable:ifcDialogDataTable = getTable();
+  //var saveAsNewDS:ifcDialogRadioButtons;
+  var dataSetViewerDlg:ifcDialogBox =
+    ifcDialogBox{
+      name: "Data Set Viewer"
+      content:bind [
+        dataSetSelect,
+        dataSetTable
+        ]
+      cancelName: "Close"
+      cancelAction: function():Void{mainApp.removeDialog(dataSetViewerDlg)}
+    };
 
-	function  getTable():ifcDialogDataTable{
-		return ifcDialogDataTable{
-					dataset: dataSetSelect.getDataSets()[0].getData()
-					}
-	}
+  function  getTable():ifcDialogDataTable{
+    return ifcDialogDataTable{
+          dataset: dataSetSelect.getDataSets()[0].getData()
+          }
+  }
 
 
-	/**
-	* Create and display the data Set Viewer.
-	*/
-	public function dataSetViewer():Void{
-		if(mainMediator.getDSP(0) == null){
-			mainApp.alert("No Data Set Loaded");
-			return;
-		}
-		mainApp.addDialog(dataSetViewerDlg);
-	}
+  /**
+  * Create and display the data Set Viewer.
+  */
+  public function dataSetViewer():Void{
+    if(mainMediator.getDSP(0) == null){
+      mainApp.alert("No Data Set Loaded");
+      return;
+    }
+    mainApp.addDialog(dataSetViewerDlg);
+  }
 }

@@ -26,23 +26,23 @@ import ifcSoft.model.DataSetProxy;
  */
 public class LoadFileJob implements ThreadJob{
 
-	/**
-	 * The dsp (with a filename ready) to be loaded.
-	 */
-	public DataSetProxy dsp;
+  /**
+   * The dsp (with a filename ready) to be loaded.
+   */
+  public DataSetProxy dsp;
 
 
-	/**
-	 * Create a job to load the file in the dsp.
-	 * @param dsp - The data set proxy to load the file into (dsp has info on file)
-	 */
-	public LoadFileJob(DataSetProxy dsp){
-		this.dsp = dsp;
-	}
+  /**
+   * Create a job to load the file in the dsp.
+   * @param dsp - The data set proxy to load the file into (dsp has info on file)
+   */
+  public LoadFileJob(DataSetProxy dsp){
+    this.dsp = dsp;
+  }
 
-	@Override
-	public int getJobType() {
-		return LOADFILEJOB;
-	}
+  @Override
+  public int getJobType() {
+    return LOADFILEJOB;
+  }
 
 }

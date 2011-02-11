@@ -29,106 +29,106 @@ import ifcSoft.view.TabMediator;
  */
 public class HistTabMediator implements TabMediator {
 
-	HistTabI histTab;
-	DataSetProxy dsp;
-	int dim;
-	Histogram hist;
+  HistTabI histTab;
+  DataSetProxy dsp;
+  int dim;
+  Histogram hist;
 
-	/**
-	 * The constructor. It needs access to the MainApp so it can draw and such.
-	 * @param app
-	 */
-	public HistTabMediator(MainAppI app){
-		histTab = app.makeHistTab(this);
-	}
+  /**
+   * The constructor. It needs access to the MainApp so it can draw and such.
+   * @param app
+   */
+  public HistTabMediator(MainAppI app){
+    histTab = app.makeHistTab(this);
+  }
 
-	@Override
-	public void display() {
-		System.out.println("dimension is "+dim);
-		histTab.displayTab();
-	}
+  @Override
+  public void display() {
+    System.out.println("dimension is "+dim);
+    histTab.displayTab();
+  }
 
-	@Override
-	public void swapOutTab() {
-		histTab.swapOutTab();
-	}
+  @Override
+  public void swapOutTab() {
+    histTab.swapOutTab();
+  }
 
-	@Override
-	public String getTabName() {
-		return "Histogram";
-	}
+  @Override
+  public String getTabName() {
+    return "Histogram";
+  }
 
-	@Override
-	public float getTabProgress() {
-		return 100; //for now I don't thread the histogram progress
-	}
+  @Override
+  public float getTabProgress() {
+    return 100; //for now I don't thread the histogram progress
+  }
 
-	@Override
-	public void informNewDsp() {
-		histTab.informNewDsp();
-	}
-	
-	/**
-	 * Tries to close the tab
-	 * @return True if the tab allows itself to be closed
-	 */
-	@Override
-	public boolean closeTab(){
-		return true; //As long as I'm not working on anything, I can close
-	}
+  @Override
+  public void informNewDsp() {
+    histTab.informNewDsp();
+  }
+  
+  /**
+   * Tries to close the tab
+   * @return True if the tab allows itself to be closed
+   */
+  @Override
+  public boolean closeTab(){
+    return true; //As long as I'm not working on anything, I can close
+  }
 
-	/**
-	 *  Returns whether or not the dialog content should be blocked (for reloading tab).
-	 *  In this case, it never should be blocked.
-	 * @return false
-	 */
-	@Override
-	public boolean isDialogContentBlocked(){
-		return false;
-	}
+  /**
+   *  Returns whether or not the dialog content should be blocked (for reloading tab).
+   *  In this case, it never should be blocked.
+   * @return false
+   */
+  @Override
+  public boolean isDialogContentBlocked(){
+    return false;
+  }
 
-	/**
-	 * Set the data set that the histogram is of.
-	 * @param dsp
-	 */
-	public void setDataSet(DataSetProxy dsp){
-		this.dsp = dsp;
-		histTab.setDataSet(dsp);
-	}
+  /**
+   * Set the data set that the histogram is of.
+   * @param dsp
+   */
+  public void setDataSet(DataSetProxy dsp){
+    this.dsp = dsp;
+    histTab.setDataSet(dsp);
+  }
 
-	/**
-	 * Set which dimension is to be drawn.
-	 * @param dim
-	 */
-	public void setDimension(int dim){
-		this.dim = dim;
-		histTab.setDimension(dim);
-	}
+  /**
+   * Set which dimension is to be drawn.
+   * @param dim
+   */
+  public void setDimension(int dim){
+    this.dim = dim;
+    histTab.setDimension(dim);
+  }
 
-	/**
-	 * Set which scale type is to be used.
-	 * @param scaleType
-	 */
-	public void setScaleType(int scaleType){
-		histTab.setScaleType(scaleType);
-	}
-
-
+  /**
+   * Set which scale type is to be used.
+   * @param scaleType
+   */
+  public void setScaleType(int scaleType){
+    histTab.setScaleType(scaleType);
+  }
 
 
 
-	/************  Display Functions *****************/
 
-	/**
-	 * This makes a Histogram with the number of segments and scale type.
-	 * @param numPieces
-	 * @param scaleType
-	 * @return
-	 */
-	public Histogram divideHistogram(int numPieces, int scaleType){
-		System.out.println("making histogram");
-		hist = new Histogram(dsp, dim, numPieces, scaleType);
-		return hist;
-	}
+
+  /************  Display Functions *****************/
+
+  /**
+   * This makes a Histogram with the number of segments and scale type.
+   * @param numPieces
+   * @param scaleType
+   * @return
+   */
+  public Histogram divideHistogram(int numPieces, int scaleType){
+    System.out.println("making histogram");
+    hist = new Histogram(dsp, dim, numPieces, scaleType);
+    return hist;
+  }
 
 }

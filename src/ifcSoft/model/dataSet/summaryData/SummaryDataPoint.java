@@ -26,24 +26,24 @@ import java.util.LinkedList;
  * @author kthayer
  */
 public class SummaryDataPoint {
-	protected DataSet dataset;
-	protected String rawSetName;
+  protected DataSet dataset;
+  protected String rawSetName;
 
-	int numPoints;
-	int total;
+  int numPoints;
+  int total;
 
-	//Eventually, each point will need actual number, data set from,
-	//totals for different levels (can it get this from the data set structure?)
-	// SOM used (with cluster), clustering options, dataset delta map
+  //Eventually, each point will need actual number, data set from,
+  //totals for different levels (can it get this from the data set structure?)
+  // SOM used (with cluster), clustering options, dataset delta map
 
-	public SummaryDataPoint(DataSet dataset, String rawSetName, int numPoints, int total){
-		this.dataset = dataset;
-		this.rawSetName = rawSetName;
-		this.numPoints = numPoints;
-		this.total = total;
-	}
+  public SummaryDataPoint(DataSet dataset, String rawSetName, int numPoints, int total){
+    this.dataset = dataset;
+    this.rawSetName = rawSetName;
+    this.numPoints = numPoints;
+    this.total = total;
+  }
 
-	protected float getPercent(){
-		return ((float)numPoints) / total;
-	}
+  protected float getPercent(){
+    return ((float)numPoints) / total;
+  }
 }

@@ -28,43 +28,43 @@ import javafx.util.Sequences;
  */
 
 public class ifcDialogChoiceBox extends ifcDialogItem{
-	public-init var name:String;
-	public var items:Object[];
-	public-init var initialSelectedItem:Object = null;
-	public-init var selectedItem: Object = bind choiceBoxInput.selectedItem;
+  public-init var name:String;
+  public var items:Object[];
+  public-init var initialSelectedItem:Object = null;
+  public-init var selectedItem: Object = bind choiceBoxInput.selectedItem;
 
-	var choiceBoxInput:ChoiceBox;
+  var choiceBoxInput:ChoiceBox;
 
-	init{
-		children =
-			HBox{
-				content:[
-					Label {text: name}
-					choiceBoxInput = ChoiceBox{
-						items: bind items
-						//selected: initialCheck
-					},
+  init{
+    children =
+      HBox{
+        content:[
+          Label {text: name}
+          choiceBoxInput = ChoiceBox{
+            items: bind items
+            //selected: initialCheck
+          },
 
-				]
-			}
-		if(initialSelectedItem != null){
-			choiceBoxInput.select(Sequences.indexOf(items, initialSelectedItem));
-		}else{
-			choiceBoxInput.select(0);
-		}
+        ]
+      }
+    if(initialSelectedItem != null){
+      choiceBoxInput.select(Sequences.indexOf(items, initialSelectedItem));
+    }else{
+      choiceBoxInput.select(0);
+    }
 
-	}
+  }
 
-	public function getInput():Object{
-		return choiceBoxInput.selectedItem;
-	}
+  public function getInput():Object{
+    return choiceBoxInput.selectedItem;
+  }
 
-	public function getInputNumber():Integer{
-		return choiceBoxInput.selectedIndex;
-	}
+  public function getInputNumber():Integer{
+    return choiceBoxInput.selectedIndex;
+  }
 
-	override function getName():String{
-		return name;
-	}
+  override function getName():String{
+    return name;
+  }
 
 }

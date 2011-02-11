@@ -28,56 +28,56 @@ import javafx.scene.input.MouseEvent;
  */
 public interface SOMvcI {
 
-	/**
-	 * Informs the SOMvc the the SOM has started calculating (so it can put up the progress bar).
-	 */
-	public void SOMstarted();
+  /**
+   * Informs the SOMvc the the SOM has started calculating (so it can put up the progress bar).
+   */
+  public void SOMstarted();
 
-	/**
-	 * Sets the progress of the calculating SOM.
-	 * @param p - progress % (0 - 1 if computing, 100 when done)
-	 */
-	public void setProgress(int p);
+  /**
+   * Sets the progress of the calculating SOM.
+   * @param p - progress % (0 - 1 if computing, 100 when done)
+   */
+  public void setProgress(int p);
 
-	/**
-	 * Tells the SOMvc to draw the SOM maps in the current tab.
-	 */
-	public void dispSOM();
-	
-	/**
-	 * When a cluster is selected, an overlay image is drawn to show what was selected,
-	 * this sets that image. If image is null, it means nothing is selected.
-	 * @param img - the overlay image
-	 * @param size - the total number of points selected
-	 * @param total - the total number of points displayed
-	 */
-	public void setClusterImg(BufferedImage img, int size, int total);
-	
-	/**
-	 * Opens the cluster options dialog box.
-	 */
-	public void clustOpt();
+  /**
+   * Tells the SOMvc to draw the SOM maps in the current tab.
+   */
+  public void dispSOM();
+  
+  /**
+   * When a cluster is selected, an overlay image is drawn to show what was selected,
+   * this sets that image. If image is null, it means nothing is selected.
+   * @param img - the overlay image
+   * @param size - the total number of points selected
+   * @param total - the total number of points displayed
+   */
+  public void setClusterImg(BufferedImage img, int size, int total);
+  
+  /**
+   * Opens the cluster options dialog box.
+   */
+  public void clustOpt();
 
 
-	/**
-	 * Opens the right-click menu.
-	 * @param e - the event that caused the right click menu to open
-	 */
-	public void showRightClickMenu(MouseEvent e);
-	
-	/**
-	 * Tell the SOM tiles to update their status (point over or cluster stats).
-	 */
-	public void updateMapStats();
+  /**
+   * Opens the right-click menu.
+   * @param e - the event that caused the right click menu to open
+   */
+  public void showRightClickMenu(MouseEvent e);
+  
+  /**
+   * Tell the SOM tiles to update their status (point over or cluster stats).
+   */
+  public void updateMapStats();
 
-	/**
-	 * Make sure the SOMvc is checking for changes in density maps (used when a new density map is added).
-	 */
-	public void continueUpdatingDensities();
+  /**
+   * Make sure the SOMvc is checking for changes in density maps (used when a new density map is added).
+   */
+  public void continueUpdatingDensities();
 
-	/**
-	 * Do anything needed before swapping out the tab.
-	 */
-	public void swapOut();
+  /**
+   * Do anything needed before swapping out the tab.
+   */
+  public void swapOut();
 
 }

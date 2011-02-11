@@ -27,44 +27,44 @@ import javafx.scene.layout.HBox;
  */
 
 public class ifcDialogStringInput extends ifcDialogItem{
-	public-init var name:String;
-	public-init var initialString:String = "";
-	public-init var inputWidth:Integer = 10;
-	public-init var allowEmptyInput:Boolean = false;
+  public-init var name:String;
+  public-init var initialString:String = "";
+  public-init var inputWidth:Integer = 10;
+  public-init var allowEmptyInput:Boolean = false;
 
-	var stringInput:TextBox;
+  var stringInput:TextBox;
 
-	init{
-		children =
-			HBox{
-				content:[
-					Text {content: name},
-					stringInput = TextBox{
-						text:  initialString
-						columns: inputWidth
-					}
-				]
-			}
-	}
+  init{
+    children =
+      HBox{
+        content:[
+          Text {content: name},
+          stringInput = TextBox{
+            text:  initialString
+            columns: inputWidth
+          }
+        ]
+      }
+  }
 
-	public function getInput():String{
-		return stringInput.text;
-	}
+  public function getInput():String{
+    return stringInput.text;
+  }
 
-	override function getName():String{
-		return name;
-	}
+  override function getName():String{
+    return name;
+  }
 
-	override function validate():Boolean{
-		if(allowEmptyInput){
-			true;
-		}
-		if(stringInput.text.length() > 0){
-			true;
-		}else{
-			false;
-		}
-	}
+  override function validate():Boolean{
+    if(allowEmptyInput){
+      true;
+    }
+    if(stringInput.text.length() > 0){
+      true;
+    }else{
+      false;
+    }
+  }
 
 
 }

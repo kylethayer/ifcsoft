@@ -27,29 +27,29 @@ import javafx.scene.control.Label;
  */
 
 public class ifcDialogCheckBox extends ifcDialogItem{
-	public-init var name:String;
-	public-init var initialCheck:Boolean = false;
+  public-init var name:String;
+  public-init var initialCheck:Boolean = false;
 
-	var checkBoxInput:CheckBox;
+  var checkBoxInput:CheckBox;
 
-	init{
-		children =
-			HBox{
-				content:[
-					checkBoxInput = CheckBox{
-						selected: initialCheck
-					},
-					Label {text: name}
-				]
-			}
-	}
+  init{
+    children =
+      HBox{
+        content:[
+          checkBoxInput = CheckBox{
+            selected: initialCheck
+          },
+          Label {text: name}
+        ]
+      }
+  }
 
-	public function getInput():Boolean{
-		return checkBoxInput.selected;
-	}
+  public function getInput():Boolean{
+    return checkBoxInput.selected;
+  }
 
-	override function getName():String{
-		return name;
-	}
+  override function getName():String{
+    return name;
+  }
 
 }

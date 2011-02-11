@@ -30,20 +30,20 @@ import ifcSoft.model.DataSetProxy;
  */
 public class LoadDataCommand extends SimpleCommand {
 
-	
-	/**
-	 *  Load a data file. (I don't think it is currently used).
-	 * @param note
-	 */
-	@Override
-	public void execute(INotification note){
-		//for now, we only do FCS (actually only CSV's of them)
-		String filename[] = (String[]) note.getBody();
-		DataSetProxy dsp = new DataSetProxy();
-		//dsp.loadDataFile(filename);
-		//somehow need to check if it really did load
-		sendNotification(ApplicationFacade.ADDNEWDSP, dsp, null);
+  
+  /**
+   *  Load a data file. (I don't think it is currently used).
+   * @param note
+   */
+  @Override
+  public void execute(INotification note){
+    //for now, we only do FCS (actually only CSV's of them)
+    String filename[] = (String[]) note.getBody();
+    DataSetProxy dsp = new DataSetProxy();
+    //dsp.loadDataFile(filename);
+    //somehow need to check if it really did load
+    sendNotification(ApplicationFacade.ADDNEWDSP, dsp, null);
 
-		
-	}
+    
+  }
 }

@@ -29,48 +29,48 @@ import javafx.scene.control.RadioButton;
  */
 
 public class ifcDialogRadioButtons extends ifcDialogItem{
-	public-init var name:String;
-	public-init var options:String[];
-	public-init var initialCheck:Integer = 0;
+  public-init var name:String;
+  public-init var options:String[];
+  public-init var initialCheck:Integer = 0;
 
-	var toggleGroup= ToggleGroup {};
+  var toggleGroup= ToggleGroup {};
 
-	var radioButtons:RadioButton[];
+  var radioButtons:RadioButton[];
 
-	init{
-		children =
-			VBox{
-				content:[
-					Label {text: name}
-					HBox{
-						content:[
-							for(opt in options){
-								radioButtons[indexof opt] = RadioButton{
-									text: opt
-									selected: indexof opt == initialCheck
-									toggleGroup:toggleGroup
-								}
-							}
+  init{
+    children =
+      VBox{
+        content:[
+          Label {text: name}
+          HBox{
+            content:[
+              for(opt in options){
+                radioButtons[indexof opt] = RadioButton{
+                  text: opt
+                  selected: indexof opt == initialCheck
+                  toggleGroup:toggleGroup
+                }
+              }
 
-						]
-					}
-				]
-			}
-	}
+            ]
+          }
+        ]
+      }
+  }
 
-	public function getInput():Integer{
-		var selected:Integer;
-		for(button in radioButtons){
-			if(button.selected){
-				selected = indexof button;
-			}
-		}
+  public function getInput():Integer{
+    var selected:Integer;
+    for(button in radioButtons){
+      if(button.selected){
+        selected = indexof button;
+      }
+    }
 
-		return selected;
-	}
+    return selected;
+  }
 
-	override function getName():String{
-		return name;
-	}
+  override function getName():String{
+    return name;
+  }
 
 }

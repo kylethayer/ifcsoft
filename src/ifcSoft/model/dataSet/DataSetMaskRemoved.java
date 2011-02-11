@@ -26,65 +26,65 @@ import java.util.LinkedList;
  */
 public class DataSetMaskRemoved {
 
-	/**
-	 *
-	 */
-	public static final String STDDEVREMOVED = "StdDevRemoved";
-	/**
-	 *
-	 */
-	public static final String PARENTSETREMOVED = "ParentSetRemoved";
+  /**
+   *
+   */
+  public static final String STDDEVREMOVED = "StdDevRemoved";
+  /**
+   *
+   */
+  public static final String PARENTSETREMOVED = "ParentSetRemoved";
 
-	private LinkedList<int[]> removed; // the removed elements
-	private int length;
-	private int lastSegUsed; //the last set may not be full, this is # elements used
-	//info about removal type
-	String removalType;
+  private LinkedList<int[]> removed; // the removed elements
+  private int length;
+  private int lastSegUsed; //the last set may not be full, this is # elements used
+  //info about removal type
+  String removalType;
 
-	DataSetMaskRemoved(){
-		removed = new LinkedList<int[]>();
-		length = 0;
-		lastSegUsed = 0;
-		removalType = "";
-	}
+  DataSetMaskRemoved(){
+    removed = new LinkedList<int[]>();
+    length = 0;
+    lastSegUsed = 0;
+    removalType = "";
+  }
 
-	void addPt(int index) {
-		if(removed.isEmpty()){
-			removed.add(new int[DataSet.SEGSIZE]);
-			lastSegUsed = 0;
-		}
-		int[] lastSeg = removed.getLast();
-		if(lastSeg.length <= lastSegUsed){ //if we need a new segment
-			if(lastSeg.length > lastSegUsed){ //test here for now just to double check
-				System.out.println("Error in DataSetMaskRemoved.addPt: lastSegUsed too big");
-			}
-			removed.add(new int[DataSet.SEGSIZE]);
-			lastSegUsed = 0;
-			lastSeg = removed.getLast();
-		}
-		//at this point we have the last segment in "lastSeg" and there is room
-		//lastSegUsed points to the next free spot
-		lastSeg[lastSegUsed] = index;
-		lastSegUsed++;
-		length++;
-	}
+  void addPt(int index) {
+    if(removed.isEmpty()){
+      removed.add(new int[DataSet.SEGSIZE]);
+      lastSegUsed = 0;
+    }
+    int[] lastSeg = removed.getLast();
+    if(lastSeg.length <= lastSegUsed){ //if we need a new segment
+      if(lastSeg.length > lastSegUsed){ //test here for now just to double check
+        System.out.println("Error in DataSetMaskRemoved.addPt: lastSegUsed too big");
+      }
+      removed.add(new int[DataSet.SEGSIZE]);
+      lastSegUsed = 0;
+      lastSeg = removed.getLast();
+    }
+    //at this point we have the last segment in "lastSeg" and there is room
+    //lastSegUsed points to the next free spot
+    lastSeg[lastSegUsed] = index;
+    lastSegUsed++;
+    length++;
+  }
 
-	int getPt(int index){
-		if(index >= length){
-			return -1;
-		}
-		//find the right segment
-		int i = 0;
-		int sofar = 0;
-		while(sofar + removed.get(i).length <= index){
-			sofar += removed.get(i).length;
-			i++;
-		}
-		//i is now pointing at the correct segment and sofar tells us how many points were in previous segments
-		return removed.get(i)[index - sofar];
-	}
+  int getPt(int index){
+    if(index >= length){
+      return -1;
+    }
+    //find the right segment
+    int i = 0;
+    int sofar = 0;
+    while(sofar + removed.get(i).length <= index){
+      sofar += removed.get(i).length;
+      i++;
+    }
+    //i is now pointing at the correct segment and sofar tells us how many points were in previous segments
+    return removed.get(i)[index - sofar];
+  }
 
-	int length(){
-		return length;
-	}
+  int length(){
+    return length;
+  }
 }

@@ -30,73 +30,73 @@ import ifcSoft.view.dialogBox.ifcDialogChoiceBox;
  */
 
 public class MakeScatterDialog {
-	public-init var app:MainApp;
-	public-init var mainMediator:MainMediator;
-	postinit{
-		if(app == null or mainMediator == null){
-			println("MakeScatterDialog initializer: not initialized fully");
-		}else{
-			initialize();
-		}
-	}
+  public-init var app:MainApp;
+  public-init var mainMediator:MainMediator;
+  postinit{
+    if(app == null or mainMediator == null){
+      println("MakeScatterDialog initializer: not initialized fully");
+    }else{
+      initialize();
+    }
+  }
 
-	var scatterDialog:ifcDialogBox;
-	var dimensions:String[];
-	var dataSetSelect:ifcDialogDataSetSelect;
-	var datasets:DataSetProxy[] = bind dataSetSelect.getDataSets();
-	var dataset1:DataSetProxy = bind datasets[0] on replace{
-		dimensions = dataset1.getColNames();
-		};
-
-
-	var dim1Input:ifcDialogChoiceBox;
-	var dim2Input:ifcDialogChoiceBox;
-	
+  var scatterDialog:ifcDialogBox;
+  var dimensions:String[];
+  var dataSetSelect:ifcDialogDataSetSelect;
+  var datasets:DataSetProxy[] = bind dataSetSelect.getDataSets();
+  var dataset1:DataSetProxy = bind datasets[0] on replace{
+    dimensions = dataset1.getColNames();
+    };
 
 
-	public function initialize(){
-		dataSetSelect = ifcDialogDataSetSelect{mainApp:app};
+  var dim1Input:ifcDialogChoiceBox;
+  var dim2Input:ifcDialogChoiceBox;
+  
 
-		dim1Input = ifcDialogChoiceBox{
-			name:"X-Axis"
-			items: bind dimensions
-		};
-		dim2Input = ifcDialogChoiceBox{
-			name:"Y-Axis"
-			items: bind dimensions
-		};
 
-		scatterDialog =	ifcDialogBox{
-			name: "Make Scatter Plot"
-			okAction: scatterOK
-			content: [dataSetSelect,dim1Input, dim2Input ]
-			cancelAction: function():Void{app.removeDialog(scatterDialog)}
+  public function initialize(){
+    dataSetSelect = ifcDialogDataSetSelect{mainApp:app};
 
-			blocksMouse: true
-		};
+    dim1Input = ifcDialogChoiceBox{
+      name:"X-Axis"
+      items: bind dimensions
+    };
+    dim2Input = ifcDialogChoiceBox{
+      name:"Y-Axis"
+      items: bind dimensions
+    };
 
-		app.addDialog(scatterDialog);
-	}
+    scatterDialog =  ifcDialogBox{
+      name: "Make Scatter Plot"
+      okAction: scatterOK
+      content: [dataSetSelect,dim1Input, dim2Input ]
+      cancelAction: function():Void{app.removeDialog(scatterDialog)}
 
-	function scatterOK():Void{
-		var datasets = (dataSetSelect.getDataSets());
-		if(datasets.size() == 0){
-			app.alert("No data set selected");
-			app.unblockContent();
-			return;
-		}
+      blocksMouse: true
+    };
 
-		var finaldsp:DataSetProxy = mainMediator.getDataSet(dataSetSelect.getDataSets());
-		if(finaldsp == null){
-			println("Error in data set combination");
-			return;
-		}
+    app.addDialog(scatterDialog);
+  }
 
-		var xDim:Integer = dim1Input.getInputNumber();
-		var yDim:Integer = dim2Input.getInputNumber();
+  function scatterOK():Void{
+    var datasets = (dataSetSelect.getDataSets());
+    if(datasets.size() == 0){
+      app.alert("No data set selected");
+      app.unblockContent();
+      return;
+    }
 
-		mainMediator.makeScatterPlot(finaldsp, xDim, yDim);
-	}
+    var finaldsp:DataSetProxy = mainMediator.getDataSet(dataSetSelect.getDataSets());
+    if(finaldsp == null){
+      println("Error in data set combination");
+      return;
+    }
+
+    var xDim:Integer = dim1Input.getInputNumber();
+    var yDim:Integer = dim2Input.getInputNumber();
+
+    mainMediator.makeScatterPlot(finaldsp, xDim, yDim);
+  }
 
 
 

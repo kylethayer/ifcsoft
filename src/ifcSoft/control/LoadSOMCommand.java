@@ -31,22 +31,22 @@ import ifcSoft.model.DataSetProxy;
 public class LoadSOMCommand extends SimpleCommand {
 
 
-	/**
-	 * Load a SOM from a ".iflo" file.
-	 * @param note
-	 */
-	@Override
-	public void execute(INotification note){
-		//for now, we only do FCS (actually only CSV's of them)
-		String filename = (String) note.getBody();
-		DataSetProxy dsp = new DataSetProxy();
-		dsp.loadIFlowFile(filename);
-		//somehow need to check if it really did load
-		
-		//this seems bad practice
-		sendNotification(ApplicationFacade.ADDNEWDSP, dsp, null); //Will this work?
-		sendNotification(ApplicationFacade.RETURNEDSOM, dsp, null); //Will this work?
+  /**
+   * Load a SOM from a ".iflo" file.
+   * @param note
+   */
+  @Override
+  public void execute(INotification note){
+    //for now, we only do FCS (actually only CSV's of them)
+    String filename = (String) note.getBody();
+    DataSetProxy dsp = new DataSetProxy();
+    dsp.loadIFlowFile(filename);
+    //somehow need to check if it really did load
+    
+    //this seems bad practice
+    sendNotification(ApplicationFacade.ADDNEWDSP, dsp, null); //Will this work?
+    sendNotification(ApplicationFacade.RETURNEDSOM, dsp, null); //Will this work?
 
 
-	}
+  }
 }

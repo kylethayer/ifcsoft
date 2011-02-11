@@ -31,45 +31,45 @@ import javafx.scene.layout.Stack;
 
 public class SOMTileBlank extends SOMTile {
 
-	override public function makeTile():Void{
-		tileNode = Stack{
-			height: bind somMaps.tileWidth* somMaps.aspectratio
-			width: bind somMaps.tileWidth
-			onMouseDragged: function (e:MouseEvent){if(not (e.secondaryButtonDown or e.altDown))somMaps.SOMmousedragged(e, this);}
-			onMouseReleased: function (e:MouseEvent){somMaps.SOMmousereleased(e, this);}
-			content:[
-				Rectangle{
-					height:bind somMaps.tileWidth* somMaps.aspectratio
-					width: bind somMaps.tileWidth
-					fill:Color.WHITE
-					opacity: bind if(highlight){.25}else{0};
-				},
-				HBox{ //the left/right highlights
-					content: [
-						Rectangle{
-							height:bind somMaps.tileWidth* somMaps.aspectratio
-							width: bind somMaps.tileWidth / 6
-							fill:Color.WHITE
-							opacity: bind if(leftHighlight){.25}else{0};
-						},
-						Rectangle{ //spacer
-							height:bind somMaps.tileWidth* somMaps.aspectratio
-							width: bind somMaps.tileWidth * 2 / 3
-							fill:Color.WHITE
-							opacity: 0;
-						},
-						Rectangle{
-							height:bind somMaps.tileWidth* somMaps.aspectratio
-							width: bind somMaps.tileWidth / 6
-							fill:Color.WHITE
-							opacity: bind if(rightHighlight){.25}else{0};
-						}
-					]
-				}
+  override public function makeTile():Void{
+    tileNode = Stack{
+      height: bind somMaps.tileWidth* somMaps.aspectratio
+      width: bind somMaps.tileWidth
+      onMouseDragged: function (e:MouseEvent){if(not (e.secondaryButtonDown or e.altDown))somMaps.SOMmousedragged(e, this);}
+      onMouseReleased: function (e:MouseEvent){somMaps.SOMmousereleased(e, this);}
+      content:[
+        Rectangle{
+          height:bind somMaps.tileWidth* somMaps.aspectratio
+          width: bind somMaps.tileWidth
+          fill:Color.WHITE
+          opacity: bind if(highlight){.25}else{0};
+        },
+        HBox{ //the left/right highlights
+          content: [
+            Rectangle{
+              height:bind somMaps.tileWidth* somMaps.aspectratio
+              width: bind somMaps.tileWidth / 6
+              fill:Color.WHITE
+              opacity: bind if(leftHighlight){.25}else{0};
+            },
+            Rectangle{ //spacer
+              height:bind somMaps.tileWidth* somMaps.aspectratio
+              width: bind somMaps.tileWidth * 2 / 3
+              fill:Color.WHITE
+              opacity: 0;
+            },
+            Rectangle{
+              height:bind somMaps.tileWidth* somMaps.aspectratio
+              width: bind somMaps.tileWidth / 6
+              fill:Color.WHITE
+              opacity: bind if(rightHighlight){.25}else{0};
+            }
+          ]
+        }
 
-			]
-		}
-	}
+      ]
+    }
+  }
 
 
     override public function updateDenseMap () : Void {

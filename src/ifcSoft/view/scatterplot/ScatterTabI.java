@@ -26,43 +26,43 @@ import ifcSoft.model.DataSetProxy;
  */
 public interface ScatterTabI {
 
-	/**
-	 * Display the tab view on the screen.
-	 */
-	public void displayTab();
+  /**
+   * Display the tab view on the screen.
+   */
+  public void displayTab();
 
-	/**
-	 * Let the Histogram view know there is a new data set loaded.
-	 */
-	public void informNewDsp();
+  /**
+   * Let the Histogram view know there is a new data set loaded.
+   */
+  public void informNewDsp();
 
-	/**
-	 * Set which data set is being displayed.
-	 * @param dsp
-	 */
-	public void setDataSet(DataSetProxy dsp);
+  /**
+   * Set which data set is being displayed.
+   * @param dsp
+   */
+  public void setDataSet(DataSetProxy dsp);
 
-	/**
-	 * Set the dimension being displayed.
-	 * @param dim
-	 */
-	public void setXDimension(int xDim);
+  /**
+   * Set the dimension being displayed.
+   * @param dim
+   */
+  public void setXDimension(int xDim);
 
-	/**
-	 * Set the dimension being displayed.
-	 * @param dim
-	 */
-	public void setYDimension(int yDim);
+  /**
+   * Set the dimension being displayed.
+   * @param dim
+   */
+  public void setYDimension(int yDim);
 
-	/**
-	 * Set the initial Scale type being used.
-	 * @param initialScaleType
-	 */
-	public void setScaleType(int initialScaleType);
+  /**
+   * Set the initial Scale type being used.
+   * @param initialScaleType
+   */
+  public void setScaleType(int initialScaleType);
 
-	/**
-	 * Save everything that needs to be saved in order to swap out.
-	 */
-	public void swapOutTab();
+  /**
+   * Save everything that needs to be saved in order to swap out.
+   */
+  public void swapOutTab();
 
 }

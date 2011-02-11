@@ -32,61 +32,61 @@ import ifcSoft.model.som.SOM;
  * @author Kyle Thayer <kthayer@emory.edu>
  */
 public class FindMembershipsJob implements ThreadJob {
-	
-	/**
-	 * Which data set needs members found on.
-	 * -1 means the data set the SOM was made with.
-	 * >= 0 means that data set in the other data sets stored in the SOM.
-	 */
-	public int dataSetNum;
-	/**
-	 * The SOM to find the membership on.
-	 */
-	public SOM som;
-	/**
-	 * Starting point in the data set to find membership of.
-	 */
-	public int firstPt;
-	/**
-	 * Ending point in the data set to find membership of.
-	 */
-	public int lastPt;
-	/**
-	 * A variable that can be set to cancel the job.
-	 */
-	public AtomicBoolean iscanceled; //the main thread can cancel a job by changing this object
-	/**
-	 * A variable that can be set to pause the job.
-	 */
-	public AtomicBoolean ispaused; //the main thread can cancel a job by changing this object
-	
-	/**
-	 * Create a Find Membership Job holder
-	 * @param dataSetNum - Which data set needs members found on.
-	 *					-1 means the data set the SOM was made with.
-	 *					>= 0 means that data set in the other data sets stored in the SOM.
-	 * @param som - The SOM to find the membership on.
-	 * @param firstPt - Starting point in the data set to find membership of.
-	 * @param lastPt - Ending point in the data set to find membership of.
-	 * @param iscanceled - A variable that can be set to pause the job.
-	 * @param ispaused - A variable that can be set to pause the job.
-	 */
-	public FindMembershipsJob(int dataSetNum, SOM som, int firstPt, int lastPt, AtomicBoolean iscanceled, AtomicBoolean ispaused){
-		this.dataSetNum = dataSetNum;
-		this.som = som;
-		this.firstPt = firstPt;
-		this.lastPt = lastPt;
-		this.iscanceled = iscanceled;
-		this.ispaused = ispaused;
-	}
-	
-	/**
-	 * It is a Find Membership Job
-	 * @return
-	 */
-	@Override
-	public int getJobType() {
-		return ThreadJob.FINDBMUJOB;
-	}
+  
+  /**
+   * Which data set needs members found on.
+   * -1 means the data set the SOM was made with.
+   * >= 0 means that data set in the other data sets stored in the SOM.
+   */
+  public int dataSetNum;
+  /**
+   * The SOM to find the membership on.
+   */
+  public SOM som;
+  /**
+   * Starting point in the data set to find membership of.
+   */
+  public int firstPt;
+  /**
+   * Ending point in the data set to find membership of.
+   */
+  public int lastPt;
+  /**
+   * A variable that can be set to cancel the job.
+   */
+  public AtomicBoolean iscanceled; //the main thread can cancel a job by changing this object
+  /**
+   * A variable that can be set to pause the job.
+   */
+  public AtomicBoolean ispaused; //the main thread can cancel a job by changing this object
+  
+  /**
+   * Create a Find Membership Job holder
+   * @param dataSetNum - Which data set needs members found on.
+   *          -1 means the data set the SOM was made with.
+   *          >= 0 means that data set in the other data sets stored in the SOM.
+   * @param som - The SOM to find the membership on.
+   * @param firstPt - Starting point in the data set to find membership of.
+   * @param lastPt - Ending point in the data set to find membership of.
+   * @param iscanceled - A variable that can be set to pause the job.
+   * @param ispaused - A variable that can be set to pause the job.
+   */
+  public FindMembershipsJob(int dataSetNum, SOM som, int firstPt, int lastPt, AtomicBoolean iscanceled, AtomicBoolean ispaused){
+    this.dataSetNum = dataSetNum;
+    this.som = som;
+    this.firstPt = firstPt;
+    this.lastPt = lastPt;
+    this.iscanceled = iscanceled;
+    this.ispaused = ispaused;
+  }
+  
+  /**
+   * It is a Find Membership Job
+   * @return
+   */
+  @Override
+  public int getJobType() {
+    return ThreadJob.FINDBMUJOB;
+  }
 
 }

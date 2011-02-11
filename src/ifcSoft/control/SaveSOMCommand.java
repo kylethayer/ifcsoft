@@ -31,17 +31,17 @@ import ifcSoft.model.DataSetProxy;
 public class SaveSOMCommand extends SimpleCommand {
 
 
-	/**
-	 * Save the SOM to a file. (currently disabled).
-	 * @param note
-	 */
-	@Override
-	public void execute(INotification note){
-		//TODO: Redo
-		//for now, we only do FCS (actually only CSV's of them)
-		/*Object msgData[]  = (Object[]) note.getBody();
-		DataSetProxy dsp = (DataSetProxy) msgData[0];
-		String filename = (String) msgData[1];
-		dsp.saveIFlowFile(filename);*/
-	}
+  /**
+   * Save the SOM to a file. (currently disabled).
+   * @param note
+   */
+  @Override
+  public void execute(INotification note){
+    //TODO: Redo
+    //for now, we only do FCS (actually only CSV's of them)
+    /*Object msgData[]  = (Object[]) note.getBody();
+    DataSetProxy dsp = (DataSetProxy) msgData[0];
+    String filename = (String) msgData[1];
+    dsp.saveIFlowFile(filename);*/
+  }
 }

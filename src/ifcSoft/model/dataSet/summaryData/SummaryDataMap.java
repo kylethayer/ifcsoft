@@ -30,80 +30,80 @@ import java.util.Set;
  * @author kthayer
  */
 public class SummaryDataMap {
-	//make a map of maps (allow access as a 2d map)
-			// request is on [dataset+rawset] and cluster
+  //make a map of maps (allow access as a 2d map)
+      // request is on [dataset+rawset] and cluster
 
-	//how do I deal with dataset and raw dataset?
-		//could I ever have a data set be a raw set and also be asked for on it's own?
-		//maybe I only ever ask for the raw data sets. I'll assume that for now
+  //how do I deal with dataset and raw dataset?
+    //could I ever have a data set be a raw set and also be asked for on it's own?
+    //maybe I only ever ask for the raw data sets. I'll assume that for now
 
-	//returns null if invalid combo
-	HashMap<DataSet, HashMap<String,SummaryDataPoint> > map;
-			
-
-
-	public SummaryDataMap(){
-		map = new HashMap<DataSet, HashMap<String,SummaryDataPoint> >();
-	}
-
-	public SummaryDataPoint add(SummaryDataPoint sdp, DataSet rawdataset, String cluster){
-		HashMap<String,SummaryDataPoint> map2 = map.get(rawdataset);
-		if(map2 == null){
-			map2 = new HashMap<String,SummaryDataPoint>();
-			map.put(rawdataset, map2);
-		}
-
-		return map2.put(cluster, sdp);
-	}
-	
-
-	public SummaryDataPoint get(DataSet rawdataset, String cluster){
-		HashMap<String,SummaryDataPoint> map2 = map.get(rawdataset);
-		if(map2 != null){
-			return map2.get(cluster);
-		}
-		return null;
-	}
-
-	public LinkedList<String> getAllClusterNames(){
-		LinkedList<String> allNames = new LinkedList<String>();
+  //returns null if invalid combo
+  HashMap<DataSet, HashMap<String,SummaryDataPoint> > map;
+      
 
 
-		Set<Entry<DataSet, HashMap<String,SummaryDataPoint>>> datasetList = map.entrySet();
+  public SummaryDataMap(){
+    map = new HashMap<DataSet, HashMap<String,SummaryDataPoint> >();
+  }
 
-		Iterator<Entry<DataSet, HashMap<String,SummaryDataPoint>>> mapiter = datasetList.iterator();
+  public SummaryDataPoint add(SummaryDataPoint sdp, DataSet rawdataset, String cluster){
+    HashMap<String,SummaryDataPoint> map2 = map.get(rawdataset);
+    if(map2 == null){
+      map2 = new HashMap<String,SummaryDataPoint>();
+      map.put(rawdataset, map2);
+    }
 
-		while(mapiter.hasNext()){
+    return map2.put(cluster, sdp);
+  }
+  
 
-			Set<Entry<String,SummaryDataPoint>> clusterList = mapiter.next().getValue().entrySet();
+  public SummaryDataPoint get(DataSet rawdataset, String cluster){
+    HashMap<String,SummaryDataPoint> map2 = map.get(rawdataset);
+    if(map2 != null){
+      return map2.get(cluster);
+    }
+    return null;
+  }
 
-			Iterator<Entry<String,SummaryDataPoint>> clusteriter = clusterList.iterator();
-			while(clusteriter.hasNext()){
-				String clusterName = clusteriter.next().getKey();
-
-				if(!allNames.contains(clusterName)){
-					allNames.add(clusterName);
-				}
-			}
-		}
-
-		return allNames;
-	}
+  public LinkedList<String> getAllClusterNames(){
+    LinkedList<String> allNames = new LinkedList<String>();
 
 
-	public LinkedList<DataSet> getAllDataSets(){
-		LinkedList<DataSet> alldatasets = new LinkedList<DataSet>();
+    Set<Entry<DataSet, HashMap<String,SummaryDataPoint>>> datasetList = map.entrySet();
 
-		Set<Entry<DataSet, HashMap<String,SummaryDataPoint>>> datasetList = map.entrySet();
+    Iterator<Entry<DataSet, HashMap<String,SummaryDataPoint>>> mapiter = datasetList.iterator();
 
-		Iterator<Entry<DataSet, HashMap<String,SummaryDataPoint>>> mapiter = datasetList.iterator();
+    while(mapiter.hasNext()){
 
-		while(mapiter.hasNext()){
-			alldatasets.add(mapiter.next().getKey());
-		}
+      Set<Entry<String,SummaryDataPoint>> clusterList = mapiter.next().getValue().entrySet();
 
-		return alldatasets;
-	}
+      Iterator<Entry<String,SummaryDataPoint>> clusteriter = clusterList.iterator();
+      while(clusteriter.hasNext()){
+        String clusterName = clusteriter.next().getKey();
+
+        if(!allNames.contains(clusterName)){
+          allNames.add(clusterName);
+        }
+      }
+    }
+
+    return allNames;
+  }
+
+
+  public LinkedList<DataSet> getAllDataSets(){
+    LinkedList<DataSet> alldatasets = new LinkedList<DataSet>();
+
+    Set<Entry<DataSet, HashMap<String,SummaryDataPoint>>> datasetList = map.entrySet();
+
+    Iterator<Entry<DataSet, HashMap<String,SummaryDataPoint>>> mapiter = datasetList.iterator();
+
+    while(mapiter.hasNext()){
+      alldatasets.add(mapiter.next().getKey());
+    }
+
+    return alldatasets;
+  }
 
 
 

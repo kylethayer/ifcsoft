@@ -26,28 +26,28 @@ import java.util.LinkedList;
  * @author kthayer
  */
 public interface DataSetScalar {
-	String getName();
-	int length();
-	int getDimensions();
-	int getUnscaledDimensions(); //Since PCA changes # of dimensions
+  String getName();
+  int length();
+  int getDimensions();
+  int getUnscaledDimensions(); //Since PCA changes # of dimensions
 
-	float getMax(int dim);
-	float getMin(int dim);
-	double getStdDev(int dim);
-	double getMean(int dim);
-	
-	float[] getPoint(int index);
-	float[] getUnscaledPoint(int index);
+  float getMax(int dim);
+  float getMin(int dim);
+  double getStdDev(int dim);
+  double getMean(int dim);
+  
+  float[] getPoint(int index);
+  float[] getUnscaledPoint(int index);
 
-	float[] scalePoint(float[] weights);
-	float[] unscalePoint(float[] weights);
+  float[] scalePoint(float[] weights);
+  float[] unscalePoint(float[] weights);
 
-	String[] getColLabels();
+  String[] getColLabels();
 
-	LinkedList<String> getRawSetNames();
+  LinkedList<String> getRawSetNames();
 
-	String getPointSetName(int index);
+  String getPointSetName(int index);
 
-	DataSet getDataSet();
+  DataSet getDataSet();
 
 }

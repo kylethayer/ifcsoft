@@ -26,89 +26,89 @@ import java.util.LinkedList;
  * @author kthayer
  */
 public class UnscaledDataSet implements DataSetScalar{
-	private DataSet dataset;
+  private DataSet dataset;
 
-	public UnscaledDataSet(DataSet dataset){
-		this.dataset = dataset;
-	}
+  public UnscaledDataSet(DataSet dataset){
+    this.dataset = dataset;
+  }
 
-	@Override
-	public String getName() {
-		return dataset.getName();
-	}
+  @Override
+  public String getName() {
+    return dataset.getName();
+  }
 
-	@Override
-	public int length() {
-		return dataset.length();
-	}
+  @Override
+  public int length() {
+    return dataset.length();
+  }
 
-	@Override
-	public int getDimensions() {
-		return dataset.getDimensions();
-	}
+  @Override
+  public int getDimensions() {
+    return dataset.getDimensions();
+  }
 
-	@Override
-	public int getUnscaledDimensions() {
-		return getDimensions();
-	}
+  @Override
+  public int getUnscaledDimensions() {
+    return getDimensions();
+  }
 
-	@Override
-	public float getMax(int dim) {
-		return dataset.getMax(dim);
-	}
+  @Override
+  public float getMax(int dim) {
+    return dataset.getMax(dim);
+  }
 
-	@Override
-	public float getMin(int dim) {
-		return dataset.getMin(dim);
-	}
+  @Override
+  public float getMin(int dim) {
+    return dataset.getMin(dim);
+  }
 
-	@Override
-	public double getStdDev(int dim) {
-		return dataset.getStdDev(dim);
-	}
+  @Override
+  public double getStdDev(int dim) {
+    return dataset.getStdDev(dim);
+  }
 
-	@Override
-	public double getMean(int dim) {
-		return dataset.getMean(dim);
-	}
+  @Override
+  public double getMean(int dim) {
+    return dataset.getMean(dim);
+  }
 
-	@Override
-	public float[] getPoint(int index) {
-		return dataset.getVals(index);
-	}
+  @Override
+  public float[] getPoint(int index) {
+    return dataset.getVals(index);
+  }
 
-	@Override
-	public float[] getUnscaledPoint(int index) {
-		return dataset.getVals(index);
-	}
+  @Override
+  public float[] getUnscaledPoint(int index) {
+    return dataset.getVals(index);
+  }
 
-	@Override
-	public float[] scalePoint(float[] weights) {
-		return weights;
-	}
+  @Override
+  public float[] scalePoint(float[] weights) {
+    return weights;
+  }
 
-	@Override
-	public float[] unscalePoint(float[] weights) {
-		return weights;
-	}
+  @Override
+  public float[] unscalePoint(float[] weights) {
+    return weights;
+  }
 
-	@Override
-	public String[] getColLabels() {
-		return dataset.getColLabels();
-	}
+  @Override
+  public String[] getColLabels() {
+    return dataset.getColLabels();
+  }
 
-	@Override
-	public LinkedList<String> getRawSetNames() {
-		return dataset.getRawSetNames();
-	}
+  @Override
+  public LinkedList<String> getRawSetNames() {
+    return dataset.getRawSetNames();
+  }
 
-	@Override
-	public String getPointSetName(int index) {
-		return dataset.getPointSetName(index);
-	}
+  @Override
+  public String getPointSetName(int index) {
+    return dataset.getPointSetName(index);
+  }
 
-	@Override
-	public DataSet getDataSet(){
-		return dataset;
-	}
+  @Override
+  public DataSet getDataSet(){
+    return dataset;
+  }
 }

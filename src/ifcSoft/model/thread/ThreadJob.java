@@ -23,40 +23,40 @@ package ifcSoft.model.thread;
  * @author Kyle Thayer <kthayer@emory.edu>
  */
 public interface ThreadJob {
-	
-	/**
-	 * A job that just yields the CPU (to attempt to let the GUI update)
-	 */
-	public static final int YIELDJOB = -1;
+  
+  /**
+   * A job that just yields the CPU (to attempt to let the GUI update)
+   */
+  public static final int YIELDJOB = -1;
 
-	/**
-	 * A job to compute an SOM
-	 */
-	public static final int COMPUTESOMJOB = 1;
+  /**
+   * A job to compute an SOM
+   */
+  public static final int COMPUTESOMJOB = 1;
 
-	/**
-	 * A job to compute a batch SOM
-	 */
-	public static final int COMPUTEBATCHSOMJOB = 2;
+  /**
+   * A job to compute a batch SOM
+   */
+  public static final int COMPUTEBATCHSOMJOB = 2;
 
-	/**
-	 * A job to create the density map of an SOM (BMUs for data points)
-	 */
-	public static final int FINDBMUJOB = 10;
+  /**
+   * A job to create the density map of an SOM (BMUs for data points)
+   */
+  public static final int FINDBMUJOB = 10;
 
-	/**
-	 * A job to load a file.
-	 */
-	public static final int LOADFILEJOB = 20;
+  /**
+   * A job to load a file.
+   */
+  public static final int LOADFILEJOB = 20;
 
-	/**
-	 * A job to remove outliers from a data set.
-	 */
-	public static final int REMOVEOUTLEIRSJOB = 30;
-	
-	/**
-	 * Returns the type of job this is.
-	 * @return
-	 */
-	public int getJobType();
+  /**
+   * A job to remove outliers from a data set.
+   */
+  public static final int REMOVEOUTLEIRSJOB = 30;
+  
+  /**
+   * Returns the type of job this is.
+   * @return
+   */
+  public int getJobType();
 }

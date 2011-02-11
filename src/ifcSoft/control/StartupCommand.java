@@ -32,25 +32,25 @@ import org.puremvc.java.patterns.command.*;
  */
 public class StartupCommand extends SimpleCommand {
 
-	/**
-	 * The process of initializing the pureMVC system.
-	 * @param note
-	 */
-	@Override
-	public void execute(INotification note){
-		MainAppI app = (MainAppI) note.getBody();
-		
-		facade.registerMediator(new MainMediator(app));
-		
-		
-		
-		facade.registerCommand(ApplicationFacade.LOADDATA, LoadDataCommand.class);
-		facade.registerCommand(ApplicationFacade.LOADSOM, LoadSOMCommand.class);
-		facade.registerCommand(ApplicationFacade.SAVESOM, SaveSOMCommand.class);
-		facade.registerCommand(ApplicationFacade.CHOOSECLUSTER, SaveClusterCommand.class);
-		facade.registerCommand(ApplicationFacade.SAVECLUSTERTOFILE, SaveClusterToFileCommand.class);
-		
-		facade.sendNotification(MainMediator.NODATA, null, null);
-	}
-	
+  /**
+   * The process of initializing the pureMVC system.
+   * @param note
+   */
+  @Override
+  public void execute(INotification note){
+    MainAppI app = (MainAppI) note.getBody();
+    
+    facade.registerMediator(new MainMediator(app));
+    
+    
+    
+    facade.registerCommand(ApplicationFacade.LOADDATA, LoadDataCommand.class);
+    facade.registerCommand(ApplicationFacade.LOADSOM, LoadSOMCommand.class);
+    facade.registerCommand(ApplicationFacade.SAVESOM, SaveSOMCommand.class);
+    facade.registerCommand(ApplicationFacade.CHOOSECLUSTER, SaveClusterCommand.class);
+    facade.registerCommand(ApplicationFacade.SAVECLUSTERTOFILE, SaveClusterToFileCommand.class);
+    
+    facade.sendNotification(MainMediator.NODATA, null, null);
+  }
+  
 }

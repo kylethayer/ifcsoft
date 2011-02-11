@@ -32,106 +32,106 @@ import ifcSoft.control.StartupCommand;
 public class ApplicationFacade extends Facade implements IFacade{
 
 
-	//notification name constants
-	/**
-	 *
-	 */
-	public static String STARTUP = "startup";
-	/**
-	 *
-	 */
-	public static String LOGIN = "login";
-	/**
-	 *
-	 */
-	public static String LOADDATA = "loaddata";
-	/**
-	 *
-	 */
-	public static String LOADSOM = "loadsom";
-	/**
-	 *
-	 */
-	public static String SAVESOM = "savesom";
-	/**
-	 *
-	 */
-	public static String FILELOADED = "fileloaded";
-	/**
-	 *
-	 */
-	public static String RETURNEDSOM = "returnedsom";
-	/**
-	 *
-	 */
-	public static String STARTEDSOM = "startedsom";
-	/**
-	 * 
-	 */
-	public static String GETSOMPROGRESS = "getsomprogress";
-	/**
-	 *
-	 */
-	public static String RETURNEDSOMPROGRESS = "returnedsomprogress";
-	/**
-	 *
-	 */
-	public static String SOMPROGRESS = "somprogress";
-	/**
-	 *
-	 */
-	public static String GETPROGRESS = "getprogress";
-	/**
-	 *
-	 */
-	public static String EXCEPTIONALERT = "exceptionalert";
-	/**
-	 *
-	 */
-	public static String STRINGALERT = "stringalert";
-	/**
-	 *
-	 */
-	public static String CHOOSECLUSTER = "choosecluster";
-	/**
-	 *
-	 */
-	public static String SAVECLUSTERTOFILE = "saveclustertofile";
-	/**
-	 *
-	 */
-	public static String ADDNEWDSP = "addnewdsp";
+  //notification name constants
+  /**
+   *
+   */
+  public static String STARTUP = "startup";
+  /**
+   *
+   */
+  public static String LOGIN = "login";
+  /**
+   *
+   */
+  public static String LOADDATA = "loaddata";
+  /**
+   *
+   */
+  public static String LOADSOM = "loadsom";
+  /**
+   *
+   */
+  public static String SAVESOM = "savesom";
+  /**
+   *
+   */
+  public static String FILELOADED = "fileloaded";
+  /**
+   *
+   */
+  public static String RETURNEDSOM = "returnedsom";
+  /**
+   *
+   */
+  public static String STARTEDSOM = "startedsom";
+  /**
+   * 
+   */
+  public static String GETSOMPROGRESS = "getsomprogress";
+  /**
+   *
+   */
+  public static String RETURNEDSOMPROGRESS = "returnedsomprogress";
+  /**
+   *
+   */
+  public static String SOMPROGRESS = "somprogress";
+  /**
+   *
+   */
+  public static String GETPROGRESS = "getprogress";
+  /**
+   *
+   */
+  public static String EXCEPTIONALERT = "exceptionalert";
+  /**
+   *
+   */
+  public static String STRINGALERT = "stringalert";
+  /**
+   *
+   */
+  public static String CHOOSECLUSTER = "choosecluster";
+  /**
+   *
+   */
+  public static String SAVECLUSTERTOFILE = "saveclustertofile";
+  /**
+   *
+   */
+  public static String ADDNEWDSP = "addnewdsp";
 
 
-	
-	/**
-	 * Returns the instance of ApplicationFacade (and creates it if needed).
-	 * @return The instance ApplicationFacade
-	 */
-	public static ApplicationFacade getInstance(){
-		if(instance == null){
-			instance = new ApplicationFacade();
-		}
-		return (ApplicationFacade) instance;
-	}
-	
-	/**
-	 * pureMVC initialize controller.
-	 */
-	@Override
-	protected void initializeController(){
-		super.initializeController();
-		registerCommand(STARTUP, StartupCommand.class);
-	}
-	
-	/**
-	 * pureMVC startup.
-	 * @param app
-	 */
-	public void startup(MainAppI app){
-		sendNotification(STARTUP, app, null);
-	}
-	
-	
-	
+  
+  /**
+   * Returns the instance of ApplicationFacade (and creates it if needed).
+   * @return The instance ApplicationFacade
+   */
+  public static ApplicationFacade getInstance(){
+    if(instance == null){
+      instance = new ApplicationFacade();
+    }
+    return (ApplicationFacade) instance;
+  }
+  
+  /**
+   * pureMVC initialize controller.
+   */
+  @Override
+  protected void initializeController(){
+    super.initializeController();
+    registerCommand(STARTUP, StartupCommand.class);
+  }
+  
+  /**
+   * pureMVC startup.
+   * @param app
+   */
+  public void startup(MainAppI app){
+    sendNotification(STARTUP, app, null);
+  }
+  
+  
+  
 }

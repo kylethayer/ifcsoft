@@ -28,41 +28,41 @@ import java.lang.UnsupportedOperationException;
 
 public class SOMTileDenseMap extends SOMTile{
 
-	
+  
 
-	override public function updateDenseMap():Void{
-		//main dense map
-		var placed:Integer = somMaps.mediator.getDenstiyMapPlaced();
-		if(placed > lastDenseDisplayed){
-			var newimg:BufferedImage = somMaps.mediator.getDenstiyMapImg();
-			img =newimg;
-			placed = lastDenseDisplayed;
-			if(somMaps.clusterImg == null){
-				updatePointStats();
-			}else{
-				updateClusterStats();
-			}
-		}
-	}
+  override public function updateDenseMap():Void{
+    //main dense map
+    var placed:Integer = somMaps.mediator.getDenstiyMapPlaced();
+    if(placed > lastDenseDisplayed){
+      var newimg:BufferedImage = somMaps.mediator.getDenstiyMapImg();
+      img =newimg;
+      placed = lastDenseDisplayed;
+      if(somMaps.clusterImg == null){
+        updatePointStats();
+      }else{
+        updateClusterStats();
+      }
+    }
+  }
 
 
     override public function updatePointStats () : Void {
        var val = somMaps.mediator.getDenseCellVal();
-		if(val == -1){
-			setBottomText("");
-		}else{
-			setBottomText("{val}");
-		}
+    if(val == -1){
+      setBottomText("");
+    }else{
+      setBottomText("{val}");
+    }
     }
 
     override public function updateClusterStats () : Void {
         var clustMembs:Integer =  somMaps.mediator.getTotalClusterMembs();
-		var totalPlaced:Float = somMaps.mediator.getDenstiyMapPlaced();
-		if(totalPlaced == 0){
-			setBottomText("");
-		}else{
-			setBottomText("{clustMembs * 100 / totalPlaced}%");
-		}
+    var totalPlaced:Float = somMaps.mediator.getDenstiyMapPlaced();
+    if(totalPlaced == 0){
+      setBottomText("");
+    }else{
+      setBottomText("{clustMembs * 100 / totalPlaced}%");
+    }
     }
 
 }

@@ -30,64 +30,64 @@ import ifcSoft.model.DataSetProxy;
  */
 
 public class ShrinkDataSetDialog {
-	public-init var mainMediator:MainMediator;
-	public-init var mainApp:MainApp;
+  public-init var mainMediator:MainMediator;
+  public-init var mainApp:MainApp;
 
-	var shrinkAmtInput:ifcDialogFloatInput;
-	var dataSetSelect:ifcDialogDataSetSelect;
-	var saveAsNewDS:ifcDialogRadioButtons;
-	var shrinkDatasetBoxDialog:ifcDialogBox =
-		ifcDialogBox{
-			name: "Shrink Data Set(s)"
-			content:[
-				dataSetSelect = ifcDialogDataSetSelect{mainApp:mainApp},
-				shrinkAmtInput = ifcDialogFloatInput{
-					name: "Keep what percent? "
-					initialFloat: 10
-				},
-				/*saveAsNewDS = ifcDialogCheckBox{
-					name: "Save As New Data Set"
-					initialCheck: false
-					defined: bind (dataSetSelect.getDataSets().size() == 1)
-				}*/
-
-
-			]
-			okAction: shrinkDatsetOK
-			okName: "Shrink Data Set"
-			cancelAction: shrinkDatsetCancel
-
-			blocksMouse: true
-			//disable: bind ReRemoveOutliersBoxDisabled;
-		};
-
-	
-
-	function shrinkDatsetOK():Void{
-		var finaldsp:DataSetProxy = mainMediator.getDataSet(dataSetSelect.getDataSets());
-
-		mainMediator.shrinkDatset(finaldsp, shrinkAmtInput.getInput());
-
-		mainApp.removeDialog(shrinkDatasetBoxDialog);
-	}
-
-	function shrinkDatsetCancel():Void{
-	
-
-		mainApp.removeDialog(shrinkDatasetBoxDialog);
-	}
+  var shrinkAmtInput:ifcDialogFloatInput;
+  var dataSetSelect:ifcDialogDataSetSelect;
+  var saveAsNewDS:ifcDialogRadioButtons;
+  var shrinkDatasetBoxDialog:ifcDialogBox =
+    ifcDialogBox{
+      name: "Shrink Data Set(s)"
+      content:[
+        dataSetSelect = ifcDialogDataSetSelect{mainApp:mainApp},
+        shrinkAmtInput = ifcDialogFloatInput{
+          name: "Keep what percent? "
+          initialFloat: 10
+        },
+        /*saveAsNewDS = ifcDialogCheckBox{
+          name: "Save As New Data Set"
+          initialCheck: false
+          defined: bind (dataSetSelect.getDataSets().size() == 1)
+        }*/
 
 
-	/**
-	* Create and display the Shrink Dataset dialog box.
-	*/
-	public function shrinkDatasetDialog():Void{
-		if(mainMediator.getDSP(0) == null){
-			mainApp.alert("No Data Set Loaded");
-			return;
-		}
-		mainApp.addDialog(shrinkDatasetBoxDialog);
-	}
+      ]
+      okAction: shrinkDatsetOK
+      okName: "Shrink Data Set"
+      cancelAction: shrinkDatsetCancel
 
-	
+      blocksMouse: true
+      //disable: bind ReRemoveOutliersBoxDisabled;
+    };
+
+  
+
+  function shrinkDatsetOK():Void{
+    var finaldsp:DataSetProxy = mainMediator.getDataSet(dataSetSelect.getDataSets());
+
+    mainMediator.shrinkDatset(finaldsp, shrinkAmtInput.getInput());
+
+    mainApp.removeDialog(shrinkDatasetBoxDialog);
+  }
+
+  function shrinkDatsetCancel():Void{
+  
+
+    mainApp.removeDialog(shrinkDatasetBoxDialog);
+  }
+
+
+  /**
+  * Create and display the Shrink Dataset dialog box.
+  */
+  public function shrinkDatasetDialog():Void{
+    if(mainMediator.getDSP(0) == null){
+      mainApp.alert("No Data Set Loaded");
+      return;
+    }
+    mainApp.addDialog(shrinkDatasetBoxDialog);
+  }
+
+  
 }

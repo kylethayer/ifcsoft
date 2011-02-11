@@ -26,14 +26,14 @@ import javafx.scene.CustomNode;
 
 public abstract class ifcDialogItem extends CustomNode{
 
-	public function validate():Boolean{
-		return true;
-	}
+  public function validate():Boolean{
+    return true;
+  }
 
-	public function getName():String{
-		return "";
-	}
-	
+  public function getName():String{
+    return "";
+  }
+  
 
 
 }

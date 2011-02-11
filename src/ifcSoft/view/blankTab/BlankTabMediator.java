@@ -27,58 +27,58 @@ import ifcSoft.view.TabMediator;
  */
 public class BlankTabMediator implements TabMediator {
 
-	BlankTabI btvc;
+  BlankTabI btvc;
 
-	/**
-	 * The constructor needs a link to the MainApp to be able to display stuff.
-	 * @param app
-	 */
-	public BlankTabMediator(MainAppI app){
-		btvc = app.makeBlankTab();
-	}
+  /**
+   * The constructor needs a link to the MainApp to be able to display stuff.
+   * @param app
+   */
+  public BlankTabMediator(MainAppI app){
+    btvc = app.makeBlankTab();
+  }
 
-	@Override
-	public void display() {
-		//if there's data do one thing, else do other
-		btvc.displayTab();
-	}
+  @Override
+  public void display() {
+    //if there's data do one thing, else do other
+    btvc.displayTab();
+  }
 
-	@Override
-	public void swapOutTab() {
-		//nothing to be saved ... so far
-	}
+  @Override
+  public void swapOutTab() {
+    //nothing to be saved ... so far
+  }
 
-	@Override
-	public String getTabName() {
-		return "blank";
-	}
+  @Override
+  public String getTabName() {
+    return "blank";
+  }
 
-	@Override
-	public float getTabProgress() {
-		return 100;
-	}
+  @Override
+  public float getTabProgress() {
+    return 100;
+  }
 
-	@Override
-	public void informNewDsp() {
-		btvc.informNewDsp();
-	}
+  @Override
+  public void informNewDsp() {
+    btvc.informNewDsp();
+  }
 
-	/**
-	 * Tries to close the tab
-	 * @return True if the tab allows itself to be closed
-	 */
-	@Override
-	public boolean closeTab(){
-		return true; //Nothing to be saved, so just return
-	}
+  /**
+   * Tries to close the tab
+   * @return True if the tab allows itself to be closed
+   */
+  @Override
+  public boolean closeTab(){
+    return true; //Nothing to be saved, so just return
+  }
 
-	/**
-	 *  Returns whether or not the dialog content should be blocked (for reloading tab).
-	 *  In this case, it never should be blocked.
-	 * @return false
-	 */
-	@Override
-	public boolean isDialogContentBlocked(){
-		return false;
-	}
+  /**
+   *  Returns whether or not the dialog content should be blocked (for reloading tab).
+   *  In this case, it never should be blocked.
+   * @return false
+   */
+  @Override
+  public boolean isDialogContentBlocked(){
+    return false;
+  }
 }

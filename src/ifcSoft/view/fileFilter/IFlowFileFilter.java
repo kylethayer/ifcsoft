@@ -27,23 +27,23 @@ import javax.swing.filechooser.*;
  */
 public class IFlowFileFilter extends FileFilter {
 
-	@Override
-	public boolean accept(File f) {
-		if (f.isDirectory()) {
-			return true;
-		}
-		String name = f.getName();
-		if(name.endsWith(".iflo")){
-			return true;
-		}
+  @Override
+  public boolean accept(File f) {
+    if (f.isDirectory()) {
+      return true;
+    }
+    String name = f.getName();
+    if(name.endsWith(".iflo")){
+      return true;
+    }
 
-		return false;
-	}
+    return false;
+  }
 
 
 
  public String getDescription() {
-		return ".iflo - IFCSoft file";
-	}
+    return ".iflo - IFCSoft file";
+  }
 
 }

@@ -39,145 +39,145 @@ import javafx.scene.Group;
  */
 
 public class ifcDialogBox extends CustomNode {
-	public-init var name:String;
-	public var content:ifcDialogItem[] on replace{children = makeContent()};
+  public-init var name:String;
+  public var content:ifcDialogItem[] on replace{children = makeContent()};
 
 
-	public-init var okAction:function():Void;
-	public-init var okName:String = "OK";
+  public-init var okAction:function():Void;
+  public-init var okName:String = "OK";
 
-	public-init var cancelAction:function():Void;
-	public-init var cancelName:String = "Cancel";
+  public-init var cancelAction:function():Void;
+  public-init var cancelName:String = "Cancel";
 
-	//public var some sort of layout bounds
-
-
-	public def dialogBoxArc = 20;
-
-	var innerContent:VBox;
-
-	public var xpos:Float = 0; //public to allow the mainApp to move dialog box as needed
-	var lastDragX:Float = 0;
-	public var ypos:Float = 0;
-	var lastDragY:Float = 0; //public to allow the mainApp to move dialog box as needed
-
-	var maxWidth = 0.0;
-	var maxHeight = 0.0;
-	var currentwidth = bind innerContent.boundsInLocal.width on replace{
-			if(currentwidth > maxWidth){
-				maxWidth = currentwidth+5;
-			}
-		};
-	var currentheight = bind innerContent.boundsInLocal.height on replace{
-			if(currentheight > maxHeight){
-				maxHeight = currentheight+5;
-			}
-		};
+  //public var some sort of layout bounds
 
 
-	var testoffset = .1; //part of a hack to get around a JavaFX bug
+  public def dialogBoxArc = 20;
+
+  var innerContent:VBox;
+
+  public var xpos:Float = 0; //public to allow the mainApp to move dialog box as needed
+  var lastDragX:Float = 0;
+  public var ypos:Float = 0;
+  var lastDragY:Float = 0; //public to allow the mainApp to move dialog box as needed
+
+  var maxWidth = 0.0;
+  var maxHeight = 0.0;
+  var currentwidth = bind innerContent.boundsInLocal.width on replace{
+      if(currentwidth > maxWidth){
+        maxWidth = currentwidth+5;
+      }
+    };
+  var currentheight = bind innerContent.boundsInLocal.height on replace{
+      if(currentheight > maxHeight){
+        maxHeight = currentheight+5;
+      }
+    };
 
 
-
-
-	function makeContent():Node[]{
-		//first make the inner stuff, then make background rounded box thingy to fit.
-
-		var innerContentNodes:Node[] = content;
-
-		//add the OK and Cancel buttons
-		if(okAction != null){
-			if(cancelAction != null){ //both
-				insert HBox{
-						spacing:10
-						padding: Insets{top:3}
-						content:[
-							ifcDialogButton{text:okName action: okButton},
-							ifcDialogButton{text:cancelName action: cancelAction}
-						]
-					}into innerContentNodes;
-			}else{ //only OK
-				insert ifcDialogButton{text:okName action: okButton} into innerContentNodes;
-			}
-		}else if(cancelAction != null){ //only Cancel
-			insert ifcDialogButton{text:cancelName action: cancelAction} into innerContentNodes;
-		}
-
-		if(name != null){
-			insert Text{content:name font:Font{size:14}} before innerContentNodes[0];
-		}
-
-
-		innerContent = VBox{
-			layoutX: dialogBoxArc
-			layoutY: dialogBoxArc/2
-			spacing: 2
-			content:[
-				for(i in [0..innerContentNodes.size()-1]){
-					innerContentNodes[i];
-				}
-			]
-		}
-
-		var backRectangle = 
-			Rectangle {
-				width: bind maxWidth + 2*dialogBoxArc
-				height: bind maxHeight + dialogBoxArc*3/4
-				arcWidth: dialogBoxArc  arcHeight: dialogBoxArc
-				stroke: Color.LIGHTGRAY;
-				fill: Color.rgb(138,123,102);
-				x: 0
-				y: bind testoffset
-				onMouseDragged: rectangleDragged
-				onMousePressed: function(e:MouseEvent):Void{lastDragX = 0; lastDragY = 0;}
-				blocksMouse: true
-			};
-
-
-		//There is a bug in JavaFX (1.3.1, jdk1.6.0_18) where it wasn't displaying the
-		// dialog when it was placed on the stage, by moving it ever so slightly,
-		//javaFX will display it
-		var testtimeline = Timeline {
-			keyFrames: [
-			  at (0s) {testoffset => .1},
-			  at (.3s) {testoffset => 0 tween Interpolator.EASEOUT}
-	 	]}
-		testtimeline.play();
-		return Group{
-				content:[backRectangle, innerContent]
-				layoutX: bind xpos
-				layoutY: bind ypos
-			};
-	}
-
-	function rectangleDragged(e:MouseEvent):Void{
-		xpos += e.dragX - lastDragX;
-		ypos += e.dragY - lastDragY;
-		//TODO: Make sure you can't push it completely off screen
-
-		lastDragX = e.dragX;
-		lastDragY = e.dragY;
-	}
-
-
-	init{
-		children = makeContent();
-	}
+  var testoffset = .1; //part of a hack to get around a JavaFX bug
 
 
 
-	//when they press OK, validate every item in content first
-	function okButton():Void{
-		for(item in content){
-			if(not item.validate()){
-				//display some sort of error
-				Alert.inform("Form not completed: {item.getName()}");
-				return;
-			}
-		}
 
-		okAction();
-	}
+  function makeContent():Node[]{
+    //first make the inner stuff, then make background rounded box thingy to fit.
+
+    var innerContentNodes:Node[] = content;
+
+    //add the OK and Cancel buttons
+    if(okAction != null){
+      if(cancelAction != null){ //both
+        insert HBox{
+            spacing:10
+            padding: Insets{top:3}
+            content:[
+              ifcDialogButton{text:okName action: okButton},
+              ifcDialogButton{text:cancelName action: cancelAction}
+            ]
+          }into innerContentNodes;
+      }else{ //only OK
+        insert ifcDialogButton{text:okName action: okButton} into innerContentNodes;
+      }
+    }else if(cancelAction != null){ //only Cancel
+      insert ifcDialogButton{text:cancelName action: cancelAction} into innerContentNodes;
+    }
+
+    if(name != null){
+      insert Text{content:name font:Font{size:14}} before innerContentNodes[0];
+    }
+
+
+    innerContent = VBox{
+      layoutX: dialogBoxArc
+      layoutY: dialogBoxArc/2
+      spacing: 2
+      content:[
+        for(i in [0..innerContentNodes.size()-1]){
+          innerContentNodes[i];
+        }
+      ]
+    }
+
+    var backRectangle = 
+      Rectangle {
+        width: bind maxWidth + 2*dialogBoxArc
+        height: bind maxHeight + dialogBoxArc*3/4
+        arcWidth: dialogBoxArc  arcHeight: dialogBoxArc
+        stroke: Color.LIGHTGRAY;
+        fill: Color.rgb(138,123,102);
+        x: 0
+        y: bind testoffset
+        onMouseDragged: rectangleDragged
+        onMousePressed: function(e:MouseEvent):Void{lastDragX = 0; lastDragY = 0;}
+        blocksMouse: true
+      };
+
+
+    //There is a bug in JavaFX (1.3.1, jdk1.6.0_18) where it wasn't displaying the
+    // dialog when it was placed on the stage, by moving it ever so slightly,
+    //javaFX will display it
+    var testtimeline = Timeline {
+      keyFrames: [
+        at (0s) {testoffset => .1},
+        at (.3s) {testoffset => 0 tween Interpolator.EASEOUT}
+     ]}
+    testtimeline.play();
+    return Group{
+        content:[backRectangle, innerContent]
+        layoutX: bind xpos
+        layoutY: bind ypos
+      };
+  }
+
+  function rectangleDragged(e:MouseEvent):Void{
+    xpos += e.dragX - lastDragX;
+    ypos += e.dragY - lastDragY;
+    //TODO: Make sure you can't push it completely off screen
+
+    lastDragX = e.dragX;
+    lastDragY = e.dragY;
+  }
+
+
+  init{
+    children = makeContent();
+  }
+
+
+
+  //when they press OK, validate every item in content first
+  function okButton():Void{
+    for(item in content){
+      if(not item.validate()){
+        //display some sort of error
+        Alert.inform("Form not completed: {item.getName()}");
+        return;
+      }
+    }
+
+    okAction();
+  }
 
 
 }

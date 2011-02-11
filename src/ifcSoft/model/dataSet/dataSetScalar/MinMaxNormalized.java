@@ -27,114 +27,114 @@ import java.util.LinkedList;
  */
 public class MinMaxNormalized implements DataSetScalar {
 
-	private DataSet dataset;
-	
+  private DataSet dataset;
+  
 
-	public MinMaxNormalized(DataSet dataset){
-		this.dataset = dataset;
-	}
+  public MinMaxNormalized(DataSet dataset){
+    this.dataset = dataset;
+  }
 
-	@Override
-	public String getName() {
-		return dataset.getName();
-	}
+  @Override
+  public String getName() {
+    return dataset.getName();
+  }
 
-	@Override
-	public int length() {
-		return dataset.length();
-	}
+  @Override
+  public int length() {
+    return dataset.length();
+  }
 
-	@Override
-	public int getDimensions() {
-		return dataset.getDimensions();
-	}
+  @Override
+  public int getDimensions() {
+    return dataset.getDimensions();
+  }
 
-	@Override
-	public float getMax(int dim) {
-		return 1;
-	}
+  @Override
+  public float getMax(int dim) {
+    return 1;
+  }
 
-	@Override
-	public float getMin(int dim) {
-		return 0;
-	}
+  @Override
+  public float getMin(int dim) {
+    return 0;
+  }
 
-	@Override
-	public double getStdDev(int dim) {
-		//TODO: is this valid?
-		return scaleDim(dataset.getStdDev(dim), dim);
-	}
+  @Override
+  public double getStdDev(int dim) {
+    //TODO: is this valid?
+    return scaleDim(dataset.getStdDev(dim), dim);
+  }
 
-	@Override
-	public double getMean(int dim) {
-		return scaleDim(dataset.getMean(dim), dim);
-	}
+  @Override
+  public double getMean(int dim) {
+    return scaleDim(dataset.getMean(dim), dim);
+  }
 
-	@Override
-	public float[] getPoint(int index) {
-		return scalePoint(dataset.getVals(index));
-	}
+  @Override
+  public float[] getPoint(int index) {
+    return scalePoint(dataset.getVals(index));
+  }
 
-	@Override
-	public float[] getUnscaledPoint(int index) {
-		return dataset.getVals(index);
-	}
+  @Override
+  public float[] getUnscaledPoint(int index) {
+    return dataset.getVals(index);
+  }
 
-	@Override
-	public int getUnscaledDimensions() {
-		return getDimensions();
-	}
+  @Override
+  public int getUnscaledDimensions() {
+    return getDimensions();
+  }
 
-	@Override
-	public float[] scalePoint(float[] weights) {
-		float [] scaledpt = new float[weights.length];
-		for(int i = 0; i < weights.length; i++){
-			scaledpt[i] = (float) scaleDim(weights[i], i);
-		}
-		return scaledpt;
-	}
+  @Override
+  public float[] scalePoint(float[] weights) {
+    float [] scaledpt = new float[weights.length];
+    for(int i = 0; i < weights.length; i++){
+      scaledpt[i] = (float) scaleDim(weights[i], i);
+    }
+    return scaledpt;
+  }
 
-	@Override
-	public float[] unscalePoint(float[] weights) {
-		float [] scaledpt = new float[weights.length];
-		for(int i = 0; i < weights.length; i++){
-			scaledpt[i] = (float) unscaleDim(weights[i], i);
-		}
-		return scaledpt;
-	}
+  @Override
+  public float[] unscalePoint(float[] weights) {
+    float [] scaledpt = new float[weights.length];
+    for(int i = 0; i < weights.length; i++){
+      scaledpt[i] = (float) unscaleDim(weights[i], i);
+    }
+    return scaledpt;
+  }
 
-	@Override
-	public String[] getColLabels() {
-		return dataset.getColLabels();
-	}
+  @Override
+  public String[] getColLabels() {
+    return dataset.getColLabels();
+  }
 
-	@Override
-	public LinkedList<String> getRawSetNames() {
-		return dataset.getRawSetNames();
-	}
+  @Override
+  public LinkedList<String> getRawSetNames() {
+    return dataset.getRawSetNames();
+  }
 
-	@Override
-	public String getPointSetName(int index) {
-		return dataset.getPointSetName(index);
-	}
+  @Override
+  public String getPointSetName(int index) {
+    return dataset.getPointSetName(index);
+  }
 
-	private double scaleDim(double val, int dim){
-		if(dataset.getMax(dim) == dataset.getMin(dim)){
-			return 0;
-		}
-		return (val - dataset.getMin(dim)) / (dataset.getMax(dim) - dataset.getMin(dim));
-	}
+  private double scaleDim(double val, int dim){
+    if(dataset.getMax(dim) == dataset.getMin(dim)){
+      return 0;
+    }
+    return (val - dataset.getMin(dim)) / (dataset.getMax(dim) - dataset.getMin(dim));
+  }
 
-	private double unscaleDim(double val, int dim){
-		if(dataset.getMax(dim) == dataset.getMin(dim)){
-			return dataset.getMax(dim);
-		}
-		return val * (dataset.getMax(dim) - dataset.getMin(dim)) + dataset.getMin(dim) ;
-	}
+  private double unscaleDim(double val, int dim){
+    if(dataset.getMax(dim) == dataset.getMin(dim)){
+      return dataset.getMax(dim);
+    }
+    return val * (dataset.getMax(dim) - dataset.getMin(dim)) + dataset.getMin(dim) ;
+  }
 
-	@Override
-	public DataSet getDataSet(){
-		return dataset;
-	}
+  @Override
+  public DataSet getDataSet(){
+    return dataset;
+  }
 
 }

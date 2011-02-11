@@ -29,50 +29,50 @@ import ifcSoft.view.dialogBox.ifcDialogDataSetSelect;
  */
 
 public class MakeHistogramDialog {
-	public-init var app:MainApp;
-	public-init var mainMediator:MainMediator;
-	postinit{
-		if(app == null or mainMediator == null){
-			println("CalcSOMDialog initializer: not initialized fully");
-		}else{
-			initialize();
-		}
-	}
+  public-init var app:MainApp;
+  public-init var mainMediator:MainMediator;
+  postinit{
+    if(app == null or mainMediator == null){
+      println("CalcSOMDialog initializer: not initialized fully");
+    }else{
+      initialize();
+    }
+  }
 
-	var histDialog:ifcDialogBox;
-	var dataSetSelect:ifcDialogDataSetSelect;
+  var histDialog:ifcDialogBox;
+  var dataSetSelect:ifcDialogDataSetSelect;
 
-	public function initialize(){
-		dataSetSelect = ifcDialogDataSetSelect{mainApp:app};
+  public function initialize(){
+    dataSetSelect = ifcDialogDataSetSelect{mainApp:app};
 
-		histDialog =	ifcDialogBox{
-			name: "Make Histogram"
-			okAction: histOK
-			content: [dataSetSelect]
-			cancelAction: function():Void{app.removeDialog(histDialog)}
+    histDialog =  ifcDialogBox{
+      name: "Make Histogram"
+      okAction: histOK
+      content: [dataSetSelect]
+      cancelAction: function():Void{app.removeDialog(histDialog)}
 
-			blocksMouse: true
-		};
+      blocksMouse: true
+    };
 
-		app.addDialog(histDialog);
-	}
+    app.addDialog(histDialog);
+  }
 
-	function histOK():Void{
-		var datasets = (dataSetSelect.getDataSets());
-		if(datasets.size() == 0){
-			app.alert("No data set selected");
-			app.unblockContent();
-			return;
-		}
+  function histOK():Void{
+    var datasets = (dataSetSelect.getDataSets());
+    if(datasets.size() == 0){
+      app.alert("No data set selected");
+      app.unblockContent();
+      return;
+    }
 
-		var finaldsp:DataSetProxy = mainMediator.getDataSet(dataSetSelect.getDataSets());
-		if(finaldsp == null){
-			println("Error in data set combination");
-			return;
-		}
+    var finaldsp:DataSetProxy = mainMediator.getDataSet(dataSetSelect.getDataSets());
+    if(finaldsp == null){
+      println("Error in data set combination");
+      return;
+    }
 
-		app.removeDialog(histDialog);
-		mainMediator.makeHistogram(finaldsp, 0, 1); //at the moment 1st dimmension and log scale
-	}
-	
+    app.removeDialog(histDialog);
+    mainMediator.makeHistogram(finaldsp, 0, 1); //at the moment 1st dimmension and log scale
+  }
+  
 }

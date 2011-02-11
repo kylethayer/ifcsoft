@@ -30,57 +30,57 @@ import ifcSoft.model.som.SOM;
  * @author Kyle Thayer <kthayer@emory.edu>
  */
 public class ComputeStandardSOMJob implements ThreadJob {
-		
-	/**
-	 * The data set to make the SOM with.
-	 */
-	public DataSetScalar SOMdata;
-	/**
-	 * The number of iterations to be used.
-	 */
-	public int iterations;
-	/**
-	 * The maximum Neighborhood size to be used.
-	 */
-	public int maxNeighborSize;
+    
+  /**
+   * The data set to make the SOM with.
+   */
+  public DataSetScalar SOMdata;
+  /**
+   * The number of iterations to be used.
+   */
+  public int iterations;
+  /**
+   * The maximum Neighborhood size to be used.
+   */
+  public int maxNeighborSize;
 
-	/**
-	 * The min Neighborhood size to be used.
-	 */
-	public int minNeighborSize;
-	/**
-	 * The SOM object to build the SOM in.
-	 */
-	public SOM som;
-	/**
-	 * A variable allowing the SOM building to be canceled.
-	 */
-	public AtomicBoolean iscanceled; //the main thread can cancel a job by changing this object
-	
-	/**
-	 * Constructor for the ComputeSOMJob
-	 * @param SOMdata - The number of iterations to be used.
-	 * @param iterations - The number of iterations to be used.
-	 * @param maxNeighborSize - The maximum Neighborhood size to be used.
-	 * @param som - The SOM object to build the SOM in.
-	 * @param iscanceled - A variable allowing the SOM building to be canceled.
-	 */
-	public ComputeStandardSOMJob(DataSetScalar SOMdata, int iterations, int maxNeighborSize, int minNeighborSize, SOM som, AtomicBoolean iscanceled){
-		this.SOMdata = SOMdata;
-		this.maxNeighborSize = maxNeighborSize;
-		this.minNeighborSize = minNeighborSize;
-		this.som = som;
-		this.iterations = iterations;
-		this.iscanceled = iscanceled;
-	}
-	
-	/**
-	 * It is a Computer SOM Job
-	 * @return
-	 */
-	@Override
-	public int getJobType() {
-		return ThreadJob.COMPUTESOMJOB;
-	}
+  /**
+   * The min Neighborhood size to be used.
+   */
+  public int minNeighborSize;
+  /**
+   * The SOM object to build the SOM in.
+   */
+  public SOM som;
+  /**
+   * A variable allowing the SOM building to be canceled.
+   */
+  public AtomicBoolean iscanceled; //the main thread can cancel a job by changing this object
+  
+  /**
+   * Constructor for the ComputeSOMJob
+   * @param SOMdata - The number of iterations to be used.
+   * @param iterations - The number of iterations to be used.
+   * @param maxNeighborSize - The maximum Neighborhood size to be used.
+   * @param som - The SOM object to build the SOM in.
+   * @param iscanceled - A variable allowing the SOM building to be canceled.
+   */
+  public ComputeStandardSOMJob(DataSetScalar SOMdata, int iterations, int maxNeighborSize, int minNeighborSize, SOM som, AtomicBoolean iscanceled){
+    this.SOMdata = SOMdata;
+    this.maxNeighborSize = maxNeighborSize;
+    this.minNeighborSize = minNeighborSize;
+    this.som = som;
+    this.iterations = iterations;
+    this.iscanceled = iscanceled;
+  }
+  
+  /**
+   * It is a Computer SOM Job
+   * @return
+   */
+  @Override
+  public int getJobType() {
+    return ThreadJob.COMPUTESOMJOB;
+  }
 
 }

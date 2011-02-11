@@ -28,39 +28,39 @@ import javafx.scene.layout.HBox;
  */
 
 public class ifcDialogFloatInput  extends ifcDialogItem{
-	public-init var name:String;
-	public-init var initialFloat:Float = 0;
+  public-init var name:String;
+  public-init var initialFloat:Float = 0;
 
-	var floatInput:TextBox;
+  var floatInput:TextBox;
 
-	init{
-		children =
-			HBox{
-				content:[
-					Text {content: name},
-					floatInput = TextBox{
-						text:  "{initialFloat}"
-					}
-				]
-			}
-	}
+  init{
+    children =
+      HBox{
+        content:[
+          Text {content: name},
+          floatInput = TextBox{
+            text:  "{initialFloat}"
+          }
+        ]
+      }
+  }
 
-	public function getInput():Float{
-		return Float.parseFloat(floatInput.text);;
-	}
+  public function getInput():Float{
+    return Float.parseFloat(floatInput.text);;
+  }
 
-	override function validate():Boolean{
-		try{
-			Float.parseFloat(floatInput.text);
-		}catch(e:Exception){
-			return false;
-		}
-		return true;
-	}
+  override function validate():Boolean{
+    try{
+      Float.parseFloat(floatInput.text);
+    }catch(e:Exception){
+      return false;
+    }
+    return true;
+  }
 
-	override function getName():String{
-		return name;
-	}
+  override function getName():String{
+    return name;
+  }
 
 
 

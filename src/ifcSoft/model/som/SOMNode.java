@@ -26,63 +26,63 @@ import java.util.Random;
  */
 public class SOMNode {
 
-	private float weights[];
-	
-	/**
-	 * If not given an initial value, this will set random weights between 0
-	 * and 1 for each dimension.
-	 * @param dimensions
-	 */
-	protected SOMNode(int dimensions, float min[], float max[]){
-		weights = new float[dimensions];
-		Random r = new Random();
-		for(int i = 0; i < dimensions; i++){
-			weights[i] = r.nextFloat() * (min[i] - max[i]) + min[i];
-			
-		}
-	}
-	
-	/**
-	 * Creates a node with the given initial value.
-	 * @param dimensions
-	 * @param initialWeight
-	 */
-	public SOMNode(float initialWeight[]){
-		weights = new float[initialWeight.length];
-		System.arraycopy(initialWeight, 0, weights, 0, initialWeight.length);
-	}
-	
-	/**
-	 * This gets the weight of a specific dimension from the node.
-	 * @param dim
-	 * @return
-	 */
-	protected float getWeight(int dim){
-		return weights[dim];
-	}
-	
-	/**
-	 * This gets the all the weights from the node.
-	 * @return
-	 */
-	protected float[] getWeights(){
-		return weights;
-	}
+  private float weights[];
+  
+  /**
+   * If not given an initial value, this will set random weights between 0
+   * and 1 for each dimension.
+   * @param dimensions
+   */
+  protected SOMNode(int dimensions, float min[], float max[]){
+    weights = new float[dimensions];
+    Random r = new Random();
+    for(int i = 0; i < dimensions; i++){
+      weights[i] = r.nextFloat() * (min[i] - max[i]) + min[i];
+      
+    }
+  }
+  
+  /**
+   * Creates a node with the given initial value.
+   * @param dimensions
+   * @param initialWeight
+   */
+  public SOMNode(float initialWeight[]){
+    weights = new float[initialWeight.length];
+    System.arraycopy(initialWeight, 0, weights, 0, initialWeight.length);
+  }
+  
+  /**
+   * This gets the weight of a specific dimension from the node.
+   * @param dim
+   * @return
+   */
+  protected float getWeight(int dim){
+    return weights[dim];
+  }
+  
+  /**
+   * This gets the all the weights from the node.
+   * @return
+   */
+  protected float[] getWeights(){
+    return weights;
+  }
 
-	protected void setWeights(float newWeights[]){
-		System.arraycopy(newWeights, 0, weights, 0, weights.length);
-	}
-	
-	/**
-	 * This moves the weight of the node toward the newWeight given
-	 * by a factor of alpha (1 being replace weight and 0 being no change).
-	 * @param newWeight
-	 * @param alpha
-	 */
-	protected void shiftWeights(float[] newWeight, float alpha){
-		for(int k=0; k < weights.length; k++){
-			weights[k] = (1-alpha)*weights[k] + alpha*newWeight[k];
-		}
-	}
+  protected void setWeights(float newWeights[]){
+    System.arraycopy(newWeights, 0, weights, 0, weights.length);
+  }
+  
+  /**
+   * This moves the weight of the node toward the newWeight given
+   * by a factor of alpha (1 being replace weight and 0 being no change).
+   * @param newWeight
+   * @param alpha
+   */
+  protected void shiftWeights(float[] newWeight, float alpha){
+    for(int k=0; k < weights.length; k++){
+      weights[k] = (1-alpha)*weights[k] + alpha*newWeight[k];
+    }
+  }
 }
 

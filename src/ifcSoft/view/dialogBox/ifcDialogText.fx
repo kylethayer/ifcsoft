@@ -25,9 +25,9 @@ import javafx.scene.text.Text;
  */
 
 public class ifcDialogText extends ifcDialogItem{
-	public var text:String;
+  public var text:String;
 
-	init{
-		children =	Text {content:text}
-	}
+  init{
+    children =  Text {content:text}
+  }
 }

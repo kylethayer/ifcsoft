@@ -27,47 +27,47 @@ import ifcSoft.view.som.SOMTile;
 
 public class SOMTileSubsetDenseMap extends SOMTile{
 
-	public-init var densityMap:Integer = -1; //-1 is not a dense map, 0 is the main one, above are the subset ones
+  public-init var densityMap:Integer = -1; //-1 is not a dense map, 0 is the main one, above are the subset ones
 
-	override public function updateDenseMap():Void{
+  override public function updateDenseMap():Void{
 
-		//density subset map
-		var mapNum:Integer = densityMap;
-		var placed:Integer = somMaps.mediator.getSubDenstiyMapPlaced(mapNum);
-		if(placed > lastDenseDisplayed){
-			var newimg:BufferedImage = somMaps.mediator.getSubDenstiyMapImg(mapNum);
-			img = newimg;
-			placed = lastDenseDisplayed;
-			if(somMaps.clusterImg == null){
-				updatePointStats();
-			}else{
-				updateClusterStats();
-			}
-		}
-	}
+    //density subset map
+    var mapNum:Integer = densityMap;
+    var placed:Integer = somMaps.mediator.getSubDenstiyMapPlaced(mapNum);
+    if(placed > lastDenseDisplayed){
+      var newimg:BufferedImage = somMaps.mediator.getSubDenstiyMapImg(mapNum);
+      img = newimg;
+      placed = lastDenseDisplayed;
+      if(somMaps.clusterImg == null){
+        updatePointStats();
+      }else{
+        updateClusterStats();
+      }
+    }
+  }
 
-	override public function updateClusterStats () : Void {
+  override public function updateClusterStats () : Void {
 
-		var mapNum = densityMap;
-		var clustMembs:Integer =  somMaps.mediator.getSubClusterMembs(mapNum);
-		var totalPlaced:Float = somMaps.mediator.getSubDenstiyMapPlaced(mapNum);
-		if(totalPlaced == 0){
-			setBottomText("");
-		}else{
-			setBottomText("{clustMembs * 100 / totalPlaced}%");
-		}
+    var mapNum = densityMap;
+    var clustMembs:Integer =  somMaps.mediator.getSubClusterMembs(mapNum);
+    var totalPlaced:Float = somMaps.mediator.getSubDenstiyMapPlaced(mapNum);
+    if(totalPlaced == 0){
+      setBottomText("");
+    }else{
+      setBottomText("{clustMembs * 100 / totalPlaced}%");
+    }
 
-		
+    
     }
 
     override public function updatePointStats () : Void {
-		var mapNum = densityMap;
-		var val = somMaps.mediator.getDenseCellVal(mapNum);
-		if(val == -1){
-			setBottomText("");
-		}else{
-			setBottomText("{val}");
-		}
+    var mapNum = densityMap;
+    var val = somMaps.mediator.getDenseCellVal(mapNum);
+    if(val == -1){
+      setBottomText("");
+    }else{
+      setBottomText("{val}");
+    }
     }
 
 

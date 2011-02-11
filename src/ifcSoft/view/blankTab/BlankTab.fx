@@ -35,128 +35,128 @@ import javafx.scene.input.MouseEvent;
  */
 
 public class BlankTab extends BlankTabI{
-	
-	/**
-	 * This variable must be initialized for it to work
-	 */
-	public var app:MainApp;
+  
+  /**
+   * This variable must be initialized for it to work
+   */
+  public var app:MainApp;
 
-	postinit{
-		if(app == null){
-			println("BlankTab initializer: not initialized fully");
-		}
-	}
+  postinit{
+    if(app == null){
+      println("BlankTab initializer: not initialized fully");
+    }
+  }
 
-	override public function informNewDsp(){
-		displayData();
-	}
-
-
-	override public function displayTab() {
-		//if() who holds the Dsps?
-		if(app.getMainMediator().dataSets.size() == 0){
-			displayNoData();
-		}else{
-			displayData();
-		}
-	}
-
-	function displayNoData(){
-		var display =  Group{
-			content: [
-				Group{
-					layoutX: bind app.contentWidth/2 - 50
-					layoutY: bind app.contentHeight/2 - 20
-					content: [
-						Rectangle {
-							width: 200
-							height : 80
-							x: -15 y: -35
-							onMouseClicked: function(event){app.loadFile();}
-
-						},
-						Text {
-							content: "< no data loaded >\nClick  to load data"
-							font: Font {name: "Arial" size: 20}
-							fill: Color.WHITE
-						}
-					]
+  override public function informNewDsp(){
+    displayData();
+  }
 
 
-				}
-			]
-		}
-		app.setMainContent(display);
-	}
+  override public function displayTab() {
+    //if() who holds the Dsps?
+    if(app.getMainMediator().dataSets.size() == 0){
+      displayNoData();
+    }else{
+      displayData();
+    }
+  }
 
-	function displayData(){
-		var display = Group{
-			content: [
-				Group{
-					layoutX: bind app.contentWidth/2 - 70
-					layoutY: bind app.contentHeight/2 - 50
-					content: [
-						VBox{
-							spacing: 10
-							content: [
-								Text {
-									content: "Data is loaded.\n(later this will show the data sets)"
-									font: Font {name: "Arial" size: 14}
-									fill: Color.WHITE
-								}
-								Text {
-									content: "Options:"
-									font: Font {name: "Arial" size: 12}
-									fill: Color.WHITE
-								}
-								Button{
-									text: "Load Data"
-									action:  function(){}
-									//Use clicked so that the click doesn't hit the new popup window
-									onMouseClicked:function(e: MouseEvent){app.loadFile();}
-								},
-								Button{
-									text: "Remove\nOutliers"
-									action:  function(){}
-									//Use clicked so that the click doesn't hit the new popup window
-									onMouseClicked:function(e: MouseEvent){app.outliersDialog(false);}
-								},
-								Button{
-									text: "Calculate SOM"
-									blocksMouse: false
-									action:  function(){}
-									//Use clicked so that the click doesn't hit the new popup window
-									onMouseClicked:function(e: MouseEvent){app.SOM();}
-								},
-								Button{
-									text: "Make Histogram"
-									blocksMouse: false
-									action:  function(){}
-									//Use clicked so that the click doesn't hit the new popup window
-									onMouseClicked:function(e: MouseEvent){app.histogramDlg();}
-								}
-								Button{
-									text: "Make Scatter Plot"
-									blocksMouse: false
-									action:  function(){}
-									//Use clicked so that the click doesn't hit the new popup window
-									onMouseClicked:function(e: MouseEvent){app.scatterplotDlg();}
-								}
-								Button{
-									text: "Make Wind-Rose Plot"
-									blocksMouse: false
-									action:  function(){}
-									//Use clicked so that the click doesn't hit the new popup window
-									onMouseClicked:function(e: MouseEvent){app.windrosePlotDlg();}
-								}
-							]
-						}
-					]
+  function displayNoData(){
+    var display =  Group{
+      content: [
+        Group{
+          layoutX: bind app.contentWidth/2 - 50
+          layoutY: bind app.contentHeight/2 - 20
+          content: [
+            Rectangle {
+              width: 200
+              height : 80
+              x: -15 y: -35
+              onMouseClicked: function(event){app.loadFile();}
+
+            },
+            Text {
+              content: "< no data loaded >\nClick  to load data"
+              font: Font {name: "Arial" size: 20}
+              fill: Color.WHITE
+            }
+          ]
 
 
-				}
-			]
-		}
-		app.setMainContent(display);
-	}
+        }
+      ]
+    }
+    app.setMainContent(display);
+  }
+
+  function displayData(){
+    var display = Group{
+      content: [
+        Group{
+          layoutX: bind app.contentWidth/2 - 70
+          layoutY: bind app.contentHeight/2 - 50
+          content: [
+            VBox{
+              spacing: 10
+              content: [
+                Text {
+                  content: "Data is loaded.\n(later this will show the data sets)"
+                  font: Font {name: "Arial" size: 14}
+                  fill: Color.WHITE
+                }
+                Text {
+                  content: "Options:"
+                  font: Font {name: "Arial" size: 12}
+                  fill: Color.WHITE
+                }
+                Button{
+                  text: "Load Data"
+                  action:  function(){}
+                  //Use clicked so that the click doesn't hit the new popup window
+                  onMouseClicked:function(e: MouseEvent){app.loadFile();}
+                },
+                Button{
+                  text: "Remove\nOutliers"
+                  action:  function(){}
+                  //Use clicked so that the click doesn't hit the new popup window
+                  onMouseClicked:function(e: MouseEvent){app.outliersDialog(false);}
+                },
+                Button{
+                  text: "Calculate SOM"
+                  blocksMouse: false
+                  action:  function(){}
+                  //Use clicked so that the click doesn't hit the new popup window
+                  onMouseClicked:function(e: MouseEvent){app.SOM();}
+                },
+                Button{
+                  text: "Make Histogram"
+                  blocksMouse: false
+                  action:  function(){}
+                  //Use clicked so that the click doesn't hit the new popup window
+                  onMouseClicked:function(e: MouseEvent){app.histogramDlg();}
+                }
+                Button{
+                  text: "Make Scatter Plot"
+                  blocksMouse: false
+                  action:  function(){}
+                  //Use clicked so that the click doesn't hit the new popup window
+                  onMouseClicked:function(e: MouseEvent){app.scatterplotDlg();}
+                }
+                Button{
+                  text: "Make Wind-Rose Plot"
+                  blocksMouse: false
+                  action:  function(){}
+                  //Use clicked so that the click doesn't hit the new popup window
+                  onMouseClicked:function(e: MouseEvent){app.windrosePlotDlg();}
+                }
+              ]
+            }
+          ]
+
+
+        }
+      ]
+    }
+    app.setMainContent(display);
+  }
 }

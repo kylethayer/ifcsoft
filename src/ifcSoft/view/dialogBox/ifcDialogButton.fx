@@ -33,43 +33,43 @@ import javafx.scene.input.MouseEvent;
 public class ifcDialogButton extends ifcDialogItem{
 
 
-	public var action:function():Void;
-	public var text:String = "";
+  public var action:function():Void;
+  public var text:String = "";
 
-	var isMousePressedOverButton = false;
-	var isMouseDragged = false;
+  var isMousePressedOverButton = false;
+  var isMouseDragged = false;
 
-	var btn:Button = Button{
-		onMousePressed: function(e:MouseEvent){isMousePressedOverButton = true}
-		onMouseReleased: mouseReleasedOnButton
-		onMouseDragged: function(e:MouseEvent){isMouseDragged = true}
-		onMouseClicked: mouseClickedOnButton
-		text: bind text
-	};
+  var btn:Button = Button{
+    onMousePressed: function(e:MouseEvent){isMousePressedOverButton = true}
+    onMouseReleased: mouseReleasedOnButton
+    onMouseDragged: function(e:MouseEvent){isMouseDragged = true}
+    onMouseClicked: mouseClickedOnButton
+    text: bind text
+  };
 
-	init{
-		children = btn;
-	}
+  init{
+    children = btn;
+  }
 
-	function mouseReleasedOnButton(e:MouseEvent){
+  function mouseReleasedOnButton(e:MouseEvent){
 
-		if(isMousePressedOverButton){
-			isMousePressedOverButton = false;
-			if(isMouseDragged){ //if the mouse is not dragged, it will be a click. I need to handle this in the click
-								//handler, otherwise the click will make a new event after "action" is performed.
-				isMouseDragged = false;
-				if(btn.contains(e.x, e.y)){
-					action();
-				}
-			}
-		}
-	}
+    if(isMousePressedOverButton){
+      isMousePressedOverButton = false;
+      if(isMouseDragged){ //if the mouse is not dragged, it will be a click. I need to handle this in the click
+                //handler, otherwise the click will make a new event after "action" is performed.
+        isMouseDragged = false;
+        if(btn.contains(e.x, e.y)){
+          action();
+        }
+      }
+    }
+  }
 
-	function mouseClickedOnButton(e:MouseEvent){
-		isMouseDragged = false;
-		isMousePressedOverButton = false;
-		action();
-	}
+  function mouseClickedOnButton(e:MouseEvent){
+    isMouseDragged = false;
+    isMousePressedOverButton = false;
+    action();
+  }
 
 
     override public function validate () : Boolean {

@@ -26,38 +26,38 @@ import java.util.concurrent.BlockingQueue;
  */
 public class jobThread implements Runnable{
 
-	private BlockingQueue<ThreadJob> jobqueue;
+  private BlockingQueue<ThreadJob> jobqueue;
 
-	/**
-	 * Create a new thread to do SOM jobs
-	 * @param jobqueue
-	 */
-	public jobThread(BlockingQueue<ThreadJob> jobqueue){
-		this.jobqueue = jobqueue;
-	}
+  /**
+   * Create a new thread to do SOM jobs
+   * @param jobqueue
+   */
+  public jobThread(BlockingQueue<ThreadJob> jobqueue){
+    this.jobqueue = jobqueue;
+  }
 
-	@Override
-	public void run() {
-		while(true){ //We will indefinately look for new jobs
-			//get next job (blocking wait)
-			ThreadJob job = null;
-			try {
-				job = jobqueue.take();
-			} catch (InterruptedException e) {
-				e.printStackTrace();
-			}
-			//run job
-			if(job != null){ //in case of exception or something
-				if(job.getJobType() == job.LOADFILEJOB){
-					LoadFileJob lfJob = (LoadFileJob) job;
-					lfJob.dsp.loadDataFile();
-				}
-				if(job.getJobType() == job.REMOVEOUTLEIRSJOB){
-					RemoveOutliersJob roJob = (RemoveOutliersJob) job;
-					roJob.dsp.removeOutliers(roJob.stdDevs);
-				}
-			}
-		}
-	}
+  @Override
+  public void run() {
+    while(true){ //We will indefinately look for new jobs
+      //get next job (blocking wait)
+      ThreadJob job = null;
+      try {
+        job = jobqueue.take();
+      } catch (InterruptedException e) {
+        e.printStackTrace();
+      }
+      //run job
+      if(job != null){ //in case of exception or something
+        if(job.getJobType() == job.LOADFILEJOB){
+          LoadFileJob lfJob = (LoadFileJob) job;
+          lfJob.dsp.loadDataFile();
+        }
+        if(job.getJobType() == job.REMOVEOUTLEIRSJOB){
+          RemoveOutliersJob roJob = (RemoveOutliersJob) job;
+          roJob.dsp.removeOutliers(roJob.stdDevs);
+        }
+      }
+    }
+  }
 
 }

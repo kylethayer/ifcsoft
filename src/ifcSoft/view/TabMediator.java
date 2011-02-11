@@ -25,45 +25,45 @@ package ifcSoft.view;
 public interface TabMediator {
 
 
-	/**
-	 * Display the tab on the screen.
-	 */
-	void display();
+  /**
+   * Display the tab on the screen.
+   */
+  void display();
 
-	/**
-	 * Give the tabMediator the chance to save anything it needs to before being swapped out.
-	 */
-	void swapOutTab();
+  /**
+   * Give the tabMediator the chance to save anything it needs to before being swapped out.
+   */
+  void swapOutTab();
 
-	/**
-	 * Returns the name of the tab.
-	 * @return
-	 */
-	String getTabName();
-	
-	/**
-	 * Returns progress of a tab (eventually each tab will show some sort of progress)
-	 * @return  0 - 1 if in progress, 100 if done
-	 */
-	float getTabProgress();
+  /**
+   * Returns the name of the tab.
+   * @return
+   */
+  String getTabName();
+  
+  /**
+   * Returns progress of a tab (eventually each tab will show some sort of progress)
+   * @return  0 - 1 if in progress, 100 if done
+   */
+  float getTabProgress();
 
-	/**
-	 * Inform the tab that a new DSP has been loaded.
-	 */
-	public void informNewDsp();
+  /**
+   * Inform the tab that a new DSP has been loaded.
+   */
+  public void informNewDsp();
 
-	/**
-	 * Tries to close the tab
-	 * @return True if the tab allows itself to be closed
-	 */
-	public boolean closeTab();
+  /**
+   * Tries to close the tab
+   * @return True if the tab allows itself to be closed
+   */
+  public boolean closeTab();
 
 
-	/**
-	 *
-	 * Returns whether or not the dialog content should be blocked (for reloading tab).
-	 * @return if the dialog content should be blocked
-	 */
-	public boolean isDialogContentBlocked();
+  /**
+   *
+   * Returns whether or not the dialog content should be blocked (for reloading tab).
+   * @return if the dialog content should be blocked
+   */
+  public boolean isDialogContentBlocked();
 
 }

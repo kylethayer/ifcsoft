@@ -28,16 +28,16 @@ import java.lang.UnsupportedOperationException;
  */
 
 public class SOMTileDenseMapDelta extends SOMTile{
-	
-	override public function updateDenseMap():Void{
-		var placed:Integer = somMaps.mediator.getDenstiyMapPlaced();
-		if(placed > lastDenseDisplayed){
-			var newimg:BufferedImage = somMaps.mediator.getDenseMapsDeltaImg();
-			img = newimg;
-			placed = lastDenseDisplayed;
-		}
-	}
-	
+  
+  override public function updateDenseMap():Void{
+    var placed:Integer = somMaps.mediator.getDenstiyMapPlaced();
+    if(placed > lastDenseDisplayed){
+      var newimg:BufferedImage = somMaps.mediator.getDenseMapsDeltaImg();
+      img = newimg;
+      placed = lastDenseDisplayed;
+    }
+  }
+  
 
     override public function updateClusterStats () : Void {
     }

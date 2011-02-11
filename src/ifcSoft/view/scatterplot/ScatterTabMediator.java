@@ -31,138 +31,138 @@ import java.awt.image.BufferedImage;
  */
 public class ScatterTabMediator implements TabMediator {
 
-	ScatterTabI scatterTab;
-	DataSetProxy dsp;
-	int xDim;
-	int yDim;
-	ScatterPlot scatterPlot;
+  ScatterTabI scatterTab;
+  DataSetProxy dsp;
+  int xDim;
+  int yDim;
+  ScatterPlot scatterPlot;
 
-	/**
-	 * The constructor. It needs access to the MainApp so it can draw and such.
-	 * @param app
-	 */
-	public ScatterTabMediator(MainAppI app){
-		scatterTab = app.makeScatterTab(this);
-	}
+  /**
+   * The constructor. It needs access to the MainApp so it can draw and such.
+   * @param app
+   */
+  public ScatterTabMediator(MainAppI app){
+    scatterTab = app.makeScatterTab(this);
+  }
 
-	@Override
-	public void display() {
-		System.out.println("dimension is "+xDim +", " + yDim);
-		scatterTab.displayTab();
-	}
+  @Override
+  public void display() {
+    System.out.println("dimension is "+xDim +", " + yDim);
+    scatterTab.displayTab();
+  }
 
-	@Override
-	public void swapOutTab() {
-		scatterTab.swapOutTab();
-	}
+  @Override
+  public void swapOutTab() {
+    scatterTab.swapOutTab();
+  }
 
-	@Override
-	public String getTabName() {
-		return "Scatter Plot";
-	}
+  @Override
+  public String getTabName() {
+    return "Scatter Plot";
+  }
 
-	@Override
-	public float getTabProgress() {
-		return 100; //for now I don't thread the scatter progress
-	}
+  @Override
+  public float getTabProgress() {
+    return 100; //for now I don't thread the scatter progress
+  }
 
-	@Override
-	public void informNewDsp() {
-		scatterTab.informNewDsp();
-	}
+  @Override
+  public void informNewDsp() {
+    scatterTab.informNewDsp();
+  }
 
-	/**
-	 * Tries to close the tab
-	 * @return True if the tab allows itself to be closed
-	 */
-	@Override
-	public boolean closeTab(){
-		return true; //As long as I'm not working on anything, I can close
-	}
+  /**
+   * Tries to close the tab
+   * @return True if the tab allows itself to be closed
+   */
+  @Override
+  public boolean closeTab(){
+    return true; //As long as I'm not working on anything, I can close
+  }
 
-	/**
-	 *  Returns whether or not the dialog content should be blocked (for reloading tab).
-	 *  In this case, it never should be blocked.
-	 * @return false
-	 */
-	@Override
-	public boolean isDialogContentBlocked(){
-		return false;
-	}
+  /**
+   *  Returns whether or not the dialog content should be blocked (for reloading tab).
+   *  In this case, it never should be blocked.
+   * @return false
+   */
+  @Override
+  public boolean isDialogContentBlocked(){
+    return false;
+  }
 
-	/**
-	 * Set the data set that the histogram is of.
-	 * @param dsp
-	 */
-	public void setDataSet(DataSetProxy dsp){
-		this.dsp = dsp;
-		scatterTab.setDataSet(dsp);
-	}
+  /**
+   * Set the data set that the histogram is of.
+   * @param dsp
+   */
+  public void setDataSet(DataSetProxy dsp){
+    this.dsp = dsp;
+    scatterTab.setDataSet(dsp);
+  }
 
-	/**
-	 * Set which dimension is to be drawn.
-	 * @param dim
-	 */
-	public void setXDimension(int xDim){
-		this.xDim = xDim;
-		scatterTab.setXDimension(xDim);
-	}
+  /**
+   * Set which dimension is to be drawn.
+   * @param dim
+   */
+  public void setXDimension(int xDim){
+    this.xDim = xDim;
+    scatterTab.setXDimension(xDim);
+  }
 
-	/**
-	 * Set which dimension is to be drawn.
-	 * @param dim
-	 */
-	public void setYDimension(int yDim){
-		this.yDim = yDim;
-		scatterTab.setYDimension(yDim);
-	}
+  /**
+   * Set which dimension is to be drawn.
+   * @param dim
+   */
+  public void setYDimension(int yDim){
+    this.yDim = yDim;
+    scatterTab.setYDimension(yDim);
+  }
 
-	/**
-	 * Set which scale type is to be used.
-	 * @param scaleType
-	 */
-	public void setScaleType(int scaleType){
-		scatterTab.setScaleType(scaleType);
-	}
-
-
+  /**
+   * Set which scale type is to be used.
+   * @param scaleType
+   */
+  public void setScaleType(int scaleType){
+    scatterTab.setScaleType(scaleType);
+  }
 
 
 
-	/************  Display Functions *****************/
-
-	/**
-	 * This makes a Histogram with the number of segments and scale type.
-	 * @param numPieces
-	 * @param scaleType
-	 * @return
-	 */
-	public ScatterPlot calcScatter(int xRes, int yRes, int scaleType){
-		System.out.println("making scatterPlot");
-		scatterPlot = new ScatterPlot(dsp, xDim, yDim, xRes, yRes, scaleType);
-		return scatterPlot;
-	}
 
 
-	public BufferedImage getScatterImage(ScatterPlot scatterplot){
-		BufferedImage scatterImg = new BufferedImage(scatterplot.xRes(), scatterplot.yRes(),BufferedImage.TYPE_INT_RGB);
-		for(int i = 0; i < scatterplot.xRes(); i++){
-			for(int j = 0; j < scatterplot.yRes(); j++){
-				float amt = scatterplot.getPntSize(i, j); //the Y axis of the image is flipped
-				int clr;
-				if(amt == 0){
-					clr = Color.HSBtoRGB(1, 0, .05f); // if nothing, make it dark grey
-				}else{
-					float fraction = amt / scatterplot.getMaxPntSize();
-					clr = Color.HSBtoRGB(.65f*(1-fraction), //if I go all the way to 1 I get red again
-					fraction*.75f+.25f,
-					fraction*.5f+.5f); //make it dimmer if it's lower
-				}
+  /************  Display Functions *****************/
 
-				scatterImg.setRGB(i, scatterplot.yRes() - j - 1, clr);
-			}
-		}
-		return scatterImg;
-	}
+  /**
+   * This makes a Histogram with the number of segments and scale type.
+   * @param numPieces
+   * @param scaleType
+   * @return
+   */
+  public ScatterPlot calcScatter(int xRes, int yRes, int scaleType){
+    System.out.println("making scatterPlot");
+    scatterPlot = new ScatterPlot(dsp, xDim, yDim, xRes, yRes, scaleType);
+    return scatterPlot;
+  }
+
+
+  public BufferedImage getScatterImage(ScatterPlot scatterplot){
+    BufferedImage scatterImg = new BufferedImage(scatterplot.xRes(), scatterplot.yRes(),BufferedImage.TYPE_INT_RGB);
+    for(int i = 0; i < scatterplot.xRes(); i++){
+      for(int j = 0; j < scatterplot.yRes(); j++){
+        float amt = scatterplot.getPntSize(i, j); //the Y axis of the image is flipped
+        int clr;
+        if(amt == 0){
+          clr = Color.HSBtoRGB(1, 0, .05f); // if nothing, make it dark grey
+        }else{
+          float fraction = amt / scatterplot.getMaxPntSize();
+          clr = Color.HSBtoRGB(.65f*(1-fraction), //if I go all the way to 1 I get red again
+          fraction*.75f+.25f,
+          fraction*.5f+.5f); //make it dimmer if it's lower
+        }
+
+        scatterImg.setRGB(i, scatterplot.yRes() - j - 1, clr);
+      }
+    }
+    return scatterImg;
+  }
 
 }

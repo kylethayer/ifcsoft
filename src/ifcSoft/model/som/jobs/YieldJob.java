@@ -26,12 +26,12 @@ import ifcSoft.model.thread.ThreadJob;
  * @author Kyle Thayer <kthayer@emory.edu>
  */
 public class YieldJob  implements ThreadJob {
-	/**
-	 * It is a Yield Job
-	 * @return
-	 */
-	@Override
-	public int getJobType() {
-		return ThreadJob.YIELDJOB;
-	}
+  /**
+   * It is a Yield Job
+   * @return
+   */
+  @Override
+  public int getJobType() {
+    return ThreadJob.YIELDJOB;
+  }
 }

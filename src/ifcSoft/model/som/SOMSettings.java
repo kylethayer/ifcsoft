@@ -29,67 +29,67 @@ import ifcSoft.model.dataSet.dataSetScalar.DataSetScalar;
  */
 public class SOMSettings {
 
-	public static final String UNSCALED= "Unscaled";
-	public static final String MINMAXNORM = "Min/Max Normalized";
-	public static final String VARNORM = "Variance Normalized";
-	public static final String LOGSCALE = "Log Scale";
-	public static final String PCACOMP = "Principal Components";
-	public static final String PCACOMPDECAY = "Principal Components (decaying comp. weight)";
+  public static final String UNSCALED= "Unscaled";
+  public static final String MINMAXNORM = "Min/Max Normalized";
+  public static final String VARNORM = "Variance Normalized";
+  public static final String LOGSCALE = "Log Scale";
+  public static final String PCACOMP = "Principal Components";
+  public static final String PCACOMPDECAY = "Principal Components (decaying comp. weight)";
 
 
-	public static final String LINEARINIT = "Linear Initialization";
-	public static final String RANDOMINIT = "Random Initialization";
-	public static final String FILEINIT = "Load SOM file";
+  public static final String LINEARINIT = "Linear Initialization";
+  public static final String RANDOMINIT = "Random Initialization";
+  public static final String FILEINIT = "Load SOM file";
 
-	public static final String CLASSICSOM = "Classic SOM";
-	public static final String BATCHSOM = "Batch SOM";
+  public static final String CLASSICSOM = "Classic SOM";
+  public static final String BATCHSOM = "Batch SOM";
 
-	public DataSetProxy datasetproxy;
-	public DataSetScalar datasetscalar;
-	public String scaleType;
-	public float[] weights;
+  public DataSetProxy datasetproxy;
+  public DataSetScalar datasetscalar;
+  public String scaleType;
+  public float[] weights;
 
-	public String initType;
+  public String initType;
 
-	public String SOMType;
+  public String SOMType;
 
-	public int width;
-	public int height;
+  public int width;
+  public int height;
 
-	//classic options
-	public int classicIterations;
-	public int classicMaxNeighborhood;
-	public int classicMinNeighborhood;
+  //classic options
+  public int classicIterations;
+  public int classicMaxNeighborhood;
+  public int classicMinNeighborhood;
 
-	//batchSOM options
-	public int batchSteps;
-	public int batchMaxNeighborhood;
-	public int batchMinNeighborhood;
-	public int batchPointsPerNode;
-
-
-
-	public SOMSettings(){
-		datasetproxy = null;
-		datasetscalar = null;
-		scaleType = VARNORM;
-		weights = null;
-
-		initType = LINEARINIT;
-
-		SOMType = BATCHSOM;
-
-		width = 30;
-		height = 60;
+  //batchSOM options
+  public int batchSteps;
+  public int batchMaxNeighborhood;
+  public int batchMinNeighborhood;
+  public int batchPointsPerNode;
 
 
-		classicIterations = 5000;
-		classicMaxNeighborhood = -1; //default is max dimension / 2
-		classicMinNeighborhood = 1;
 
-		batchSteps = 10;
-		batchMaxNeighborhood = -1; //default is max dimension / 4
-		batchMinNeighborhood = 2;
-		batchPointsPerNode = 100;
-	}
+  public SOMSettings(){
+    datasetproxy = null;
+    datasetscalar = null;
+    scaleType = VARNORM;
+    weights = null;
+
+    initType = LINEARINIT;
+
+    SOMType = BATCHSOM;
+
+    width = 30;
+    height = 60;
+
+
+    classicIterations = 5000;
+    classicMaxNeighborhood = -1; //default is max dimension / 2
+    classicMinNeighborhood = 1;
+
+    batchSteps = 10;
+    batchMaxNeighborhood = -1; //default is max dimension / 4
+    batchMinNeighborhood = 2;
+    batchPointsPerNode = 100;
+  }
 }

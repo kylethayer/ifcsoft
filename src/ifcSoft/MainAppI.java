@@ -38,103 +38,103 @@ import ifcSoft.view.windrose.WindRoseTabMediator;
  */
 public interface MainAppI { //TODO: remove interface for letting FX files access it
 
-	
-	/**
-	 * This gives the MainApp a reference to its mediator.
-	 * @param m - the MainMediator.
-	 */
-	public void setMainMediator(MainMediator m);
+  
+  /**
+   * This gives the MainApp a reference to its mediator.
+   * @param m - the MainMediator.
+   */
+  public void setMainMediator(MainMediator m);
 
-	/**
-	 * Saves the SOM values to a file.
-	 */
-	//public void saveSOM();
+  /**
+   * Saves the SOM values to a file.
+   */
+  //public void saveSOM();
 
-	/**
-	 * Loads an SOM from a file.
-	 */
-	//public void loadSOM();
-	
-	/**
-	 * Displays an alert with the given message.
-	 * @param s
-	 */
-	public void alert(String s);
-	
-	
-	
+  /**
+   * Loads an SOM from a file.
+   */
+  //public void loadSOM();
+  
+  /**
+   * Displays an alert with the given message.
+   * @param s
+   */
+  public void alert(String s);
+  
+  
+  
 
-	/**
-	 * Returns the MainMediator associated with the MainApp.
-	 * @return
-	 */
-	public MainMediator getMainMediator();
+  /**
+   * Returns the MainMediator associated with the MainApp.
+   * @return
+   */
+  public MainMediator getMainMediator();
 
-	/**
-	 * Creates an input dialog and returns it to the retObj.
-	 * @param retObj
-	 */
-	//public void inputDlg(InputReturnObj retObj);
+  /**
+   * Creates an input dialog and returns it to the retObj.
+   * @param retObj
+   */
+  //public void inputDlg(InputReturnObj retObj);
 
-	public void nameDSP(DataSetProxy dsp, String info, String type);
+  public void nameDSP(DataSetProxy dsp, String info, String type);
 
-	/**
-	 * Re-draw the tabs if needed.
-	 */
-	public void updateTabs();
+  /**
+   * Re-draw the tabs if needed.
+   */
+  public void updateTabs();
 
 
-	/**
-	 * Redraw a specific tab if needed.
-	 * @param tabToUpdate
-	 */
-	public void updateTab(int tabToUpdate);
+  /**
+   * Redraw a specific tab if needed.
+   * @param tabToUpdate
+   */
+  public void updateTab(int tabToUpdate);
 
-	/**
-	 * Set the given tab as the current tab.
-	 * @param currentTab
-	 */
-	public void setCurrentTab(int currentTab);
-	
-	/**
-	 * This function makes the blankTab JavaFX object
-	 *
-	 * To create a JavaFX object, you have to do it in a JavaFX object, so I do it here.
-	 * @return
-	 */
-	public BlankTabI makeBlankTab();
+  /**
+   * Set the given tab as the current tab.
+   * @param currentTab
+   */
+  public void setCurrentTab(int currentTab);
+  
+  /**
+   * This function makes the blankTab JavaFX object
+   *
+   * To create a JavaFX object, you have to do it in a JavaFX object, so I do it here.
+   * @return
+   */
+  public BlankTabI makeBlankTab();
 
-	/**
-	 * This function makes the histTab JavaFX object
-	 *
-	 * To create a JavaFX object, you have to do it in a JavaFX object, so I do it here.
-	 * @param histMediator 
-	 * @return
-	 */
-	public HistTabI makeHistTab(HistTabMediator histMediator);
+  /**
+   * This function makes the histTab JavaFX object
+   *
+   * To create a JavaFX object, you have to do it in a JavaFX object, so I do it here.
+   * @param histMediator 
+   * @return
+   */
+  public HistTabI makeHistTab(HistTabMediator histMediator);
 
-	/**
-	 * This function makes the histTab JavaFX object
-	 *
-	 * To create a JavaFX object, you have to do it in a JavaFX object, so I do it here.
-	 * @param histMediator
-	 * @return
-	 */
-	public ScatterTabI makeScatterTab(ScatterTabMediator scatterMediator);
+  /**
+   * This function makes the histTab JavaFX object
+   *
+   * To create a JavaFX object, you have to do it in a JavaFX object, so I do it here.
+   * @param histMediator
+   * @return
+   */
+  public ScatterTabI makeScatterTab(ScatterTabMediator scatterMediator);
 
-	public WindRoseTabI makeWindRoseTab(WindRoseTabMediator windroseMediator);
+  public WindRoseTabI makeWindRoseTab(WindRoseTabMediator windroseMediator);
 
-	/**
-	 * Adds another file being loaded to the file-loading display.
-	 * @param dsp - Data set that has been put on the job queue
-	 */
-	public void addFileLoading(DataSetProxy dsp);
+  /**
+   * Adds another file being loaded to the file-loading display.
+   * @param dsp - Data set that has been put on the job queue
+   */
+  public void addFileLoading(DataSetProxy dsp);
 
-	/**
-	 * Adds another file having outliers removed to the remove outliers display.
-	 * @param dsp - Data set that has been put on the job queue
-	 */
-	public void addRemoveOutlier(DataSetProxy dsp);
+  /**
+   * Adds another file having outliers removed to the remove outliers display.
+   * @param dsp - Data set that has been put on the job queue
+   */
+  public void addRemoveOutlier(DataSetProxy dsp);
 
 
 }

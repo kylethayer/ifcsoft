@@ -29,50 +29,50 @@ import ifcSoft.view.dialogBox.ifcDialogDataSetSelect;
  */
 
 public class MakeWindRoseDialog {
-	public-init var app:MainApp;
-	public-init var mainMediator:MainMediator;
-	postinit{
-		if(app == null or mainMediator == null){
-			println("MakeWindRose initializer: not initialized fully");
-		}else{
-			initialize();
-		}
-	}
+  public-init var app:MainApp;
+  public-init var mainMediator:MainMediator;
+  postinit{
+    if(app == null or mainMediator == null){
+      println("MakeWindRose initializer: not initialized fully");
+    }else{
+      initialize();
+    }
+  }
 
-	var windroseDialog:ifcDialogBox;
-	var dataSetSelect:ifcDialogDataSetSelect;
+  var windroseDialog:ifcDialogBox;
+  var dataSetSelect:ifcDialogDataSetSelect;
 
 
-	public function initialize(){
-		dataSetSelect = ifcDialogDataSetSelect{mainApp:app};
+  public function initialize(){
+    dataSetSelect = ifcDialogDataSetSelect{mainApp:app};
 
-		windroseDialog =	ifcDialogBox{
-			name: "Make Wind Rose Plot"
-			okAction: windroseOK
-			content: [dataSetSelect]
-			cancelAction: function():Void{app.removeDialog(windroseDialog)}
+    windroseDialog =  ifcDialogBox{
+      name: "Make Wind Rose Plot"
+      okAction: windroseOK
+      content: [dataSetSelect]
+      cancelAction: function():Void{app.removeDialog(windroseDialog)}
 
-			blocksMouse: true
-		};
+      blocksMouse: true
+    };
 
-		app.addDialog(windroseDialog);
-	}
+    app.addDialog(windroseDialog);
+  }
 
-	function windroseOK():Void{
-		var datasets = (dataSetSelect.getDataSets());
-		if(datasets.size() == 0){
-			app.alert("No data set selected");
-			app.unblockContent();
-			return;
-		}
+  function windroseOK():Void{
+    var datasets = (dataSetSelect.getDataSets());
+    if(datasets.size() == 0){
+      app.alert("No data set selected");
+      app.unblockContent();
+      return;
+    }
 
-		var finaldsp:DataSetProxy = mainMediator.getDataSet(dataSetSelect.getDataSets());
-		if(finaldsp == null){
-			println("Error in data set combination");
-			return;
-		}
+    var finaldsp:DataSetProxy = mainMediator.getDataSet(dataSetSelect.getDataSets());
+    if(finaldsp == null){
+      println("Error in data set combination");
+      return;
+    }
 
-		mainMediator.makeWindRose(finaldsp);
-	}
+    mainMediator.makeWindRose(finaldsp);
+  }
 
 }

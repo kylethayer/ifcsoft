@@ -28,47 +28,47 @@ import javafx.scene.control.Label;
  */
 
 public class ifcDialogDataTable extends ifcDialogItem{
-	public var dataset:DataSet;
+  public var dataset:DataSet;
 
 
-	var cols = bind dataset.getDimensions();
-	var rows = bind dataset.length();
-	
-	init{
-		 makeTable();
-	}
+  var cols = bind dataset.getDimensions();
+  var rows = bind dataset.length();
+  
+  init{
+     makeTable();
+  }
 
-	function makeTable(){
-		var numDataPnts = dataset.length();
-		if(numDataPnts > 10){
-			numDataPnts = 10;
-		}
+  function makeTable(){
+    var numDataPnts = dataset.length();
+    if(numDataPnts > 10){
+      numDataPnts = 10;
+    }
 
-		children = HBox{
-			spacing: 5
-			content:[
-				VBox{
-					spacing: 3
-					content:[
-						Label{text: ""}
-						for(j in [0..numDataPnts-1]){
-							Label{text: dataset.getPointName(j)};
-						}
-					]
-				}
-				for(i in [0..cols-1]){
-					VBox{
-						spacing: 3
-						content:[
-							Label{text:dataset.getColLabels()[i]},
-							for(j in [0..numDataPnts-1]){
-								Label{text: "{dataset.getVals(j)[i]}" };
-							}
-							]
-					}
-				}
-				]
-			};
-	}
+    children = HBox{
+      spacing: 5
+      content:[
+        VBox{
+          spacing: 3
+          content:[
+            Label{text: ""}
+            for(j in [0..numDataPnts-1]){
+              Label{text: dataset.getPointName(j)};
+            }
+          ]
+        }
+        for(i in [0..cols-1]){
+          VBox{
+            spacing: 3
+            content:[
+              Label{text:dataset.getColLabels()[i]},
+              for(j in [0..numDataPnts-1]){
+                Label{text: "{dataset.getVals(j)[i]}" };
+              }
+              ]
+          }
+        }
+        ]
+      };
+  }
 
 }

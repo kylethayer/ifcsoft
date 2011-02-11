@@ -31,76 +31,76 @@ import javafx.stage.Alert;
  */
 
 public class ifcDialogDataSetSelectBox extends ifcDialogBox {
-	public-init var mainApp:MainApp;
+  public-init var mainApp:MainApp;
 
-	public-init var initialDataSets:DataSetProxy[];
+  public-init var initialDataSets:DataSetProxy[];
 
-	var selectedDataSets:Boolean[];
-	var dataSetCheckBoxes:ifcDialogCheckBox[];
+  var selectedDataSets:Boolean[];
+  var dataSetCheckBoxes:ifcDialogCheckBox[];
 
-	init{
-		if(mainApp == null){ //This needs mainApp to be able to ask about data sets
-			throw new Exception("ifcDialogDataSetSelect: mainApp must be initialized");
-		}
+  init{
+    if(mainApp == null){ //This needs mainApp to be able to ask about data sets
+      throw new Exception("ifcDialogDataSetSelect: mainApp must be initialized");
+    }
 
-		var mainMed:MainMediator = mainApp.getMainMediator();
+    var mainMed:MainMediator = mainApp.getMainMediator();
 
-		selectedDataSets =
-			for(i in [0..mainMed.numDSPs()-1]){
-				if(Sequences.indexOf(initialDataSets, mainMed.getDSP(i)) >= 0){
-					true;
-				}else{
-					false;
-				}
-			};
-
-
-		dataSetCheckBoxes =
-			for(i in [0..selectedDataSets.size()-1]){
-						ifcDialogCheckBox{
-							name:mainMed.getDSP(i).getDataSetName()
-							initialCheck: selectedDataSets[i]
-						};
-				};
-
-		children = ifcDialogBox{
-			name:"Select Data Set(s)"
-			content:[
-					dataSetCheckBoxes
-				]
-			okAction:okAction
-			okName:okName
-			cancelAction:cancelAction
-			cancelName:cancelName
-		};
-	}
-
-	function okPressed():Void{
-		//make sure a data set is selected before returning
-		var isDataSetSelected:Boolean = false;
-		for(i in [0..selectedDataSets.size()-1]){
-			if(dataSetCheckBoxes[i].getInput()){
-				isDataSetSelected = true;
-			}
-		}
-		if(isDataSetSelected){
-			okAction();
-		}else{
-			Alert.inform("No data set selected.");
-			return
-		}
-	}
+    selectedDataSets =
+      for(i in [0..mainMed.numDSPs()-1]){
+        if(Sequences.indexOf(initialDataSets, mainMed.getDSP(i)) >= 0){
+          true;
+        }else{
+          false;
+        }
+      };
 
 
-	public function getDataSets():DataSetProxy[]{
-		var datasets:DataSetProxy[];
-		for(i in [0..selectedDataSets.size()-1]){
-			if(dataSetCheckBoxes[i].getInput()){
-				insert mainApp.getMainMediator().getDSP(i) into datasets;
-			}
-		}
-		return datasets;
-	}
+    dataSetCheckBoxes =
+      for(i in [0..selectedDataSets.size()-1]){
+            ifcDialogCheckBox{
+              name:mainMed.getDSP(i).getDataSetName()
+              initialCheck: selectedDataSets[i]
+            };
+        };
+
+    children = ifcDialogBox{
+      name:"Select Data Set(s)"
+      content:[
+          dataSetCheckBoxes
+        ]
+      okAction:okAction
+      okName:okName
+      cancelAction:cancelAction
+      cancelName:cancelName
+    };
+  }
+
+  function okPressed():Void{
+    //make sure a data set is selected before returning
+    var isDataSetSelected:Boolean = false;
+    for(i in [0..selectedDataSets.size()-1]){
+      if(dataSetCheckBoxes[i].getInput()){
+        isDataSetSelected = true;
+      }
+    }
+    if(isDataSetSelected){
+      okAction();
+    }else{
+      Alert.inform("No data set selected.");
+      return
+    }
+  }
+
+
+  public function getDataSets():DataSetProxy[]{
+    var datasets:DataSetProxy[];
+    for(i in [0..selectedDataSets.size()-1]){
+      if(dataSetCheckBoxes[i].getInput()){
+        insert mainApp.getMainMediator().getDSP(i) into datasets;
+      }
+    }
+    return datasets;
+  }
 
 
 }
