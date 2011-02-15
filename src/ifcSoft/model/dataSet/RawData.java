@@ -22,8 +22,14 @@ package ifcSoft.model.dataSet;
 import FloCK.FCSLoader.FCSLoader;
 import FloCK.FCSLoader.Stats;
 import java.io.BufferedReader;
+import java.io.DataInputStream;
 import java.io.FileReader;
 import java.io.IOException;
+import java.io.InputStreamReader;
+import java.io.Reader;
+import java.net.HttpURLConnection;
+import java.net.URL;
+import java.net.URLConnection;
 import java.util.LinkedList;
 import java.util.StringTokenizer;
 
@@ -77,7 +83,15 @@ public class RawData extends DataSet {
    * @throws Exception
    */
   public void loadFile()throws Exception{
-    if(fileName.endsWith(".csv")){
+    DataInputStream in;
+    if(fileName.startsWith("http") && fileName.endsWith(".csv") ){
+      URL u = new URL(fileName);
+      URLConnection urlCon = u.openConnection();
+      urlCon.setDoInput(true);
+      in = new DataInputStream(urlCon.getInputStream());
+      BufferedReader br = new BufferedReader(new InputStreamReader(in));
+      readCSV(br);
+    }else if(fileName.endsWith(".csv")){
       BufferedReader br = new BufferedReader(new FileReader(fileName));
       readCSV(br);
     }else if(fileName.endsWith(".fcs")){

@@ -30,6 +30,8 @@ import javafx.animation.Interpolator;
 import javafx.scene.control.Button;
 import javafx.stage.Alert;
 import ifcSoft.MainApp;
+import ifcSoft.view.dialogBox.ifcDialogBox;
+import ifcSoft.view.dialogBox.ifcDialogChoiceBox;
 
 
 //Static variables
@@ -179,10 +181,16 @@ public class Menus{
               transforms: Rotate { angle: 90 }
             },
             Button{
-              layoutX: -90 layoutY: -100
+              layoutX: -90 layoutY: -150
               text: "Load Data"
               blocksMouse: false
               action:  function(){app.loadFile();}
+            },
+            Button{
+              layoutX: -90 layoutY: -120
+              text: "Load Sample\nData"
+              blocksMouse: false
+              action: loadSampleFile
             },
             Button{
               layoutX: -90 layoutY: 100
@@ -234,19 +242,25 @@ public class Menus{
               action:  function(){app.loadFile();}
             },
             Button{
-              layoutX: 10 layoutY: -150
+              layoutX: 10 layoutY: -170
+              text: "Load Sample\nData"
+              blocksMouse: false
+              action: loadSampleFile
+            },
+            Button{
+              layoutX: 10 layoutY: -100
               text: "Remove\nOutliers"
               blocksMouse: false
               action:  function(){app.outliersDialog(false);}
             }
             Button{
-              layoutX: 10 layoutY: -100
+              layoutX: 10 layoutY: -50
               text: "Shrink\nData Set"
               blocksMouse: false
               action:  function(){app.shrinkDatasetDialog();}
             }
             Button{
-              layoutX: 10 layoutY: -50
+              layoutX: 10 layoutY: 0
               text: "View\nData Set"
               blocksMouse: false
               action:  function(){app.viewDatasetDialog();}
@@ -299,6 +313,62 @@ public class Menus{
   public function getAllMenus():Group{
     return allMenus;
   }
+
+
+  //Gives two default sample data set groups to load from the website
+  var sampleFileDialog:ifcDialogBox;
+  var sampleFileChoice:ifcDialogChoiceBox;
+  var flowCytBeads:String = "Flow Cytometry Beads";
+  var shuttleData:String = "Shuttle Data";
+  function loadSampleFile():Void{
+    sampleFileChoice = ifcDialogChoiceBox{
+      items: [flowCytBeads, shuttleData]
+    }
+
+    sampleFileDialog = ifcDialogBox{
+      name: "Load Sample Data Sets From Website"
+      okAction: loadSampleFileOK
+      content: [sampleFileChoice]
+      cancelAction: function():Void{app.removeDialog(sampleFileDialog)}
+
+      blocksMouse: true
+    };
+
+    app.addDialog(sampleFileDialog);
+  }
+
+  function loadSampleFileOK():Void{
+    var baseurl = "http://mathcs.emory.edu/~kthayer/ifcsoft/datasets/";
+    if(sampleFileChoice.selectedItem == flowCytBeads){
+      app.getMainMediator().loadFile(
+          ["{baseurl}BEADS_APC.csv", "{baseurl}BEADS_FITC.csv",
+          "{baseurl}BEADS_PE.csv", "{baseurl}BEADS_PERCP.csv", "{baseurl}BEADS_UNSTAINED.csv", 
+          "{baseurl}BEADS_TEST.csv", "{baseurl}BEADS_ALL.csv", ]);
+      app.alert("This Sample Data is of Flow Cytometry test beads.\n\n"
+                "The important channels are: FITC-A, PE-A, APC-A, and PERCP-A. The rest "
+                "should be turned off in SOM Weighting.\n\n"
+                "There should be a group of beads that is high in each of those dimensions "
+                "and another group that is low in all of them.");
+    }else if(sampleFileChoice.selectedItem == shuttleData){
+       app.getMainMediator().loadFile(
+          ["{baseurl}train-Bpv_Close.csv", "{baseurl}train-Bpv_Open.csv", "{baseurl}train-Bypass.csv",
+          "{baseurl}train-Fpv_Close.csv", "{baseurl}train-Fpv_Open.csv", "{baseurl}train-High.csv",
+          "{baseurl}train-Rad_Flow.csv",
+          "{baseurl}test-Bpv_Close.csv", "{baseurl}test-Bpv_Open.csv", "{baseurl}test-Bypass.csv",
+          "{baseurl}test-Fpv_Close.csv", "{baseurl}test-Fpv_Open.csv", "{baseurl}test-High.csv",
+          "{baseurl}test-Rad_Flow.csv"]);
+       app.alert("This Sample Data from the UCI Machine Learning Repository.\n\n"
+                "It is best to make an SOM first of all the \"train\" sets combined.\n\n"
+                "Then you should use right-click -->  \"Compare Data Set\" and add each \"test\" set one at a time.");
+    }else{
+      println("Somehow loadSampleFileOK got invalid sample file: {sampleFileChoice.selectedItem}");
+    }
+
+    app.removeDialog(sampleFileDialog);
+
+  }
+
+
 
   function displayHelp():Void{
 
