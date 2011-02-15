@@ -66,24 +66,7 @@ public class CalcSOMDialog {
   var calcSOMDialog:ifcDialogBox;
 
   var dataSetSelect:ifcDialogDataSetSelect;
-  var scaleTypeInput:ifcDialogChoiceBox;
-  var scaleTypes:String[] = [SOMSettings.UNSCALED, SOMSettings.MINMAXNORM, SOMSettings.VARNORM,
-                SOMSettings.LOGSCALE, SOMSettings.PCACOMP, SOMSettings.PCACOMPDECAY];
   var weightButton:ifcDialogButton;
-
-  var initTypeInput:ifcDialogChoiceBox;
-  var initTypes:String[] = [SOMSettings.RANDOMINIT, SOMSettings.LINEARINIT, SOMSettings.FILEINIT];
-
-  var somTypeInput:ifcDialogChoiceBox;
-  var somTypes:String[] = [SOMSettings.CLASSICSOM, SOMSettings.BATCHSOM];
-
-  var classIterInput:ifcDialogIntInput;
-  var batchStepInput:ifcDialogIntInput;
-
-  var rowsInput:ifcDialogIntInput;
-  var colsInput:ifcDialogIntInput;
-  
-  
   var advancedOptionsBtn:ifcDialogButton;
 
   var SOMDialogDisabled:Boolean = false;
@@ -95,46 +78,10 @@ public class CalcSOMDialog {
               okAction: function():Void{SOMDialogDisabled = false;}
               cancelAction: function():Void{SOMDialogDisabled = false;}
               };
-    scaleTypeInput = ifcDialogChoiceBox{
-      name:"Scale Type"
-      items: scaleTypes
-      initialSelectedItem: SOMSettings.VARNORM
-    };
+
     weightButton = ifcDialogButton{
       text: "Choose SOM Weights"
       action: getSOMWeights
-    };
-
-    initTypeInput = ifcDialogChoiceBox{
-      name:"Initialization: "
-      items: initTypes
-      initialSelectedItem: SOMSettings.LINEARINIT
-    };
-
-    somTypeInput = ifcDialogChoiceBox{
-      name:"SOM Type:"
-      items: somTypes
-      initialSelectedItem: SOMSettings.BATCHSOM
-    };
-
-    classIterInput = ifcDialogIntInput{
-      name:"Iterations: "
-      initialInt: somSettings.classicIterations
-    };
-
-    batchStepInput = ifcDialogIntInput{
-      name:"Batch Steps: "
-      initialInt: somSettings.batchSteps
-    };
-
-
-    rowsInput = ifcDialogIntInput{
-      name:"SOM Rows: "
-      initialInt: somSettings.height
-    };
-    colsInput = ifcDialogIntInput{
-      name:"SOM Columns: "
-      initialInt: somSettings.width
     };
 
     advancedOptionsBtn = ifcDialogButton{
@@ -175,15 +122,15 @@ public class CalcSOMDialog {
     somSettings.datasetproxy = finaldsp;
     //pick the correct scalar
     //var datasetscalar:DataSetScalar;
-    if(scaleTypeInput.getInput() == SOMSettings.UNSCALED){
+    if(somSettings.scaleType == SOMSettings.UNSCALED){
       somSettings.datasetscalar = new UnscaledDataSet(finaldsp.getData());
-    }else if (scaleTypeInput.getInput() == SOMSettings.MINMAXNORM){
+    }else if (somSettings.scaleType == SOMSettings.MINMAXNORM){
       somSettings.datasetscalar = new MinMaxNormalized(finaldsp.getData());
-    }else if (scaleTypeInput.getInput() == SOMSettings.VARNORM){
+    }else if (somSettings.scaleType == SOMSettings.VARNORM){
       somSettings.datasetscalar = new VarianceNormalized(finaldsp.getData());
-    }else if (scaleTypeInput.getInput() == SOMSettings.LOGSCALE){
+    }else if (somSettings.scaleType == SOMSettings.LOGSCALE){
       somSettings.datasetscalar = new LogScaleNormalized(finaldsp.getData());
-    }else if (scaleTypeInput.getInput() == SOMSettings.PCACOMP){
+    }else if (somSettings.scaleType == SOMSettings.PCACOMP){
       somSettings.datasetscalar = new PCANormalized(finaldsp.getData(), SOMWeights);
       SOMWeights = null;
       //Make weights 1 for all the PCs, then have stand ins for the original data vals set to weight 0
@@ -197,7 +144,7 @@ public class CalcSOMDialog {
         }
       }
 
-    }else if (scaleTypeInput.getInput() == SOMSettings.PCACOMPDECAY){
+    }else if (somSettings.scaleType == SOMSettings.PCACOMPDECAY){
       somSettings.datasetscalar = new PCANormalized(finaldsp.getData(), SOMWeights);
       SOMWeights = null;
       //Make weights 1 for all the PCs, then have stand ins for the original data vals set to weight 0
@@ -213,15 +160,6 @@ public class CalcSOMDialog {
         }
       }
     }
-
-    somSettings.scaleType = scaleTypeInput.getInput() as String;
-    somSettings.SOMType = somTypeInput.getInput() as String;
-    somSettings.initType = initTypeInput.getInput() as String;
-
-    somSettings.height = rowsInput.getInput();
-    somSettings.width = colsInput.getInput();
-    somSettings.classicIterations = classIterInput.getInput();
-    somSettings.batchSteps = batchStepInput.getInput();
     somSettings.weights = SOMWeights as nativearray of Float;
 
 
@@ -315,6 +253,24 @@ public class CalcSOMDialog {
   /***********************************/
 
   var AdvancedBox:ifcDialogBox;
+
+  var scaleTypeInput:ifcDialogChoiceBox;
+  var scaleTypes:String[] = [SOMSettings.UNSCALED, SOMSettings.MINMAXNORM, SOMSettings.VARNORM,
+                SOMSettings.LOGSCALE, SOMSettings.PCACOMP, SOMSettings.PCACOMPDECAY];
+
+  var initTypeInput:ifcDialogChoiceBox;
+  var initTypes:String[] = [SOMSettings.RANDOMINIT, SOMSettings.LINEARINIT, SOMSettings.FILEINIT];
+
+  var somTypeInput:ifcDialogChoiceBox;
+  var somTypes:String[] = [SOMSettings.CLASSICSOM, SOMSettings.BATCHSOM];
+
+  var classIterInput:ifcDialogIntInput;
+  var batchStepInput:ifcDialogIntInput;
+
+  var rowsInput:ifcDialogIntInput;
+  var colsInput:ifcDialogIntInput;
+
+
   var classicMaxNbrInput:ifcDialogIntInput;
   var classicMinNbrInput:ifcDialogIntInput;
 
@@ -323,11 +279,59 @@ public class CalcSOMDialog {
   var batchPntsPerNode:ifcDialogIntInput;
 
 
-  function getAdvancedSettings():Void{
+  var advancedContent:ifcDialogItem[] = bind [
+        rowsInput, colsInput,
+        scaleTypeInput,
+        initTypeInput, somTypeInput,
+        if(somTypeInput.selectedItem == somSettings.CLASSICSOM) {
+          [classIterInput, classicMaxNbrInput, classicMinNbrInput]
+        }else{
+          [batchStepInput,batchMaxNbrInput,batchMinNbrInput, batchPntsPerNode]
+        }
+        ];
 
+  function getAdvancedSettings():Void{
+   
     SOMDialogDisabled = true;
 
-    var content:ifcDialogItem[];
+
+    scaleTypeInput = ifcDialogChoiceBox{
+      name:"Scale Type"
+      items: scaleTypes
+      initialSelectedItem: somSettings.scaleType
+    };
+
+    initTypeInput = ifcDialogChoiceBox{
+      name:"Initialization: "
+      items: initTypes
+      initialSelectedItem: somSettings.initType
+    };
+
+    somTypeInput = ifcDialogChoiceBox{
+      name:"SOM Type:"
+      items: somTypes
+      initialSelectedItem: somSettings.SOMType
+    };
+
+    classIterInput = ifcDialogIntInput{
+      name:"Iterations: "
+      initialInt: somSettings.classicIterations
+    };
+
+    batchStepInput = ifcDialogIntInput{
+      name:"Batch Steps: "
+      initialInt: somSettings.batchSteps
+    };
+
+
+    rowsInput = ifcDialogIntInput{
+      name:"SOM Rows: "
+      initialInt: somSettings.height
+    };
+    colsInput = ifcDialogIntInput{
+      name:"SOM Columns: "
+      initialInt: somSettings.width
+    };
 
     classicMaxNbrInput = ifcDialogIntInput{
       name:"Max Neighborhood: "
@@ -364,16 +368,7 @@ public class CalcSOMDialog {
 
     AdvancedBox =ifcDialogBox{
       name: "Advanced Settings"
-      content: bind[
-        rowsInput, colsInput,
-        scaleTypeInput,
-        initTypeInput, somTypeInput,
-        if(SOMSettings.CLASSICSOM == somTypeInput.selectedItem){
-          [classIterInput, classicMaxNbrInput, classicMinNbrInput]
-        }else{
-          [batchStepInput,batchMaxNbrInput,batchMinNbrInput, batchPntsPerNode]
-        }
-        ]
+      content: bind advancedContent
 
       okAction: advancedOK
       cancelAction: function():Void{SOMDialogDisabled = false;
@@ -388,6 +383,14 @@ public class CalcSOMDialog {
   }
 
   function advancedOK():Void{
+    somSettings.scaleType = scaleTypeInput.getInput() as String;
+    somSettings.SOMType = somTypeInput.getInput() as String;
+    somSettings.initType = initTypeInput.getInput() as String;
+
+    somSettings.height = rowsInput.getInput();
+    somSettings.width = colsInput.getInput();
+    somSettings.classicIterations = classIterInput.getInput();
+    somSettings.batchSteps = batchStepInput.getInput();
     if(somTypeInput.getInput() == SOMSettings.CLASSICSOM){
       somSettings.classicMaxNeighborhood = classicMaxNbrInput.getInput();
       somSettings.classicMinNeighborhood = classicMinNbrInput.getInput();

@@ -82,7 +82,7 @@ public class ifcDialogBox extends CustomNode {
 
   function makeContent():Node[]{
     //first make the inner stuff, then make background rounded box thingy to fit.
-
+    
     var innerContentNodes:Node[] = content;
 
     //add the OK and Cancel buttons
