@@ -503,15 +503,44 @@ public class MainApp extends MainAppI {
 
 
   function updateFileProgress(){
-    for(dataset in filesBeingLoaded){
-      if((dataset.getData() as RawData).didLoad()){
-        delete fileProgresses[indexof dataset];
-        delete filesBeingLoaded[indexof dataset];
-        mainMediator.addNewDSP(dataset); 
-      }else{
-        fileProgresses[indexof dataset] = dataset.getFileProgress();
+    var setsDone:Boolean[] = [
+        for(i in [0..filesBeingLoaded.size()-1]){
+          false;
+        }
+    ];
+    //go through until none new left to add
+    //this makes sure they load in order (otherwise
+    //the finishing loading and removing from list could be
+    //changing together).
+    var areAnyNew:Boolean = true;
+    while(areAnyNew){
+      areAnyNew = false;
+      for(i in [0..setsDone.size()-1]){
+        var dataset = filesBeingLoaded[i];
+        if((dataset.getData() as RawData).didLoad()){
+          if(setsDone[i] == false){
+            setsDone[i] = true;
+            areAnyNew = true;
+          }
+        }else{
+          fileProgresses[i] = dataset.getFileProgress();
+        }
       }
     }
+
+    var index = 0;
+    while(index < setsDone.size()){
+      if(setsDone[index] == true){
+         var dataset = filesBeingLoaded[index];
+         delete setsDone[index];
+         delete fileProgresses[index];
+         delete filesBeingLoaded[index];
+         mainMediator.addNewDSP(dataset);
+      }else{
+        index++;
+      }
+    }
+
     if(filesBeingLoaded.size() == 0){
       delete loadingFileDialog from blockingDialogContent.content;
     }else{
