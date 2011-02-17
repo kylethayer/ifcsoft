@@ -36,6 +36,7 @@ public class ifcDialogFloatInput  extends ifcDialogItem{
   init{
     children =
       HBox{
+        spacing: 4
         content:[
           Text {content: name},
           floatInput = TextBox{

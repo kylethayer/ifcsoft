@@ -38,6 +38,7 @@ public class ifcDialogChoiceBox extends ifcDialogItem{
   init{
     children =
       HBox{
+        spacing: 4
         content:[
           Label {text: name}
           choiceBoxInput = ChoiceBox{

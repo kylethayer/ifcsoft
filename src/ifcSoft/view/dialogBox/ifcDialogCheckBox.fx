@@ -35,6 +35,7 @@ public class ifcDialogCheckBox extends ifcDialogItem{
   init{
     children =
       HBox{
+        spacing: 4
         content:[
           checkBoxInput = CheckBox{
             selected: initialCheck

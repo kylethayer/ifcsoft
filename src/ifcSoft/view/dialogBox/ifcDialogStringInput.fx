@@ -37,6 +37,7 @@ public class ifcDialogStringInput extends ifcDialogItem{
   init{
     children =
       HBox{
+        spacing: 4
         content:[
           Text {content: name},
           stringInput = TextBox{
