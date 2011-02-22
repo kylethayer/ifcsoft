@@ -357,9 +357,9 @@ public class Menus{
           "{baseurl}test-Bpv_Close.csv", "{baseurl}test-Bpv_Open.csv", "{baseurl}test-Bypass.csv",
           "{baseurl}test-Fpv_Close.csv", "{baseurl}test-Fpv_Open.csv", "{baseurl}test-High.csv",
           "{baseurl}test-Rad_Flow.csv"]);
-       app.alert("This Sample Data from the UCI Machine Learning Repository.\n\n"
-                "It is best to make an SOM first of all the \"train\" sets combined.\n\n"
-                "Then you should use right-click -->  \"Compare Data Set\" and add each \"test\" set one at a time.");
+       app.alert("This Sample Data is from the UCI Machine Learning Repository.\n\n"
+                "It is best to make an SOM of all the \"train_____.csv\" sets combined.\n\n"
+                "Then you should use right-click --> \"Compare Data Set\" and add each \"test_____.csv\" set one at a time.");
     }else{
       println("Somehow loadSampleFileOK got invalid sample file: {sampleFileChoice.selectedItem}");
     }
