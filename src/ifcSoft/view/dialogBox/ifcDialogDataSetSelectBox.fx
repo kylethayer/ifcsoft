@@ -37,6 +37,7 @@ public class ifcDialogDataSetSelectBox extends ifcDialogBox {
 
   var selectedDataSets:Boolean[];
   var dataSetCheckBoxes:ifcDialogCheckBox[];
+  var selectAllButton:ifcDialogButton;
 
   init{
     if(mainApp == null){ //This needs mainApp to be able to ask about data sets
@@ -63,9 +64,16 @@ public class ifcDialogDataSetSelectBox extends ifcDialogBox {
             };
         };
 
+		selectAllButton = ifcDialogButton{
+			action: selectAll
+			text: "Select All"
+		}
+
+
     children = ifcDialogBox{
       name:"Select Data Set(s)"
       content:[
+				  selectAllButton,
           dataSetCheckBoxes
         ]
       okAction:okAction
@@ -74,6 +82,29 @@ public class ifcDialogDataSetSelectBox extends ifcDialogBox {
       cancelName:cancelName
     };
   }
+
+	function selectAll():Void{
+		var someUnselected:Boolean = false;
+		for(checkBox in dataSetCheckBoxes){
+			if(not checkBox.getInput()){
+				someUnselected = true;
+			}
+		}
+
+		if(someUnselected){ //select all
+			for(checkBox in dataSetCheckBoxes){
+				checkBox.select();
+			}
+		}else{ //unselect all
+			for(checkBox in dataSetCheckBoxes){
+				checkBox.unSelect();
+			}
+		}
+
+
+
+	}
+
 
   function okPressed():Void{
     //make sure a data set is selected before returning
