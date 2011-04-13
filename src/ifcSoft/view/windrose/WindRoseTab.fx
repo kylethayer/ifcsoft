@@ -47,6 +47,7 @@ import javafx.util.Sequences;
 import javafx.scene.control.ChoiceBox;
 import javafx.scene.control.Label;
 import javafx.stage.Alert;
+import javafx.scene.control.Slider;
 
 /**
  * The view Component for the Wind Rose tab.
@@ -67,10 +68,18 @@ public class WindRoseTab extends WindRoseTabI{
     }
   }
 
-  var unitRadius = 50.0;
+  var radiusSlider = Slider{
+    min: 1
+    max: 100
+    value: 50.0
+    blockIncrement: 1
+  }
+
+  var unitRadius = bind radiusSlider.value;
+
 
   var dsp:DataSetProxy;
-  
+
 
 
 
@@ -93,6 +102,16 @@ public class WindRoseTab extends WindRoseTabI{
         textFill: Color.WHITE
       },
       scaleTypeChoiceBox
+      ]
+  };
+
+  var radiusBox:HBox = HBox{
+    content:[
+      Label{
+        text:"Size:  "
+        textFill: Color.WHITE
+      },
+      radiusSlider
       ]
   };
 
@@ -161,15 +180,15 @@ public class WindRoseTab extends WindRoseTabI{
           [
             Rectangle{
               x: 0  y: 0
-              height: unitRadius*2
-              width: unitRadius*2
+              height: bind unitRadius*2
+              width: bind unitRadius*2
             }
 
             for(dim in [0..dimensions-1]){
               Arc {
-                centerX: unitRadius  centerY: unitRadius
-                radiusX: (dim+1)*unitRadius/dimensions
-                radiusY: (dim+1)*unitRadius/dimensions
+                centerX: bind unitRadius  centerY: bind unitRadius
+                radiusX: bind (dim+1)*unitRadius/dimensions
+                radiusY: bind (dim+1)*unitRadius/dimensions
                 startAngle: (dim*1.0)/dimensions * 360.0
                 length: 360.0 / dimensions
                 fill: colors[dim]
@@ -194,7 +213,7 @@ public class WindRoseTab extends WindRoseTabI{
                   text: tile.name
                   action: function():Void{
                     if(notDisplayedTiles[indexof tile] == blankTile){
-                      insert WindRoseTile{pt: -1, name:"Blank", unitRadius:unitRadius
+                      insert WindRoseTile{pt: -1, name:"Blank", unitRadius:bind unitRadius
                           onMouseClickedFunction: tileClicked, onMouseDraggedFunction: tileDragged
                           onMouseReleasedFunction: tileReleased} into displayedTiles;
                     }else{
@@ -210,7 +229,7 @@ public class WindRoseTab extends WindRoseTabI{
 
 
 
-      mainWRCs = makeMainWRCs(dimensions, colors, unitRadius);
+      mainWRCs = makeMainWRCs(dimensions, colors);
 
 
       windRoseContent = Group{
@@ -243,7 +262,7 @@ public class WindRoseTab extends WindRoseTabI{
                     vpos: VPos.CENTER
                     spacing: 10
                     padding: Insets { top: 10 right: 25 bottom: 10 left: 10}
-                    content:[scaleTypeBox, legend/*, scale*/]
+                    content:[scaleTypeBox, radiusBox, legend/*, scale*/]
                   }
                 ]
               }
@@ -261,16 +280,16 @@ public class WindRoseTab extends WindRoseTabI{
   var displayedTiles:WindRoseTile[];
 
   var blankTile:WindRoseTile = WindRoseTile{
-                pt: -1 name:"Blank", unitRadius: unitRadius
+                pt: -1 name:"Blank", unitRadius: bind unitRadius
                 onMouseClickedFunction: tileClicked
                 onMouseDraggedFunction: tileDragged
                 onMouseReleasedFunction: tileReleased};
   var notDisplayedTiles:WindRoseTile[] = [blankTile];
 
-  function makeMainWRCs(dimensions:Integer, colors:Paint[], unitRadius:Number):Node{
-    var numTiles = Math.min(dsp.getDataSize(), 25);
+  function makeMainWRCs(dimensions:Integer, colors:Paint[]):Node{
+    var numTiles = Math.min(dsp.getDataSize(), 200);
     if(numTiles < dsp.getDataSize()){
-      Alert.inform("Only the first 25 of {dsp.getDataSize()} data points will be displayed.");
+      Alert.inform("Only the first 200 of {dsp.getDataSize()} data points will be displayed.");
     }
 
 
@@ -279,7 +298,7 @@ public class WindRoseTab extends WindRoseTabI{
                 name: dsp.getData().getPointName(pt)
                 dimensions:dimensions
                 colors:colors
-                unitRadius:unitRadius
+                unitRadius:bind unitRadius
                 pt:pt
                 dsp:dsp
                 onMouseClickedFunction: tileClicked
@@ -288,7 +307,7 @@ public class WindRoseTab extends WindRoseTabI{
                 scaleByArea: bind scaleByArea
               }
           };
-          
+
 
 
     Tile{

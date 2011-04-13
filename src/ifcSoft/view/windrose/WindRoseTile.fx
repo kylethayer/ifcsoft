@@ -78,8 +78,8 @@ public class WindRoseTile extends CustomNode{
             spacing: 5
             content:[
               Rectangle{
-                height: 15 + unitRadius*2 + 10
-                width: unitRadius*2
+                height: bind 15 + unitRadius*2 + 10
+                width: bind unitRadius*2
               }
             ]
           }
@@ -96,7 +96,7 @@ public class WindRoseTile extends CustomNode{
               content:[
                 Rectangle{ //Label double click catcher
                   height: 15
-                  width: unitRadius*2
+                  width: bind unitRadius*2
                   onMouseClicked: labelClick
                 }
                 nameEditBox = TextBox{
@@ -108,7 +108,7 @@ public class WindRoseTile extends CustomNode{
                   text: bind name
                   textFill: Color.WHITE
                   hpos: HPos.CENTER
-                  layoutInfo: LayoutInfo { width: unitRadius*2 }
+                  layoutInfo: LayoutInfo { width: bind unitRadius*2 }
                   font: Font {name: "Arial" size: 14}
                   visible: bind not isEditingName
                   onMouseClicked: labelClick
@@ -119,7 +119,7 @@ public class WindRoseTile extends CustomNode{
             makeWRCCircle(),
             Rectangle{ //spacer at the the bottom of a tile
               height: 10
-              width: unitRadius*2
+              width: bind unitRadius*2
             }
 
           ]
@@ -133,27 +133,27 @@ public class WindRoseTile extends CustomNode{
         content:[
           innerContent,
           Rectangle{
-            width: unitRadius*2
-            height: unitRadius*2 + 15
+            width: bind unitRadius*2
+            height: bind unitRadius*2 + 15
             fill: Color.WHITE
             opacity:  bind if(highlight){.25}else{0};
           },
           HBox{ //the left/right highlights
             content: [
               Rectangle{
-                height: unitRadius*2 + 15
-                width: unitRadius*2 / 6
+                height: bind unitRadius*2 + 15
+                width: bind unitRadius*2 / 6
                 fill:Color.WHITE
                 opacity: bind if(leftHighlight){.25}else{0};
               },
               Rectangle{ //spacer
-                  height:unitRadius*2 + 15
-                  width: unitRadius*2 * 2 / 3
+                  height:bind unitRadius*2 + 15
+                  width: bind unitRadius*2 * 2 / 3
                   opacity:0
               },
               Rectangle{
-                height:unitRadius*2 + 15
-                width: unitRadius*2 / 6
+                height:bind unitRadius*2 + 15
+                width: bind unitRadius*2 / 6
                 fill:Color.WHITE
                 opacity: bind if(rightHighlight){.25}else{0};
               }
@@ -183,13 +183,13 @@ public class WindRoseTile extends CustomNode{
       content:[
           Rectangle{
             x: -explodeAmt  y: -explodeAmt
-            height: unitRadius*2 + 2*explodeAmt
-            width: unitRadius*2 + 2*explodeAmt
+            height: bind unitRadius*2 + 2*explodeAmt
+            width: bind unitRadius*2 + 2*explodeAmt
           },
           for(dim in [0..dimensions-1]){
             Arc {
-              centerX: unitRadius + explodeAmt * Math.cos( (dim+.5)*6.28318531/dimensions )
-              centerY: unitRadius - explodeAmt * Math.sin( (dim+.5)*6.28318531/dimensions )
+              centerX: bind unitRadius + explodeAmt * Math.cos( (dim+.5)*6.28318531/dimensions )
+              centerY: bind unitRadius - explodeAmt * Math.sin( (dim+.5)*6.28318531/dimensions )
               radiusX: bind unitRadius*lengths[dim]
               radiusY: bind unitRadius*lengths[dim]
               startAngle: (dim*1.0)/dimensions * 360.0
@@ -205,7 +205,7 @@ public class WindRoseTile extends CustomNode{
   function labelClick(e:MouseEvent):Void{
     if(e.clickCount > 1){
       if(isEditingName){
-        
+
       }else{
         nameEditBox.text = name;
         isEditingName = true;
