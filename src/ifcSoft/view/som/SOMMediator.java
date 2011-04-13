@@ -1000,10 +1000,12 @@ public class SOMMediator extends Mediator implements IMediator, TabMediator {
         if(cluster[i][j]){ //if it is in the cluster
           //dimension average
           float[] cellVals = SOMp.getCellVals(new Point(i, j));
+          int[][] denseMap = SOMp.getDensityMap();
           for(int k = 0; k <SOMp.getDimNames().length; k++){
             clusterDimAvgs[k] =  cellVals[k] / (numNodesSelected+1) + (clusterDimAvgs[k]*numNodesSelected)/(numNodesSelected+1);
-            membSize += cellVals[k];
+
           }
+          membSize += denseMap[i][j];
           numNodesSelected++;
         }
       }
