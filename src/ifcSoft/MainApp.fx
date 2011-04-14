@@ -660,19 +660,21 @@ public class MainApp extends MainAppI {
   /**
   * Display the Remove Outliers dialog box.
   */
-  public function outliersDialog(firstTime:Boolean):Void{
+  public function outliersDialog(dsp:DataSetProxy):Void{
     var rmvOutliersDlg = RemoveOutliersDialog{
                 mainMediator: mainMediator
                 mainApp: this
+                dsp:dsp
                 }
     rmvOutliersDlg.outliersDialog();
 
   }
 
-  public function shrinkDatasetDialog():Void{
+  public function shrinkDatasetDialog(dsp:DataSetProxy):Void{
     var shrinkDatasetDlg = ShrinkDataSetDialog{
                 mainMediator: mainMediator
                 mainApp: this
+                dsp:dsp
                 }
     shrinkDatasetDlg.shrinkDatasetDialog();
 

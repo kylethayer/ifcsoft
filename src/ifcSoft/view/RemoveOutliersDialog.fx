@@ -26,6 +26,7 @@ import ifcSoft.model.dataSet.UnionData;
 import ifcSoft.view.dialogBox.ifcDialogBox;
 import ifcSoft.view.dialogBox.ifcDialogFloatInput;
 import ifcSoft.view.dialogBox.ifcDialogDataSetSelect;
+import ifcSoft.view.dialogBox.ifcDialogText;
 
 /**
  * This is the JavaFX file that makes the Remove Outliers dialog box.
@@ -34,33 +35,61 @@ import ifcSoft.view.dialogBox.ifcDialogDataSetSelect;
 public class RemoveOutliersDialog {
   public-init var mainMediator:MainMediator;
   public-init var mainApp:MainApp;
+  public-init var dsp:DataSetProxy = null;
   
 
   //var ReRemoveOutliersBoxDisabled:Boolean = false;
 
   var stdDevInput:ifcDialogFloatInput;
   var dataSetSelect:ifcDialogDataSetSelect;
-  var newRemoveDialogBoxDialog:ifcDialogBox =
-    ifcDialogBox{
-      name: "Remove Outliers"
-      content:[
-        dataSetSelect = ifcDialogDataSetSelect{mainApp:mainApp},
-        stdDevInput = ifcDialogFloatInput{
-          name: "Standard Devs "
-          initialFloat: 6
-        },
-      ]
-      okAction: removeOutliersOK
-      okName: "Remove Outliers"
-      cancelAction: newRemoveOutliersCancel
+  var newRemoveDialogBoxDialog:ifcDialogBox;
 
-      blocksMouse: true
-      //disable: bind ReRemoveOutliersBoxDisabled;
-    };
+  /**
+  * Create and display the Remove Outliers dialog box.
+  */
+  public function outliersDialog():Void{
+    if(mainMediator.getDSP(0) == null){
+      mainApp.alert("No Data Set Loaded");
+      return;
+    }
+
+    newRemoveDialogBoxDialog =
+      ifcDialogBox{
+        name: "Remove Outliers"
+        content:[
+          if(dsp == null){
+            dataSetSelect = ifcDialogDataSetSelect{mainApp:mainApp}
+          }else{
+            ifcDialogText{text:dsp.getDataSetName()}
+          },
+
+          stdDevInput = ifcDialogFloatInput{
+            name: "Standard Devs "
+            initialFloat: 6
+          },
+        ]
+        okAction: removeOutliersOK
+        okName: "Remove Outliers"
+        cancelAction: newRemoveOutliersCancel
+
+        blocksMouse: true
+        //disable: bind ReRemoveOutliersBoxDisabled;
+      };
+
+    mainApp.addDialog(newRemoveDialogBoxDialog);
+  }
 
   function removeOutliersOK():Void{
 
-    var finaldsp:DataSetProxy = mainMediator.getDataSet(dataSetSelect.getDataSets());
+    var finaldsp:DataSetProxy;
+
+   if(dsp == null){
+     finaldsp = mainMediator.getDataSet(dataSetSelect.getDataSets());
+   }else{
+     finaldsp = dsp;
+   }
+
+
 
     if(finaldsp.getData().getChildren().size() > 0){ //if anything depends on it
       if(Alert.question("Warning: Other data sets (eg. Unions, Subsets) may depend on this data set.\n\n"
@@ -87,16 +116,5 @@ public class RemoveOutliersDialog {
     mainApp.removeDialog(newRemoveDialogBoxDialog);
   }
 
-
-  /**
-  * Create and display the Remove Outliers dialog box.
-  */
-  public function outliersDialog():Void{
-    if(mainMediator.getDSP(0) == null){
-      mainApp.alert("No Data Set Loaded");
-      return;
-    }
-    mainApp.addDialog(newRemoveDialogBoxDialog);
-  }
 
 }

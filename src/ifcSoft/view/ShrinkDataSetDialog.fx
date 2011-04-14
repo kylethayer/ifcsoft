@@ -24,6 +24,7 @@ import ifcSoft.view.dialogBox.ifcDialogDataSetSelect;
 import ifcSoft.view.dialogBox.ifcDialogBox;
 import ifcSoft.view.dialogBox.ifcDialogRadioButtons;
 import ifcSoft.model.DataSetProxy;
+import ifcSoft.view.dialogBox.ifcDialogText;
 
 /**
  * @author kthayer
@@ -32,6 +33,7 @@ import ifcSoft.model.DataSetProxy;
 public class ShrinkDataSetDialog {
   public-init var mainMediator:MainMediator;
   public-init var mainApp:MainApp;
+  public-init var dsp:DataSetProxy = null;
 
   var shrinkAmtInput:ifcDialogFloatInput;
   var dataSetSelect:ifcDialogDataSetSelect;
@@ -40,7 +42,12 @@ public class ShrinkDataSetDialog {
     ifcDialogBox{
       name: "Shrink Data Set(s)"
       content:[
-        dataSetSelect = ifcDialogDataSetSelect{mainApp:mainApp},
+        if(dsp == null){
+          dataSetSelect = ifcDialogDataSetSelect{mainApp:mainApp}
+        }else{
+          ifcDialogText{text:dsp.getDataSetName()}
+        },
+
         shrinkAmtInput = ifcDialogFloatInput{
           name: "Keep what percent? "
           initialFloat: 10
@@ -64,9 +71,11 @@ public class ShrinkDataSetDialog {
   
 
   function shrinkDatsetOK():Void{
-    var finaldsp:DataSetProxy = mainMediator.getDataSet(dataSetSelect.getDataSets());
+    if(dsp == null){
+      dsp = mainMediator.getDataSet(dataSetSelect.getDataSets());
+    }
 
-    mainMediator.shrinkDatset(finaldsp, shrinkAmtInput.getInput());
+    mainMediator.shrinkDatset(dsp, shrinkAmtInput.getInput());
 
     mainApp.removeDialog(shrinkDatasetBoxDialog);
   }

@@ -247,7 +247,7 @@ public class Menus{
               blocksMouse: false
               action: loadSampleFile
             },
-            Button{
+            /*Button{
               layoutX: 10 layoutY: -100
               text: "Remove\nOutliers"
               blocksMouse: false
@@ -258,7 +258,7 @@ public class Menus{
               text: "Shrink\nData Set"
               blocksMouse: false
               action:  function(){app.shrinkDatasetDialog();}
-            }
+            }*/
             Button{
               layoutX: 10 layoutY: 0
               text: "View\nData Set"

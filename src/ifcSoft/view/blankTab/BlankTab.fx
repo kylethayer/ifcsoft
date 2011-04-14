@@ -116,10 +116,10 @@ public class BlankTab extends BlankTabI{
                   onMouseClicked:function(e: MouseEvent){app.loadFile();}
                 },
                 Button{
-                  text: "Remove\nOutliers"
+                  text: "View\nData Set"
                   action:  function(){}
                   //Use clicked so that the click doesn't hit the new popup window
-                  onMouseClicked:function(e: MouseEvent){app.outliersDialog(false);}
+                  onMouseClicked:function(e: MouseEvent){app.viewDatasetDialog();}
                 },
                 Button{
                   text: "Calculate SOM"

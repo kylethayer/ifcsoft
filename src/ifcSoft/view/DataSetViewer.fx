@@ -22,6 +22,16 @@ import ifcSoft.MainApp;
 import ifcSoft.view.dialogBox.ifcDialogBox;
 import ifcSoft.view.dialogBox.ifcDialogDataSetSelect;
 import ifcSoft.view.dialogBox.ifcDialogDataTable;
+import ifcSoft.view.dialogBox.ifcDialogButton;
+import ifcSoft.view.dialogBox.ifcDialogHBox;
+import ifcSoft.model.DataSetProxy;
+import javax.swing.JFileChooser;
+import ifcSoft.view.fileFilter.CSVFileFilter;
+import java.io.File;
+import java.io.BufferedWriter;
+import ifcSoft.model.dataSet.summaryData.SummaryData;
+import java.io.IOException;
+import java.io.FileWriter;
 
 /**
  * @author kthayer
@@ -44,6 +54,22 @@ public class DataSetViewer {
       name: "Data Set Viewer"
       content:bind [
         dataSetSelect,
+        ifcDialogHBox{
+          content:[
+            ifcDialogButton{
+              text:"Save\nData Set"
+              action:function(){saveDataSet();}
+            },
+            ifcDialogButton{
+              text:"Remove\nOutliers"
+              action: function(){mainApp.outliersDialog(getCurrentDataSet());}
+            },
+            ifcDialogButton{
+              text:"Shrink\nData Set"
+              action:function(){mainApp.shrinkDatasetDialog(getCurrentDataSet());}
+            },
+          ]
+        },
         dataSetTable
         ]
       cancelName: "Close"
@@ -67,4 +93,94 @@ public class DataSetViewer {
     }
     mainApp.addDialog(dataSetViewerDlg);
   }
+
+  public function getCurrentDataSet():DataSetProxy{
+    var datasets = (dataSetSelect.getDataSets());
+    if(datasets.size() == 0){
+      mainApp.alert("No data set selected");
+      mainApp.unblockContent();
+      return null;
+    }
+
+    var finaldsp:DataSetProxy = mainMediator.getDataSet(dataSetSelect.getDataSets());
+    if(finaldsp == null){
+      println("Error in data set combination");
+      return null;
+    }
+
+    return finaldsp;
+  }
+
+
+  function saveDataSet():Void{
+    var dsp:DataSetProxy = getCurrentDataSet();
+    if(dsp == null){
+      return;
+    }
+    var fileChooser:JFileChooser;
+    if(mainApp.lastFilePath == null){
+      fileChooser = new JFileChooser();
+    }else{
+      fileChooser = new JFileChooser(mainApp.lastFilePath);
+    }
+    var filter:CSVFileFilter = new CSVFileFilter();
+    fileChooser.setFileFilter(filter);
+
+    if(fileChooser.showSaveDialog(null) == JFileChooser.APPROVE_OPTION){
+
+      mainApp.lastFilePath = fileChooser.getCurrentDirectory().getAbsolutePath();
+      var files: File = fileChooser.getSelectedFile();
+      println("saving: {files.getAbsolutePath()}");
+      var newFilename =files.getAbsolutePath();
+
+      if(not newFilename.endsWith(".csv")){
+        newFilename ="{newFilename}.csv";
+      }
+
+
+      var bw:BufferedWriter;
+      try {
+        bw = new BufferedWriter(new FileWriter(newFilename));
+        if(dsp.getData() instanceof SummaryData){
+          bw.write("name,");
+        }
+
+        for(dim in dsp.getColNames()){
+          bw.write(dim);
+          if(indexof dim == dsp.getColNames().length-1){
+            bw.newLine();
+          }else{
+            bw.write(",");
+          }
+        }
+
+
+        for(i in [0..dsp.getDataSize()-1]){
+          if(dsp.getData() instanceof SummaryData){
+            bw.write("{dsp.getData().getPointName(i)},");
+          }
+
+          for(j in [0..dsp.getColNames().length-1]){
+            bw.write("{dsp.getData().getVals(i)[j]}");
+            if(indexof j == dsp.getColNames().length-1){
+              bw.newLine();
+            }else{
+              bw.write(",");
+            }
+          }
+
+        }
+        bw.close();
+
+      }catch(ex:IOException){
+        //if(ex.)
+        println("IO Error:{ex}");
+        return;
+      }
+
+    }
+
+
+  }
+
 }
