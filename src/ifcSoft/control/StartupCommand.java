@@ -47,8 +47,6 @@ public class StartupCommand extends SimpleCommand {
     facade.registerCommand(ApplicationFacade.LOADDATA, LoadDataCommand.class);
     facade.registerCommand(ApplicationFacade.LOADSOM, LoadSOMCommand.class);
     facade.registerCommand(ApplicationFacade.SAVESOM, SaveSOMCommand.class);
-    facade.registerCommand(ApplicationFacade.CHOOSECLUSTER, SaveClusterCommand.class);
-    facade.registerCommand(ApplicationFacade.SAVECLUSTERTOFILE, SaveClusterToFileCommand.class);
     
     facade.sendNotification(MainMediator.NODATA, null, null);
   }
