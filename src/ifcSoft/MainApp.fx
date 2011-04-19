@@ -744,5 +744,10 @@ public class MainApp extends MainAppI {
     return st as WindRoseTabI;
   }
 
+  override function getStageRectangle():java.awt.Rectangle{
+    return new java.awt.Rectangle(stage.x + scene.x, stage.y + scene.y, scene.width, scene.height);
+  }
+
+
 };
 

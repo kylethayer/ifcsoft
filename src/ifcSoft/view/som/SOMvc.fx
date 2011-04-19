@@ -61,10 +61,13 @@ public class SOMvc extends SOMvcI  {
   package var SOMdlgs:SOMInternDialogs;
   package var SOMclstr:SOMcluster;
   package var SOMmps:SOMmaps;
+
+  var topSpace:Integer = 60;
+  var bottomSpace:Integer = 30;
   
   var SOMContent:VBox = null;
   var SOMTilesGroup: Container = Container{
-    height: bind app.contentHeight - 60
+    height: bind app.contentHeight - topSpace - bottomSpace
     width: bind app.contentWidth - 70
 
   };
@@ -130,20 +133,30 @@ public class SOMvc extends SOMvcI  {
       spacing: 0
       content: [
         HBox{ //"Set" and "Time" bar
-          height: 30
+          height: topSpace
           width: bind app.contentWidth
           spacing: 0
           content:[
             Rectangle{
             fill: Color.BLACK
-            height:30
+            height:bottomSpace
             width: 10
             },
-            Text{
-              fill: Color.WHITE
-              font: Font {name: "Arial" size: 14}
-              content: bind setName
-              x:10
+            VBox{
+              content:[
+                Text{
+                  fill: Color.WHITE
+                  font: Font {name: "Arial" size: 14}
+                  content: bind setName
+                  x:10
+                },
+                Button{
+                  text: "Save Cluster",
+                  //TODO: only enable button when there is something selected
+                  action: function() { SaveClusterDialog{app:app, mediator:mediator }; }
+                }
+                
+              ]
             }
           ]
         },
@@ -174,14 +187,14 @@ public class SOMvc extends SOMvcI  {
           ]
         },
         HBox{ //bottom menu tab spacer
-          height: 30
+          height: bottomSpace
           width: bind app.contentWidth
           content:[
             infoText,
             Group{content:[pauseButton,unPauseButton]},
             Rectangle{
               fill: Color.BLACK
-              height:30
+              height:bottomSpace
               width: 10
               }
             ]

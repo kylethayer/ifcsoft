@@ -24,6 +24,8 @@ import java.awt.image.BufferedImage;
 import ifcSoft.ApplicationFacade;
 import ifcSoft.MainAppI;
 import ifcSoft.model.DataSetProxy;
+import ifcSoft.model.dataSet.DataSet;
+import ifcSoft.model.dataSet.SubsetData;
 import ifcSoft.model.dataSet.dataSetScalar.DataSetScalar;
 import ifcSoft.model.dataSet.dataSetScalar.LogScaleNormalized;
 import ifcSoft.model.dataSet.summaryData.SummaryData;
@@ -33,8 +35,16 @@ import ifcSoft.model.som.SOMSettings;
 import ifcSoft.view.MainMediator;
 import ifcSoft.view.Tab;
 import ifcSoft.view.TabMediator;
+import java.awt.AWTException;
+import java.awt.Rectangle;
+import java.awt.Robot;
+import java.io.BufferedWriter;
+import java.io.File;
+import java.io.FileWriter;
+import java.io.IOException;
 import java.util.LinkedList;
 import javafx.scene.input.MouseEvent;
+import javax.imageio.ImageIO;
 
 import org.puremvc.java.interfaces.IMediator;
 import org.puremvc.java.interfaces.INotification;
@@ -96,6 +106,8 @@ public class SOMMediator extends Mediator implements IMediator, TabMediator {
   private Point Clusterpts[] = new Point[0]; // the points selected to build the cluster from
   boolean[][] lastCluster;
   boolean wasLastClusterEmpty = true;
+
+  public SaveClusterSettings lastSaveClustSettings = null;
 
   double clusterDimAvgs[];
 
@@ -1032,35 +1044,84 @@ public class SOMMediator extends Mediator implements IMediator, TabMediator {
       }
     }
   }
-  
-  /**
-   * Saves the selected cluster as a new DataSet within the program
-   */
-  public void saveCluster(){
-    
-    //TODO:I need some way of making sure the finding membership is completed
 
-    if(lastCluster != null){
-      
-      //this seems like a cheap way of doing it, but I'm not sure if it's worth making a custom
-      // object type to hold this
-      Object noteData[] = new Object[3];
-      noteData[0] = mainMed.getApp();
-      noteData[1] = SOMp; //arg 1 is the data set proxy
-      noteData[2] = lastCluster; //arg 2 is the cluster to be used
-      
-      sendNotification(ApplicationFacade.CHOOSECLUSTER, noteData, null);
-            
+  public void saveCluster(SaveClusterSettings settings, BufferedImage screenshot){
+
+    //TODO: Need to wait until it is done getting density
+
+    if(lastCluster == null){
+      mainMed.getApp().alert("No cluster selected");
+    }
+
+
+    int[][] denseMap = SOMp.getDensityMap();
+    int membSize = 0;
+    for(int i = 0; i < lastCluster.length; i++){
+      for(int j = 0; j < lastCluster[0].length; j++){
+        if(lastCluster[i][j]){ //if it is in the cluster
+          membSize += denseMap[i][j]; //add the number we need
+        }
+      }
+    }
+
+    int[] membMap = null;
+
+    if(settings.saveClusterAsNewDataSet || settings.saveClusterToFile){
+      membMap = new int[membSize];
+      int memPos = 0;
+      //add all the points
+      for(int i = 0; i < lastCluster.length; i++){
+        for(int j = 0; j < lastCluster[0].length; j++){
+          if(lastCluster[i][j]){ //if it is in the cluster
+            int cellMembs[] = SOMp.getCellMembers(new Point(i,j));
+            if(cellMembs.length != denseMap[i][j]){
+              System.out.println("Error: SOMofCluster, Densemap:"+denseMap[i][j]+
+                  " cellMembers:"+ cellMembs.length);
+            }
+            for(int k = 0; k < denseMap[i][j]; k++){
+              membMap[memPos] = cellMembs[k];
+              memPos++;
+            }
+          }
+        }
+      }
+    }
+
+    if(membSize == 0){
+      String msg = "No data points in cluster.";
+      facade.sendNotification(ifcSoft.ApplicationFacade.STRINGALERT, msg, null);
+      return;
+    }
+
+    if(settings.saveClusterAsNewDataSet){
+      DataSet newDataSet = (DataSet) new SubsetData(SOMp.getDataSet(), membMap);
+      DataSetProxy newdsp = new DataSetProxy();
+      newdsp.setDataSet(newDataSet);
+      newdsp.setDataSetName(settings.clusterName);
+      mainMed.addNewDSP(newdsp);
+    }
+
+    if(settings.saveClusterStats){
+      saveClusterStats(settings.clusterName, settings.summDataSet); //settings.summDataSet
+    }
+    
+    if(settings.saveClusterToFile){
+      saveClusterToFile(settings.clusterName, settings.fileDirectory, membMap);
+    }
+
+    if(settings.saveScreenshot){
+      saveScreenshot(settings.clusterName, settings.screenshotDirectory, screenshot);
     }
   }
 
-
-  public void saveClusterStats(String clustName){
+  public void saveClusterStats(String clustName, SummaryData sumDataSet){
+    if(sumDataSet != null){
+      sumData = sumDataSet;
+    }
     if(lastCluster != null){
       //String clustName = "clust " + clustNum;
       clustNum++;
       if(sumData == null){
-        //TODO: Search for appropriate Summary Data
         sumData = new SummaryData();
         DataSetProxy sumDSP = new DataSetProxy();
         sumDSP.setDataSet(sumData);
@@ -1083,16 +1144,78 @@ public class SOMMediator extends Mediator implements IMediator, TabMediator {
   /**
    * Saves the selected cluster into a file.
    */
-  public void saveClusterToFile(){
-    if(lastCluster != null){
-      //this seems like a cheap way of doing it, but I'm not sure if it's worth making a custom
-      // object type to hold this
-      Object noteData[] = new Object[2];
-      noteData[0] = SOMp; //arg 1 is the data set proxy
-      noteData[1] = lastCluster; //arg 2 is the cluster to be used
+  public void saveClusterToFile(String name, String filepath, int[] membMap ){
+    if(!filepath.endsWith("/"))
+      filepath+= "/";
+    String selectedFile = filepath+name+".csv";
+    /*if(!selectedFile.endsWith(".csv")){
+      selectedFile += ".csv";
+    }*/
 
-      sendNotification(ApplicationFacade.SAVECLUSTERTOFILE, noteData, null);
+    DataSet dataSet = SOMp.getDataSet();
+    boolean saveNames = true;
+    BufferedWriter bw;
+    try {
+      bw = new BufferedWriter(new FileWriter(selectedFile));
+      //write labels
+      if(saveNames){
+        bw.write("File,");
+      }
+      for(int i = 0; i < dataSet.getDimensions(); i++ ){
+        bw.write(dataSet.getColLabels()[i]);
+        if(i != dataSet.getDimensions() - 1){
+          bw.write(",");
+        }else{
 
+          bw.newLine();
+        }
+      }
+      //write the data
+
+      for(int i = 0; i < membMap.length; i++){
+        float[] dataPt = dataSet.getVals(membMap[i]);
+        if(saveNames){
+          bw.write(dataSet.getPointSetName(membMap[i])+",");
+        }
+        for(int k = 0; k < dataSet.getDimensions(); k++){
+          bw.write(""+dataPt[k]);
+          if(k != dataSet.getDimensions() - 1){
+            bw.write(",");
+          }else{
+
+            bw.newLine();
+          }
+        }
+      }
+      bw.close();
+
+    } catch (IOException ex) {
+      facade.sendNotification(ApplicationFacade.EXCEPTIONALERT, ex, null);
+    }
+  }
+
+  public void saveScreenshot(String name, String filepath, BufferedImage screenshot){
+    if(!filepath.endsWith("/"))
+      filepath+= "/";
+    String selectedFile = filepath+name+".jpg";
+    try {
+      ImageIO.write(screenshot, "png", new File(selectedFile));
+    }
+    catch(Exception e){
+    	e.printStackTrace();
+    }
+  }
+
+  public BufferedImage getScreenshot(){
+    try {
+      Robot robot = new Robot();
+      Rectangle captureSize = mainMed.getApp().getStageRectangle();
+      BufferedImage bufferedImage = robot.createScreenCapture(captureSize);
+      return bufferedImage;
+    }
+    catch(Exception e){
+    	e.printStackTrace();
+      return null;
     }
   }
 

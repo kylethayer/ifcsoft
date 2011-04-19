@@ -21,25 +21,29 @@ package ifcSoft.view.dialogBox;
 import javafx.scene.control.CheckBox;
 import javafx.scene.layout.HBox;
 import javafx.scene.control.Label;
+import javafx.scene.control.ToggleGroup;
+import javafx.scene.control.RadioButton;
 
 /**
  * @author kthayer
  */
 
-public class ifcDialogCheckBox extends ifcDialogItem{
+public class ifcDialogRadioButton extends ifcDialogItem{
   public-init var name:String;
   public-init var initialCheck:Boolean = false;
+  public-init var toggleGroup:ToggleGroup = ToggleGroup {};
 
-  var checkBoxInput:CheckBox;
-  public-read var ischecked:Boolean = bind checkBoxInput.selected; //binding wasn't working on getInput()
+  var radioButtonInput:RadioButton;
+  public-read var ischecked:Boolean = bind radioButtonInput.selected; //binding wasn't working on getInput()
 
   init{
     children =
       HBox{
         spacing: 4
         content:[
-          checkBoxInput = CheckBox{
+          radioButtonInput = RadioButton{
             selected: initialCheck
+            toggleGroup: toggleGroup
           },
           Label {text: name}
         ]
@@ -47,17 +51,17 @@ public class ifcDialogCheckBox extends ifcDialogItem{
   }
 
   public function getInput():Boolean{
-    return checkBoxInput.selected;
+    return radioButtonInput.selected;
   }
 
 	public function select():Void{
-		checkBoxInput.selected = true;
+		radioButtonInput.selected = true;
 	}
 
 	public function unSelect():Void{
-		checkBoxInput.selected = false;
+		radioButtonInput.selected = false;
 	}
-  
+
   override function getName():String{
     return name;
   }

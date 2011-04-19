@@ -44,7 +44,7 @@ public class SaveClusterToFileCommand extends SimpleCommand {
    * Save a cluster to a file.
    * @param note - Arg 1: DataSetProxy, Arg 2: Cluster (boolean[][])
    */
-  @Override  
+  /*@Override
   public void execute(INotification note){
 
     Object[] noteData = (Object []) note.getBody();
@@ -122,8 +122,6 @@ public class SaveClusterToFileCommand extends SimpleCommand {
       if(Alert.question("Do you want to include which file each data point is from?")){
         saveNames = true;
       }
-      //alert: "Do you want to include which file each data point is from?
-      //set a boolean or something for that
     }
     
     BufferedWriter bw;
@@ -170,5 +168,5 @@ public class SaveClusterToFileCommand extends SimpleCommand {
     facade.sendNotification(ifcSoft.ApplicationFacade.STRINGALERT, msg, null);
 
 
-  }
+  }*/
 }

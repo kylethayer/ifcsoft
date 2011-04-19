@@ -326,8 +326,7 @@ public class SOM {
   
   /**
    * Calculates the SOM with the given iterations and max neighborhood size.
-   * @param iterations
-   * @param maxNeighborSize
+   * @param somSettings
    */
   public void calculateSOM(SOMSettings somSettings){
     SOMprogress = 0;

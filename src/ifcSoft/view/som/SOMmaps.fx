@@ -199,9 +199,10 @@ public class SOMmaps {
               //MenuItem { text: "Test File Against SOM", action: function() { mediator.testFileAgainstSOM(); } }
               Separator { }
               MenuItem { text: "Clustering Options", action: function() { mediator.clustOpt(); } }
-              MenuItem { text: "Save Cluster", action: function() { mediator.saveCluster(); } }
-              MenuItem { text: "Save Cluster Stats", action: saveClusterStats }
-              MenuItem { text: "Save Cluster to File", action: function() {mediator.saveClusterToFile(); } }
+              //MenuItem { text: "Save Cluster", action: function() { SaveClusterDialog{app:app, mediator:mediator }; } //in order for the menu not to be in the screenshot, must use the other button
+              //MenuItem { text: "Save Cluster", action: function() { mediator.saveCluster(); } }
+              //MenuItem { text: "Save Cluster Stats", action: saveClusterStats }
+              //MenuItem { text: "Save Cluster to File", action: function() {mediator.saveClusterToFile(); } }
               Separator { }
               removeTileMenuItem = MenuItem { text: "Remove Map Tile", disable:true }
               Menu{
@@ -232,31 +233,6 @@ public class SOMmaps {
     }
     return tilesGroup;
   }
-
-  function saveClusterStats():Void{
-    app.blockContent();
-    var clusterDialogBox:ifcDialogBox;
-    var clusterNameIn:ifcDialogStringInput = ifcDialogStringInput{
-      name: "Cluster Name:"
-      initialString: "Cluster"
-    }
-
-    clusterDialogBox = ifcDialogBox{
-      name: "Save Cluster Statistics"
-      content: clusterNameIn
-      okAction:  function():Void{
-            app.removeDialog(clusterDialogBox);
-            app.unblockContent();
-            mediator.saveClusterStats(clusterNameIn.getInput());
-          }
-      cancelAction:  function():Void{
-            app.removeDialog(clusterDialogBox);
-            app.unblockContent();
-          }
-    }
-    app.addDialog(clusterDialogBox);
-  }
-
 
 
   /************************** Data Set Selector ******************/

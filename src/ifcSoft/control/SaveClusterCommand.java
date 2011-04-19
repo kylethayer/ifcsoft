@@ -40,7 +40,7 @@ public class SaveClusterCommand  extends SimpleCommand{
    * Save a cluster as a new data set.
    * @param note - Arg 1: DataSetProxy, Arg 2: Cluster (boolean[][])
    */
-  @Override 
+  /*@Override
   public void execute(INotification note){
     
     Object[] noteData = (Object []) note.getBody();
@@ -101,5 +101,5 @@ public class SaveClusterCommand  extends SimpleCommand{
     mainApp.nameDSP(newdsp, msg, "Cluster");
     
 
-  }
+  }*/
 }

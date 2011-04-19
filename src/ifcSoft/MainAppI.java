@@ -137,4 +137,6 @@ public interface MainAppI { //TODO: remove interface for letting FX files access
   public void addRemoveOutlier(DataSetProxy dsp);
 
 
+  public java.awt.Rectangle getStageRectangle();
+
 }
