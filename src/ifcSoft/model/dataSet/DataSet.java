@@ -110,6 +110,10 @@ public abstract class DataSet {
     return ""+index;
   }
 
+  public boolean hasPointNames(){
+    return false;
+  }
+
   /**
    * The maximum in the data set of the given dimension.
    * @param dimension

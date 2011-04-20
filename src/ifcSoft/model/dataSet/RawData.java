@@ -43,6 +43,10 @@ public class RawData extends DataSet {
   private String[] columnLabels;
   private LinkedList<float[][]> data = new LinkedList<float[][]>();
   private int length;
+
+  private boolean hasNames = false;
+  private LinkedList<String[]> dataNames = new LinkedList<String[]>();
+
   private boolean didload = false;
 
   private int loadProgress = 0;
@@ -241,6 +245,29 @@ public class RawData extends DataSet {
   }
 
 
+  @Override
+  public String getUnMaskedPointName(int index){
+    if(hasNames){
+      //find the right segment
+      int i = 0;
+      int sofar = 0;
+      while(sofar + data.get(i).length <= index){
+        sofar += data.get(i).length;
+        i++;
+      }
+      //i is now pointing at the correct segment and sofar tells us how many points were in previous segments
+      return dataNames.get(i)[index - sofar];
+    }
+    return ""+index;
+  }
+
+
+  @Override
+  public boolean hasPointNames(){
+    return hasNames;
+  }
+
+
 
 
   /**
@@ -320,7 +347,8 @@ public class RawData extends DataSet {
   private void readCSV(BufferedReader br) {
 
     String line = null;
-    LinkedList<float[]> tempData = new LinkedList<float[]>();; //it is read into here, first, then stuck in the data array
+    LinkedList<float[]> tempData = new LinkedList<float[]>(); //it is read into here, first, then stuck in the data array
+    LinkedList<String> tempNames = new LinkedList<String>();
     try{
       line = br.readLine();
     }catch(IOException ex){
@@ -335,7 +363,6 @@ public class RawData extends DataSet {
 
       //if the column labels aren't set, then this is the first read
       if(columnLabels == null){
-
         columnLabels = new String[st.countTokens()];
         for(int i = 0; i < columnLabels.length; i++){
           columnLabels[i] = st.nextToken();
@@ -348,9 +375,21 @@ public class RawData extends DataSet {
             columnLabels[i] = "FSC-A";
           }
         }
+        if(columnLabels[0].equalsIgnoreCase("name") || columnLabels[0].equalsIgnoreCase("file")){
+          hasNames = true;
+          String temp[] = new String[columnLabels.length-1];
+          for(int i=0; i < temp.length; i++){
+            temp[i] = columnLabels[i+1];
+          }
+          columnLabels = temp;
+        }
       }else{//the column labels have been read
         float[] thisrow = new float[columnLabels.length];
         boolean didLoadRow = true;
+        String name = null;
+        if(hasNames){
+          name = st.nextToken();
+        }
         if(st.countTokens() != columnLabels.length){
           System.out.println("Error reading FCS, columns in row"
               +dataRows+" didn't match");
@@ -369,12 +408,16 @@ public class RawData extends DataSet {
 
         if(didLoadRow){
           tempData.add(thisrow);
+          if(hasNames){
+            tempNames.add(name);
+          }
           dataRows++;
           loadProgress++;
           if(dataRows == SEGSIZE){//we'll read them into groups of MAXPERSEG (to try not to crash)
-            addSegToData(tempData, dataRows);
+            addSegToData(tempData, tempNames, dataRows);
             //reset for next dataSegment
             tempData = new LinkedList<float[]>();
+            tempNames = new LinkedList<String>();
             dataRows = 0;
           }
         }
@@ -393,7 +436,7 @@ public class RawData extends DataSet {
     }
 
     if(dataRows > 0){  //if the last pass read some data, add it
-      addSegToData(tempData, dataRows);
+      addSegToData(tempData, tempNames, dataRows);
       //use this to clear the linked list
       tempData = null;
     }
@@ -412,11 +455,12 @@ public class RawData extends DataSet {
     return;
   }
 
-  private void addSegToData(LinkedList<float[]> tempData, int dataRows) {
+  private void addSegToData(LinkedList<float[]> tempData, LinkedList<String> tempNames, int dataRows) {
     //I've read the data into a linked list, but I really want to access it as
     //an array, so I will now copy that over.
     //while I'm at it, I'll find the min and max of each data thingy
     float[][] dataSeg = new float[dataRows][];
+    String[] nameSeg = new String[dataRows];
 
     if(mins == null){
       mins = new float[columnLabels.length];
@@ -432,6 +476,9 @@ public class RawData extends DataSet {
 
     for(int i = 0; i < dataRows; i++){
       dataSeg[i] = tempData.removeFirst();
+      if(hasNames){
+        nameSeg[i] = tempNames.removeFirst();
+      }
       //while we're adding the data, calculate the means and average
       length ++;
       for(int k=0; k < columnLabels.length; k++){
@@ -449,7 +496,9 @@ public class RawData extends DataSet {
     }
 
     data.add(dataSeg);
-
+    if(hasNames){
+      dataNames.add(nameSeg);
+    }
     System.out.println("length after seg "+ data.size()+": "+ length);
   }
 

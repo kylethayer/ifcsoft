@@ -141,7 +141,7 @@ public class DataSetViewer {
       var bw:BufferedWriter;
       try {
         bw = new BufferedWriter(new FileWriter(newFilename));
-        if(dsp.getData() instanceof SummaryData){
+        if(dsp.getData().hasPointNames()){
           bw.write("name,");
         }
 
@@ -156,7 +156,7 @@ public class DataSetViewer {
 
 
         for(i in [0..dsp.getDataSize()-1]){
-          if(dsp.getData() instanceof SummaryData){
+          if(dsp.getData().hasPointNames()){
             bw.write("{dsp.getData().getPointName(i)},");
           }
 

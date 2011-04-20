@@ -1154,12 +1154,19 @@ public class SOMMediator extends Mediator implements IMediator, TabMediator {
 
     DataSet dataSet = SOMp.getDataSet();
     boolean saveNames = true;
+    boolean savePointNames = false;
+    if(dataSet.hasPointNames()){
+      savePointNames = true;
+    }
     BufferedWriter bw;
     try {
       bw = new BufferedWriter(new FileWriter(selectedFile));
       //write labels
       if(saveNames){
         bw.write("File,");
+      }
+      if(savePointNames){
+        bw.write("Name,");
       }
       for(int i = 0; i < dataSet.getDimensions(); i++ ){
         bw.write(dataSet.getColLabels()[i]);
@@ -1176,6 +1183,9 @@ public class SOMMediator extends Mediator implements IMediator, TabMediator {
         float[] dataPt = dataSet.getVals(membMap[i]);
         if(saveNames){
           bw.write(dataSet.getPointSetName(membMap[i])+",");
+        }
+        if(savePointNames){
+          bw.write(dataSet.getPointName(membMap[i])+",");
         }
         for(int k = 0; k < dataSet.getDimensions(); k++){
           bw.write(""+dataPt[k]);

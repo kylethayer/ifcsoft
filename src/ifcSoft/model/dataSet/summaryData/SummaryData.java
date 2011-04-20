@@ -96,6 +96,11 @@ public class SummaryData extends DataSet {
   }
 
   @Override
+  public boolean hasPointNames(){
+    return true;
+  }
+
+  @Override
   public int UnMaskedLength() {
     return datasets.size();
   }
