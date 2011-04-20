@@ -169,6 +169,34 @@ public class UnionData extends DataSet {
     return parentSets.get(i).getData().getVals(index - sofar);
   }
 
+
+  @Override
+  public String getUnMaskedPointName(int index){
+    if(index >= length){
+      return null; //bad input
+    }
+    //find the right Data Set
+    int i = 0;
+    int sofar = 0;
+    while(sofar + parentSets.get(i).getData().length() <= index){
+      sofar += parentSets.get(i).getData().length();
+      i++;
+    }
+    //i is now pointing at the correct segment and sofar tells us how many points were in previous segments
+    return parentSets.get(i).getData().getPointName(index - sofar);
+  }
+
+  @Override
+  public boolean hasPointNames(){
+    boolean anyHaveNames = false;
+    for(int i = 0; i < parentSets.size(); i++){
+      if(parentSets.get(i).getData().hasPointNames()){
+        anyHaveNames = true;
+      }
+    }
+    return anyHaveNames;
+  }
+
   /**
    *
    * @param index

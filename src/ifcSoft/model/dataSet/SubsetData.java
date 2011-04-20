@@ -80,6 +80,16 @@ public class SubsetData extends DataSet {
     return parentSet.getVals(members[index]);
   }
 
+  @Override
+  public String getUnMaskedPointName(int index){
+    return parentSet.getPointName(members[index]);
+  }
+
+
+  @Override
+  public boolean hasPointNames(){
+    return parentSet.hasPointNames();
+  }
 
   /**
    *
