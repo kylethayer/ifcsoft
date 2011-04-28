@@ -79,13 +79,13 @@ public class SOMSettings {
 
     SOMType = BATCHSOM;
 
-    width = 30;
-    height = 60;
+    width = 15;
+    height = 15;
 
 
     classicIterations = 5000;
     classicMaxNeighborhood = -1; //default is max dimension / 2
-    classicMinNeighborhood = 1;
+    classicMinNeighborhood = 2;
 
     batchSteps = 10;
     batchMaxNeighborhood = -1; //default is max dimension / 4
