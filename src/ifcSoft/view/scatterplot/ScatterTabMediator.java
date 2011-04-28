@@ -144,16 +144,33 @@ public class ScatterTabMediator implements TabMediator {
   }
 
 
-  public BufferedImage getScatterImage(ScatterPlot scatterplot){
+  /**
+   *
+   * @param scatterplot
+   * @param set - set number or -1 for all
+   * @return
+   */
+  public BufferedImage getScatterImage(ScatterPlot scatterplot, int set){
     BufferedImage scatterImg = new BufferedImage(scatterplot.xRes(), scatterplot.yRes(),BufferedImage.TYPE_INT_RGB);
     for(int i = 0; i < scatterplot.xRes(); i++){
       for(int j = 0; j < scatterplot.yRes(); j++){
-        float amt = scatterplot.getPntSize(i, j); //the Y axis of the image is flipped
+        float amt;
+        if(set == -1){
+          amt = scatterplot.getPntSize(i, j); //the Y axis of the image is flipped
+        }else{
+          amt = scatterplot.getSetPntSize(i, j, set);
+        }
         int clr;
         if(amt == 0){
           clr = Color.HSBtoRGB(1, 0, .05f); // if nothing, make it dark grey
         }else{
-          float fraction = amt / scatterplot.getMaxPntSize();
+          float fraction;
+          if(set == -1){
+            fraction = amt / scatterplot.getMaxPntSize();
+          }else{
+            fraction = amt / scatterplot.getMaxPntSize(); //should this be done separately?
+          }
+          fraction = (float) Math.sqrt(Math.sqrt(fraction)); //push the scale to higher fractions
           clr = Color.HSBtoRGB(.65f*(1-fraction), //if I go all the way to 1 I get red again
           fraction*.75f+.25f,
           fraction*.5f+.5f); //make it dimmer if it's lower

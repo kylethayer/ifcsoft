@@ -173,10 +173,22 @@ public class ScatterPlot {
     xlowerLimits = new double[xRes+1];
     ylowerLimits = new double[yRes+1];
     DataSet ds = dsp.getData();
-    double minX = ds.getMin(xDim);
-    double maxX = ds.getMax(xDim);
-    double minY = ds.getMin(yDim);
-    double maxY = ds.getMax(yDim);
+    double minX = ds.getMean(xDim) - 2*ds.getStdDev(xDim);//ds.getMin(xDim);
+    if( minX < ds.getMin(xDim)){
+      minX = ds.getMin(xDim);
+    }
+    double maxX = ds.getMean(xDim) + 2*ds.getStdDev(xDim);
+    if( maxX > ds.getMax(xDim)){
+      maxX = ds.getMax(xDim);
+    }
+    double minY = ds.getMean(yDim) - 2*ds.getStdDev(yDim);
+    if( minY < ds.getMin(yDim)){
+      minY = ds.getMin(yDim);
+    }
+    double maxY = ds.getMean(yDim) + 2*ds.getStdDev(yDim);
+    if( maxY > ds.getMax(yDim)){
+      maxY = ds.getMax(yDim);
+    }
     /*if(minX == maxX){
       //Just one bar with everything
       System.out.println("Histogram: xMin == xMax");
@@ -258,25 +270,25 @@ public class ScatterPlot {
 
       if(xNum >= xRes){ //if it placed it out of our range on x
         if(ds.getVals(i)[xDim] > maxX){
-          System.out.println("point "+i+" truly too large");
+          //System.out.println("point "+i+" truly too large");
         }
         xNum = xRes - 1;
       }
       if(xNum < 0){
         if(ds.getVals(i)[xDim] < minX){
-          System.out.println("point "+i+" truly too small");
+          //System.out.println("point "+i+" truly too small");
         }
         xNum = 0;
       }
       if(yNum >= yRes){ //if it placed it out of our range on x
         if(ds.getVals(i)[yDim] > maxY){
-          System.out.println("point "+i+" truly too large");
+          //System.out.println("point "+i+" truly too large");
         }
         yNum = yRes - 1;
       }
       if(yNum < 0){
         if(ds.getVals(i)[yDim] < minY){
-          System.out.println("point "+i+" truly too small");
+          //System.out.println("point "+i+" truly too small");
         }
         yNum = 0;
       }
