@@ -142,12 +142,13 @@ public class SaveClusterDialog {
         ifcDialogSpacer{height: 10},
 
       ]
-      cancelAction: function():Void{app.removeDialog(saveClusterDialog)}
+      cancelAction: function():Void{app.removeDialog(saveClusterDialog); app.unblockContent();}
 
       blocksMouse: true
     };
 
     app.addDialog(saveClusterDialog);
+    app.blockContent();
   }
 
   function saveClusterOK():Void{
@@ -178,6 +179,7 @@ public class SaveClusterDialog {
     mediator.saveCluster(settings, screenshot);
 
     app.removeDialog(saveClusterDialog);
+    app.unblockContent();
   }
 
 
