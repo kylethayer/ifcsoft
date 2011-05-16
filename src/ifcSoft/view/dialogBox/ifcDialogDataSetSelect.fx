@@ -26,6 +26,7 @@ import ifcSoft.MainApp;
 import java.lang.Exception;
 import ifcSoft.view.MainMediator;
 import ifcSoft.model.DataSetProxy;
+import ifcSoft.view.synchDataSets.synchedColumn;
 
 /**
  * @author Kyle Thayer <kthayer@emory.edu>
@@ -34,6 +35,8 @@ import ifcSoft.model.DataSetProxy;
 public class ifcDialogDataSetSelect extends ifcDialogItem{
   public-init var mainApp:MainApp;
   public-init var initialDataSets:DataSetProxy[];
+  public-init var synchColumns:synchedColumn[] = null;
+
   var datasets:DataSetProxy[];
   var datasetNames:String = bind
     "{
@@ -97,6 +100,10 @@ public class ifcDialogDataSetSelect extends ifcDialogItem{
   function selectDataSetOK():Void{
     //get the data set
     datasets = dataSetSelectDialog.getDataSets();
+    if(dataSetSelectDialog.getSynchColumns != null){
+      synchColumns = dataSetSelectDialog.getSynchColumns();
+    }
+
     mainApp.removeDialog(dataSetSelectDialog);
     okAction();
   }
@@ -104,6 +111,10 @@ public class ifcDialogDataSetSelect extends ifcDialogItem{
 
   public function getDataSets():DataSetProxy[]{
     return datasets;
+  }
+
+   public function getSynchColumns():synchedColumn[]{
+    return synchColumns;
   }
 
 

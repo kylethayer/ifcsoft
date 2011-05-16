@@ -18,16 +18,19 @@
  */
 package ifcSoft.view.dialogBox;
 
-import javafx.scene.CustomNode;
 import ifcSoft.model.DataSetProxy;
 import java.lang.Exception;
 import ifcSoft.MainApp;
 import ifcSoft.view.MainMediator;
 import javafx.util.Sequences;
 import javafx.stage.Alert;
+import ifcSoft.view.synchDataSets.SynchDataSetDialog;
+import javafx.scene.control.ScrollView;
+import ifcSoft.view.synchDataSets.synchedColumn;
+import ifcSoft.view.synchDataSets.synchedColumnFX;
 
 /**
- * @author kthayer
+ * @author Kyle Thayer
  */
 
 public class ifcDialogDataSetSelectBox extends ifcDialogBox {
@@ -38,6 +41,8 @@ public class ifcDialogDataSetSelectBox extends ifcDialogBox {
   var selectedDataSets:Boolean[];
   var dataSetCheckBoxes:ifcDialogCheckBox[];
   var selectAllButton:ifcDialogButton;
+
+  var synchColumns:synchedColumn[] = null;
 
   init{
     if(mainApp == null){ //This needs mainApp to be able to ask about data sets
@@ -74,9 +79,13 @@ public class ifcDialogDataSetSelectBox extends ifcDialogBox {
       name:"Select Data Set(s)"
       content:[
 				  selectAllButton,
-          dataSetCheckBoxes
+          ifcDialogScrollView{
+            node:ifcDialogVBox{content:dataSetCheckBoxes}
+            maxWidth:400
+            maxHeight:400
+          }
         ]
-      okAction:okAction
+      okAction:okPressed
       okName:okName
       cancelAction:cancelAction
       cancelName:cancelName
@@ -107,20 +116,82 @@ public class ifcDialogDataSetSelectBox extends ifcDialogBox {
 
 
   function okPressed():Void{
-    //make sure a data set is selected before returning
+    //make sure a data set is selected and compare columns before returning
     var isDataSetSelected:Boolean = false;
+    var dataColumnNames:String[] = null;
+    var doDataColumnsMatch:Boolean = true;
     for(i in [0..selectedDataSets.size()-1]){
       if(dataSetCheckBoxes[i].getInput()){
         isDataSetSelected = true;
+
+        if(dataColumnNames == null){ //if first, get names
+          dataColumnNames = mainApp.getMainMediator().getDSP(i).getColNames();
+        }
+        else//if not first, compare current names to former
+        {
+          var currentDCNames:String[] = mainApp.getMainMediator().getDSP(i).getColNames();
+          if(dataColumnNames.size() != currentDCNames.size()){
+            doDataColumnsMatch = false;
+          }else{
+            for(name in dataColumnNames){
+              if(not name.equals(currentDCNames[indexof name])){
+                doDataColumnsMatch = false;
+              }
+            }
+          }
+        }
       }
     }
+
     if(isDataSetSelected){
-      okAction();
+      if(doDataColumnsMatch){
+        okAction();
+      }else{
+        var synchD:SynchDataSetDialog = SynchDataSetDialog{
+          mainMediator:mainApp.getMainMediator()
+          mainApp:mainApp
+          allDimNames: getAllDimNames()
+          initialColNames: dataColumnNames
+          okAction:function():Void{
+              synchColumns = synchD.getSynchCols();
+              okAction();
+            }
+        }
+        synchD.synchDataDialog();
+      }
     }else{
       Alert.inform("No data set selected.");
       return
     }
   }
+
+  public function getAllDimNames():String[]{
+    var allDimNames:String[];
+    for(i in [0..selectedDataSets.size()-1]){
+      if(dataSetCheckBoxes[i].getInput()){
+        if(allDimNames == null){ //if first, get names
+          allDimNames = mainApp.getMainMediator().getDSP(i).getColNames();
+        }
+        else//if not first, compare current names to former
+        {
+          var currentDCNames:String[] = mainApp.getMainMediator().getDSP(i).getColNames();
+          for(name in currentDCNames){
+            var isNameAleradyThere = false;
+            for(alreadyName in allDimNames){
+              if(name.equals(alreadyName)){
+                isNameAleradyThere = true;
+              }
+            }
+            if(not isNameAleradyThere)
+              insert name into allDimNames;
+          }
+          
+        }
+      }
+    }
+    return allDimNames;
+  }
+
 
 
   public function getDataSets():DataSetProxy[]{
@@ -132,6 +203,12 @@ public class ifcDialogDataSetSelectBox extends ifcDialogBox {
     }
     return datasets;
   }
+
+  public function getSynchColumns():synchedColumn[]{
+    println("ifcDialogDataSetSelectBox: getSynchColumns, length:{synchColumns.size()}");
+    return synchColumns;
+  }
+
 
 
 }
