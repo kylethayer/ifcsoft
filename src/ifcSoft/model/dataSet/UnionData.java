@@ -19,6 +19,7 @@
 package ifcSoft.model.dataSet;
 
 import ifcSoft.model.DataSetProxy;
+import ifcSoft.view.synchDataSets.synchedColumn;
 import java.util.Arrays;
 
 import java.util.LinkedList;
@@ -41,8 +42,6 @@ public class UnionData extends DataSet {
     ll.addAll(Arrays.asList(datasets));
     combineSets(ll);
   }
-
-
 
   /**
    *

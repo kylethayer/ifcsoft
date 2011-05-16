@@ -114,7 +114,7 @@ public class CalcSOMDialog {
       return;
     }
 
-    var finaldsp:DataSetProxy = mainMediator.getDataSet(dataSetSelect.getDataSets());
+    var finaldsp:DataSetProxy = mainMediator.getDataSet(dataSetSelect.getDataSets(), dataSetSelect.getSynchColumns());
     if(finaldsp == null){
       println("Error in data set combination");
       return;
@@ -201,13 +201,25 @@ public class CalcSOMDialog {
   function getSOMWeights(){
     var dataSets = dataSetSelect.getDataSets();    
     if(dataSets.size() == 0){
-        app.alert("Error: No data set selected");
-        return;
-      }
-      
-    var SOMColNames = dataSets.get(0).getColNames();
+      app.alert("Error: No data set selected");
+      return;
+    }
 
-    if(SOMWeights == null or dataSets.get(0).getDimensions() != SOMWeights.size()){
+    var SOMColNames:String[];
+
+    if(dataSetSelect.getSynchColumns() == null){
+      SOMColNames = dataSets.get(0).getColNames();
+    }else{
+      for(col in dataSetSelect.getSynchColumns()){
+        insert col.colName into SOMColNames;
+      }
+
+    }
+
+
+    
+
+    if(SOMWeights == null or SOMColNames.size() != SOMWeights.size()){
       for (names in SOMColNames){
         insert 1 into SOMWeights; //set initial weights all to 1
       }
@@ -352,7 +364,7 @@ public class CalcSOMDialog {
     batchMaxNbrInput = ifcDialogIntInput{
       name:"Max Neighborhood: "
       initialInt: if(somSettings.batchMaxNeighborhood == -1){
-              Math.max(rowsInput.getInput()/4, colsInput.getInput()/4);
+              Math.max(rowsInput.getInput()/2, colsInput.getInput()/2);
             }else{
               somSettings.batchMaxNeighborhood
             }

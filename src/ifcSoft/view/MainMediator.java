@@ -25,12 +25,14 @@ import ifcSoft.model.DataSetProxy;
 import ifcSoft.model.dataSet.DataSet;
 import ifcSoft.model.dataSet.SubsetData;
 import ifcSoft.model.dataSet.UnionData;
+import ifcSoft.model.dataSet.rearrangeDimDataSet;
 import ifcSoft.model.thread.LoadFileJob;
 import ifcSoft.model.thread.RemoveOutliersJob;
 import ifcSoft.model.thread.ThreadJob;
 import ifcSoft.model.thread.jobThread;
 import ifcSoft.view.histogram.HistTabMediator;
 import ifcSoft.view.scatterplot.ScatterTabMediator;
+import ifcSoft.view.synchDataSets.synchedColumn;
 import ifcSoft.view.windrose.WindRoseTabMediator;
 import java.util.LinkedList;
 import java.util.concurrent.BlockingQueue;
@@ -418,12 +420,16 @@ public class MainMediator extends Mediator implements IMediator {
     return dataSets.get(index).getDataSize();
   }
 
+  public DataSetProxy getDataSet(Boolean[] selectedDataSets){
+    return getDataSet(selectedDataSets, null);
+  }
+
   /**
    * Returns (and creates if needed) a combination data set of the selectedDataSets.
    * @param selectedDataSets - True for those data sets that are selected.
    * @return
    */
-  public DataSetProxy getDataSet(Boolean[] selectedDataSets){
+  public DataSetProxy getDataSet(Boolean[] selectedDataSets, synchedColumn[] synchCols){
     LinkedList<DataSetProxy> dataSets = new LinkedList<DataSetProxy>();
     for(int i = 0; i < selectedDataSets.length; i++){
       if(selectedDataSets[i]){
@@ -452,12 +458,19 @@ public class MainMediator extends Mediator implements IMediator {
   }
 
   public DataSetProxy getDataSet(DataSetProxy[] selectedDataSets){
+    return getDataSet(selectedDataSets, null);
+  }
+
+  public DataSetProxy getDataSet(DataSetProxy[] selectedDataSets, synchedColumn[] synchCols){
     if(selectedDataSets.length == 1){
       return selectedDataSets[0];
     }
     DataSetProxy newDSP;
     try {
       newDSP = new DataSetProxy();
+      if(synchCols != null && synchCols.length > 0){
+        selectedDataSets = synchronizeDataSets(selectedDataSets, synchCols);
+      }
       newDSP.setDataSet(new UnionData(selectedDataSets));
 
     } catch (Exception ex) {
@@ -466,6 +479,57 @@ public class MainMediator extends Mediator implements IMediator {
     }
 
     return newDSP;
+  }
+
+  public DataSetProxy[] synchronizeDataSets(DataSetProxy[] selectedDataSets, synchedColumn[] synchCols){
+    LinkedList<DataSetProxy> ll = new LinkedList<DataSetProxy>();
+    for(int i = 0; i < selectedDataSets.length; i++){
+      DataSet ds = selectedDataSets[i].getData();
+      String[] newColNames = new String[synchCols.length];
+      int[] colIndeces = new int[synchCols.length];
+      boolean matched = true;
+      String missingCol = "";
+      for(int j = 0; j < synchCols.length; j++){
+        boolean colPlaced = false;
+        newColNames[j] = synchCols[j].colName;
+        for(int k = 0; k < synchCols[j].sourceNames.length; k++){
+          for(int m=0; m < ds.getDimensions(); m++){
+            if(ds.getColLabels()[m].equals(synchCols[j].sourceNames[k])){
+              colIndeces[j] = m;
+              colPlaced = true;
+              break;
+            }
+          }
+          if(colPlaced){
+            break;
+          }
+        }
+        if(!colPlaced){
+          matched = false;
+          missingCol = newColNames[j];
+          break;
+        }
+      }
+
+      if(matched){
+        DataSet newds = new rearrangeDimDataSet(ds, newColNames, colIndeces);
+        DataSetProxy newdsp = new DataSetProxy();
+        newdsp.setDataSet(newds);
+        ll.add(newdsp);
+      }else{
+        getApp().alert("Couldn't add "+ ds.getName() +" because it was missing "+missingCol);
+      }
+    }
+
+    DataSetProxy[] newdsparray = new DataSetProxy[ll.size()];
+    int i = 0;
+    while(!ll.isEmpty()){
+      newdsparray[i] = ll.removeFirst();
+      i++;
+    }
+
+    return newdsparray;
+
   }
 
 
