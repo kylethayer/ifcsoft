@@ -372,7 +372,7 @@ public class Menus{
 
   function displayHelp():Void{
 
-    Alert.inform("IFCsoft v 0.4\n"
+    /*Alert.inform("IFCsoft v 0.4\n"
       "Note: This is still an early test version, so it has limited functionality and sometimes gives incorrect numbers.\n\n"
       "All data sets must be in FCS format or CSV format where the first row is the column titles and all values are numeric.\n\n"
       "Self-Organizing map shortcuts:\n"
@@ -382,8 +382,8 @@ public class Menus{
       "Hold down shift to add next selection to the current one.\n"
       "The SOM tiles can be rearranged by dragging them to a new position.\n"
       "The names on the SOM tiles can be changed by double-clicking them, then pressing enter when done."
-      );
-
+      );*/
+      BareBonesBrowserLaunch.openURL("http://mathcs.emory.edu/~kthayer/ifcsoft/reference.html");
   }
 
   function displayAbout():Void{
