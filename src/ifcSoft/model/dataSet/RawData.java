@@ -383,6 +383,7 @@ public class RawData extends DataSet {
           }
           columnLabels = temp;
         }
+        columnLabels = fixQuotes(columnLabels);
       }else{//the column labels have been read
         float[] thisrow = new float[columnLabels.length];
         boolean didLoadRow = true;
@@ -500,6 +501,38 @@ public class RawData extends DataSet {
       dataNames.add(nameSeg);
     }
     System.out.println("length after seg "+ data.size()+": "+ length);
+  }
+
+  /**
+   * In a csv file, column labels may have a comma in them and be surrounded by quotes.
+   * eg. name, "(0,0)", "(0,1)", etc.
+   * This should deal with it in most cases, though I'm not sure what the rule is when
+   * you have more complicated labels with quotes and commas next to each other
+   * @param columnLabels
+   * @return
+   */
+  private String[] fixQuotes(String[] columnLabels) {
+    LinkedList<String> newLabels = new LinkedList<String>();
+    String currentString = null;
+    for(int i = 0; i < columnLabels.length; i++){
+      if(currentString == null){
+        if(columnLabels[i].startsWith("\"")){ //start of a special case
+          currentString = columnLabels[i];
+        }else{ //normal string value
+          newLabels.add(columnLabels[i]);
+        }
+      }else{ //we are trying to find the end of the string value (ends with ")
+        if(columnLabels[i].endsWith("\"")){ //end of the string value
+          currentString+= ","+columnLabels[i];
+          newLabels.add(currentString);
+          currentString = null;
+        }else{ //continuing the middle
+          currentString+= ","+columnLabels[i];
+        }
+      }
+    }
+
+    return (String[]) newLabels.toArray(new String[0]);
   }
 
 
