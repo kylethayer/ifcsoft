@@ -518,6 +518,10 @@ public class RawData extends DataSet {
       if(currentString == null){
         if(columnLabels[i].startsWith("\"")){ //start of a special case
           currentString = columnLabels[i];
+					if(columnLabels[i].endsWith("\"")){ //if it also ends with a "
+						newLabels.add(currentString);
+						currentString = null;
+					}
         }else{ //normal string value
           newLabels.add(columnLabels[i]);
         }
