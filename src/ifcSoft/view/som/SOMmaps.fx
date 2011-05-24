@@ -196,13 +196,10 @@ public class SOMmaps {
           mapTiles, 
           rightClickMenu = PopupMenu{
             items: [
-              //MenuItem { text: "Test File Against SOM", action: function() { mediator.testFileAgainstSOM(); } }
+              MenuItem { text: "Export SOM and Hit Histograms", action: function() { ExportSOMAndHit{app:app, mediator:mediator };} }
               Separator { }
               MenuItem { text: "Clustering Options", action: function() { mediator.clustOpt(); } }
               //MenuItem { text: "Save Cluster", action: function() { SaveClusterDialog{app:app, mediator:mediator }; } //in order for the menu not to be in the screenshot, must use the other button
-              //MenuItem { text: "Save Cluster", action: function() { mediator.saveCluster(); } }
-              //MenuItem { text: "Save Cluster Stats", action: saveClusterStats }
-              //MenuItem { text: "Save Cluster to File", action: function() {mediator.saveClusterToFile(); } }
               Separator { }
               removeTileMenuItem = MenuItem { text: "Remove Map Tile", disable:true }
               Menu{

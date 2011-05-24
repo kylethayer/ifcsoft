@@ -96,7 +96,7 @@ function run()
  */
 public class MainApp extends MainAppI {
 
-  var facade:ApplicationFacade;
+  public-read var facade:ApplicationFacade;
   public var mainMediator:MainMediator;
   
   public var scene:Scene;
