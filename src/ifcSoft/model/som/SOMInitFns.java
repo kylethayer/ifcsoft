@@ -75,12 +75,14 @@ public class SOMInitFns {
     }
   }
 
-  static public void randomInitialize(int dims, int width, int height, SOM som){
+  static public void randomInitialize(int width, int height, SOM som){
     //initialize nodes with random points
-    for(int i = 0; i < width; i++){
-      for(int j=0; j < height; j++){
-        float initialWeights[] = new float[dims]; //TODO: load random points instead
-        som.SOMnodes[i][j] = new SOMNode(initialWeights);
+    for(int i = 0; i < width ; i++){
+      for(int j = 0; j < height ; j++){
+        //initialize with random points from the data
+        som.SOMnodes[i][j] = new SOMNode(
+            som.datasetScalar.getPoint((int) (Math.random() * (som.datasetScalar.length() - 1)))
+            );
       }
     }
   }

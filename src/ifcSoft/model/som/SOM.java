@@ -187,15 +187,7 @@ public class SOM {
       SOMInitFns.linearInitialize(somSettings.width, somSettings.height, datasetScalar.getDataSet(), this);
       checkWeighting();
     }else if (somSettings.initType == SOMSettings.RANDOMINIT){
-      for(int i = 0; i < SOMnodes.length; i++){
-        for(int j = 0; j < SOMnodes[0].length; j++){
-          //initialize with random points from the data
-          SOMnodes[i][j] = new SOMNode(
-              datasetScalar.getPoint((int) (Math.random() * (datasetScalar.length() - 1)))
-              );
-          //SOMNode[i][j] = new SOMNode(dims, datasetScalar.getMins(), .getMaxes())
-        }
-      }
+      SOMInitFns.randomInitialize(somSettings.width, somSettings.height, this);
     }else if (somSettings.initType == SOMSettings.FILEINIT){
       try {
         SOMInitFns.loadSOMfile(dims, this);
