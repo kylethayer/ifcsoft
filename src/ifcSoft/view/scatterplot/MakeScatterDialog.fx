@@ -64,6 +64,7 @@ public class MakeScatterDialog {
     dim2Input = ifcDialogChoiceBox{
       name:"Y-Axis"
       items: bind dimensions
+      initialSelectedItem:dimensions[1]
     };
 
     scatterDialog =  ifcDialogBox{
