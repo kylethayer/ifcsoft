@@ -284,10 +284,28 @@ public class Menus{
               fill: Color.WHITE
             }
             Button{
-              layoutX: 0 layoutY: 50
+              layoutX: 200 layoutY: 50
               text: "Calculate SOM"
               blocksMouse: false
               action:  function(){app.SOM();}
+            }
+             Button{
+              layoutX: -280 layoutY: 50
+              text: "Make Histogram"
+              blocksMouse: false
+              action:  function(){app.histogramDlg();}
+            }
+             Button{
+              layoutX: -140 layoutY: 50
+              text: "Make Scatter Plot"
+              blocksMouse: false
+              action:  function(){app.scatterplotDlg();}
+            }
+             Button{
+              layoutX: 20 layoutY: 50
+              text: "Make Wind Rose Chart"
+              blocksMouse: false
+              action:  function(){app.windrosePlotDlg();}
             },
             /*fullscreenButton = Button{
               layoutX: 150 layoutY: 50
