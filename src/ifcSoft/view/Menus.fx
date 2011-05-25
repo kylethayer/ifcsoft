@@ -389,7 +389,7 @@ public class Menus{
 
 
   function displayHelp():Void{
-      BareBonesBrowserLaunch.openURL("http://mathcs.emory.edu/~kthayer/ifcsoft/reference.html");
+      BareBonesBrowserLaunch.openURL("http://mathcs.emory.edu/~kthayer/ifcsoft/documentation.html");
   }
 
   function displayAbout():Void{
