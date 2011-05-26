@@ -233,7 +233,6 @@ public abstract class DataSet {
    * Find the mins, maxes and means.
    */
   protected void findstats() {
-    //TODO: This should be overridden in UnionData since that is easier to compute there.
     for(int k = 0; k < getDimensions(); k++){
       mins[k] = Float.MAX_VALUE;
       maxes[k] = Float.MIN_VALUE;

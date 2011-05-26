@@ -89,33 +89,9 @@ public class UnionData extends DataSet {
     means = new double[dimensions];
 
     //just find min min, max max and do a weighted sum for mean
-    for(int k = 0; k < getDimensions(); k++){
-      mins[k] = Float.MAX_VALUE;
-      maxes[k] = Float.MIN_VALUE;
-      means[k] = 0;
-    }
-
-    for(int i = 0; i < parentSets.size(); i++){
-      DataSet ds = parentSets.get(i).getData();
-      for(int k = 0; k < getDimensions(); k++){
-        if(ds.getMin(k) < mins[k]){
-          mins[k] = ds.getMin(k);
-        }
-        if(ds.getMax(k) > maxes[k]){
-          maxes[k] =ds.getMax(k);
-        }
-        means[k] +=ds.getMean(k) * (ds.length() *1.0 / length); //add the mean that that set contributes
-      }
-      //if(parentSets.get(i))
-    }
+    findstats();
 
 
-    /*for(int k = 0; k < getDimensions(); k++){
-      System.out.println("dim");
-      System.out.println("\tmin of dim " + k+ " is "+mins[k]);
-      System.out.println("\tmean of dim " + k+ " is "+means[k]);
-      System.out.println("\tmax of dim " + k+ " is "+maxes[k]);
-    }*/
   }
 
 
@@ -265,6 +241,29 @@ public class UnionData extends DataSet {
       }
     }
     return ret;
+  }
+
+  @Override
+  protected void findstats() {
+    for(int k = 0; k < getDimensions(); k++){
+      mins[k] = Float.MAX_VALUE;
+      maxes[k] = Float.MIN_VALUE;
+      means[k] = 0; //for now we'll use it to keep sums
+    }
+
+    for(int i = 0; i < parentSets.size(); i++){
+      DataSet currentset = parentSets.get(i).getData();
+      for(int k = 0; k < getDimensions(); k++){
+        means[k]+= (currentset.length()/(double) this.length)* currentset.means[k];
+
+        if(currentset.mins[k] < mins[k]){
+          mins[k] = currentset.mins[k];
+        }
+        if(currentset.maxes[k] > maxes[k]){
+          maxes[k] = currentset.maxes[k];
+        }
+      }
+    }
   }
 
   /**
