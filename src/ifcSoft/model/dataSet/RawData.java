@@ -80,6 +80,9 @@ public class RawData extends DataSet {
         name = filename;
       }
     }
+		if(name.endsWith(".csv") || name.endsWith(".fcs")){
+			name = name.substring(0, name.length()-4);
+		}
   }
 
   /**
