@@ -292,9 +292,6 @@ public class SynchDataTable extends ifcDialogItem{
     return true;
   }
 
-  /*override function getName():String{
-    return name;
-  }*/
 
   function attemptAlign(){
     for(colName in initialColNames){

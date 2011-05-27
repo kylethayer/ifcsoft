@@ -102,7 +102,7 @@ public class DataSetViewer {
       return null;
     }
 
-    var finaldsp:DataSetProxy = mainMediator.getDataSet(dataSetSelect.getDataSets());
+    var finaldsp:DataSetProxy = mainMediator.getDataSet(dataSetSelect.getDataSets(), dataSetSelect.getSynchColumns());
     if(finaldsp == null){
       println("Error in data set combination");
       return null;
