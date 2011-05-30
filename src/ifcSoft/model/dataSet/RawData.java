@@ -358,20 +358,20 @@ public class RawData extends DataSet {
 
     length = 0;
     int dataRows = 0;
+    String st[];
     while(line != null){
-      StringTokenizer st = new StringTokenizer(line, ",");
-
+      //StringTokenizer st = new StringTokenizer(line, ",");
+      st = line.split(",");
       //if the column labels aren't set, then this is the first read
       if(columnLabels == null){
-        columnLabels = new String[st.countTokens()];
+        //columnLabels = new String[st.countTokens()];
+        columnLabels = st;
         for(int i = 0; i < columnLabels.length; i++){
-          columnLabels[i] = st.nextToken();
-          if(columnLabels[i].contentEquals("F0") ||
-              columnLabels[i].contentEquals("\"F0\"")){
-            columnLabels[i] = "SSC-A";
+          //columnLabels[i] = st.nextToken();
+          if(columnLabels[i].contentEquals("F0") || columnLabels[i].contentEquals("\"F0\"")){
+                columnLabels[i] = "SSC-A";
           }
-          if(columnLabels[i].contentEquals("F1") ||
-              columnLabels[i].contentEquals("\"F1\"") ){
+          if(columnLabels[i].contentEquals("F1") || columnLabels[i].contentEquals("\"F1\"") ){
             columnLabels[i] = "FSC-A";
           }
         }
@@ -389,9 +389,11 @@ public class RawData extends DataSet {
         boolean didLoadRow = true;
         String name = null;
         if(hasNames){
-          name = st.nextToken();
+          //name = st.nextToken();
+            name = st[0];
         }
-        if(st.countTokens() != columnLabels.length){
+        //if(st.countTokens() != columnLabels.length){
+        if(st.length != columnLabels.length){
           System.out.println("Error reading FCS, columns in row"
               +dataRows+" didn't match");
           didLoadRow = false;
@@ -399,7 +401,8 @@ public class RawData extends DataSet {
 
         try{
           for(int i = 0; i < columnLabels.length; i++){
-            thisrow[i] = Float.parseFloat(st.nextToken());
+            //thisrow[i] = Float.parseFloat(st.nextToken());
+              thisrow[i] = Float.parseFloat(st[i]);
           }
         }catch(Exception e){
           didLoadRow = false;
@@ -538,19 +541,4 @@ public class RawData extends DataSet {
 
     return (String[]) newLabels.toArray(new String[0]);
   }
-
-
-
-
-
-
-
-
-
-
-
-  
-
-
-
 }
