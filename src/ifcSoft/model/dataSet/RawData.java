@@ -26,12 +26,9 @@ import java.io.DataInputStream;
 import java.io.FileReader;
 import java.io.IOException;
 import java.io.InputStreamReader;
-//import java.io.Reader;
-//import java.net.HttpURLConnection;
 import java.net.URL;
 import java.net.URLConnection;
 import java.util.LinkedList;
-//import java.util.StringTokenizer;
 
 /**
  *
@@ -360,21 +357,10 @@ public class RawData extends DataSet {
     int dataRows = 0;
     String st[];
     while(line != null){
-      //StringTokenizer st = new StringTokenizer(line, ",");
       st = line.split(",");
       //if the column labels aren't set, then this is the first read
       if(columnLabels == null){
-        //columnLabels = new String[st.countTokens()];
         columnLabels = st;
-        for(int i = 0; i < columnLabels.length; i++){
-          //columnLabels[i] = st.nextToken();
-          if(columnLabels[i].contentEquals("F0") || columnLabels[i].contentEquals("\"F0\"")){
-                columnLabels[i] = "SSC-A";
-          }
-          if(columnLabels[i].contentEquals("F1") || columnLabels[i].contentEquals("\"F1\"") ){
-            columnLabels[i] = "FSC-A";
-          }
-        }
         if(columnLabels[0].equalsIgnoreCase("name") || columnLabels[0].equalsIgnoreCase("file")){
           hasNames = true;
           String temp[] = new String[columnLabels.length-1];
@@ -387,12 +373,10 @@ public class RawData extends DataSet {
       }else{//the column labels have been read
         float[] thisrow = new float[columnLabels.length];
         boolean didLoadRow = true;
-        String name = null;
+        String pointName = null;
         if(hasNames){
-          //name = st.nextToken();
-            name = st[0];
+            pointName = st[0];
         }
-        //if(st.countTokens() != columnLabels.length){
         if(st.length != columnLabels.length){
           System.out.println("Error reading FCS, columns in row"
               +dataRows+" didn't match");
@@ -401,7 +385,6 @@ public class RawData extends DataSet {
 
         try{
           for(int i = 0; i < columnLabels.length; i++){
-            //thisrow[i] = Float.parseFloat(st.nextToken());
               thisrow[i] = Float.parseFloat(st[i]);
           }
         }catch(Exception e){
@@ -413,7 +396,7 @@ public class RawData extends DataSet {
         if(didLoadRow){
           tempData.add(thisrow);
           if(hasNames){
-            tempNames.add(name);
+            tempNames.add(pointName);
           }
           dataRows++;
           loadProgress++;
