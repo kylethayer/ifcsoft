@@ -26,12 +26,9 @@ import java.io.DataInputStream;
 import java.io.FileReader;
 import java.io.IOException;
 import java.io.InputStreamReader;
-import java.io.Reader;
-import java.net.HttpURLConnection;
 import java.net.URL;
 import java.net.URLConnection;
 import java.util.LinkedList;
-import java.util.StringTokenizer;
 
 /**
  *
@@ -80,6 +77,9 @@ public class RawData extends DataSet {
         name = filename;
       }
     }
+		if(name.endsWith(".csv") || name.endsWith(".fcs")){
+			name = name.substring(0, name.length()-4);
+		}
   }
 
   /**
@@ -358,23 +358,12 @@ public class RawData extends DataSet {
 
     length = 0;
     int dataRows = 0;
+    String st[];
     while(line != null){
-      StringTokenizer st = new StringTokenizer(line, ",");
-
+      st = line.split(",");
       //if the column labels aren't set, then this is the first read
       if(columnLabels == null){
-        columnLabels = new String[st.countTokens()];
-        for(int i = 0; i < columnLabels.length; i++){
-          columnLabels[i] = st.nextToken();
-          if(columnLabels[i].contentEquals("F0") ||
-              columnLabels[i].contentEquals("\"F0\"")){
-            columnLabels[i] = "SSC-A";
-          }
-          if(columnLabels[i].contentEquals("F1") ||
-              columnLabels[i].contentEquals("\"F1\"") ){
-            columnLabels[i] = "FSC-A";
-          }
-        }
+        columnLabels = st;
         if(columnLabels[0].equalsIgnoreCase("name") || columnLabels[0].equalsIgnoreCase("file")){
           hasNames = true;
           String temp[] = new String[columnLabels.length-1];
@@ -383,14 +372,15 @@ public class RawData extends DataSet {
           }
           columnLabels = temp;
         }
+        columnLabels = fixQuotes(columnLabels);
       }else{//the column labels have been read
         float[] thisrow = new float[columnLabels.length];
         boolean didLoadRow = true;
-        String name = null;
+        String pointName = null;
         if(hasNames){
-          name = st.nextToken();
+            pointName = st[0];
         }
-        if(st.countTokens() != columnLabels.length){
+        if(st.length != columnLabels.length){
           System.out.println("Error reading FCS, columns in row"
               +dataRows+" didn't match");
           didLoadRow = false;
@@ -398,7 +388,7 @@ public class RawData extends DataSet {
 
         try{
           for(int i = 0; i < columnLabels.length; i++){
-            thisrow[i] = Float.parseFloat(st.nextToken());
+              thisrow[i] = Float.parseFloat(st[i]);
           }
         }catch(Exception e){
           didLoadRow = false;
@@ -409,7 +399,7 @@ public class RawData extends DataSet {
         if(didLoadRow){
           tempData.add(thisrow);
           if(hasNames){
-            tempNames.add(name);
+            tempNames.add(pointName);
           }
           dataRows++;
           loadProgress++;
@@ -502,18 +492,39 @@ public class RawData extends DataSet {
     System.out.println("length after seg "+ data.size()+": "+ length);
   }
 
+  /**
+   * In a csv file, column labels may have a comma in them and be surrounded by quotes.
+   * eg. name, "(0,0)", "(0,1)", etc.
+   * This should deal with it in most cases, though I'm not sure what the rule is when
+   * you have more complicated labels with quotes and commas next to each other
+   * @param columnLabels
+   * @return
+   */
+  private String[] fixQuotes(String[] columnLabels) {
+    LinkedList<String> newLabels = new LinkedList<String>();
+    String currentString = null;
+    for(int i = 0; i < columnLabels.length; i++){
+      if(currentString == null){
+        if(columnLabels[i].startsWith("\"")){ //start of a special case
+          currentString = columnLabels[i];
+					if(columnLabels[i].endsWith("\"")){ //if it also ends with a "
+						newLabels.add(currentString);
+						currentString = null;
+					}
+        }else{ //normal string value
+          newLabels.add(columnLabels[i]);
+        }
+      }else{ //we are trying to find the end of the string value (ends with ")
+        if(columnLabels[i].endsWith("\"")){ //end of the string value
+          currentString+= ","+columnLabels[i];
+          newLabels.add(currentString);
+          currentString = null;
+        }else{ //continuing the middle
+          currentString+= ","+columnLabels[i];
+        }
+      }
+    }
 
-
-
-
-
-
-
-
-
-
-  
-
-
-
+    return (String[]) newLabels.toArray(new String[0]);
+  }
 }
