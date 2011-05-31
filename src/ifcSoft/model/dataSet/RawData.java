@@ -358,6 +358,7 @@ public class RawData extends DataSet {
 
     length = 0;
     int dataRows = 0;
+		int fileRowCounter = 0;
     String st[];
     while(line != null){
       st = line.split(",");
@@ -378,24 +379,34 @@ public class RawData extends DataSet {
         boolean didLoadRow = true;
         String pointName = null;
         if(hasNames){
-            pointName = st[0];
-        }
-        if(st.length != columnLabels.length){
-          System.out.println("Error reading FCS, columns in row"
-              +dataRows+" didn't match");
-          didLoadRow = false;
-        }
+					pointName = st[0];
+					if(st.length-1 != columnLabels.length){ //if it uses name, the file has one extra column
+						System.out.println("Error reading FCS, columns in row"
+								+dataRows+" didn't match");
+						didLoadRow = false;
+					}
+        }else{
+					if(st.length != columnLabels.length){
+						System.out.println("Error reading FCS, columns in row"
+								+dataRows+" didn't match");
+						didLoadRow = false;
+					}
+				}
 
         try{
           for(int i = 0; i < columnLabels.length; i++){
-              thisrow[i] = Float.parseFloat(st[i]);
+						if(hasNames){
+              thisrow[i] = Float.parseFloat(st[i+1]); //start one over on file if first is name
+						}else{
+							thisrow[i] = Float.parseFloat(st[i]);
+						}
           }
         }catch(Exception e){
           didLoadRow = false;
           System.out.println("Error reading FCS, couldn't parse floats in row"
-              +dataRows);
+              +fileRowCounter);
         }
-
+				fileRowCounter++;
         if(didLoadRow){
           tempData.add(thisrow);
           if(hasNames){
