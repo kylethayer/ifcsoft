@@ -315,7 +315,7 @@ public class SOMRetrieveFns {
 
 
   /**
-   * Return the total Density Map.
+   * Return the total Hit Histogram (Density Map).
    * @return
    */
   static public synchronized int[][] getDensityMap(SOM som){
