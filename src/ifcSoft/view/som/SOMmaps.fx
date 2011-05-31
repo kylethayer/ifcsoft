@@ -498,7 +498,7 @@ public class SOMmaps {
           somMaps:this
           densityMap: 0
           img: somHolder.blankmap
-          name: "Density Map"
+          name: "Hit Histogram"
           min: 0
           max: 1
         };
