@@ -536,7 +536,7 @@ public class SOMMediator extends Mediator implements IMediator, TabMediator {
   }
 
   /**
-   * Get the overall Density Map image.
+   * Get the overall Hit Histogram (Density Map) image.
    * @return
    */
   public BufferedImage getDenstiyMapImg(){
@@ -583,7 +583,7 @@ public class SOMMediator extends Mediator implements IMediator, TabMediator {
   }
 
   /**
-   * Get the Density Map of a combination of subsets and other sets.
+   * Get the Hit Histogram (Density Map) of a combination of subsets and other sets.
    * @param selectedSubSets
    * @param selectedDataSets
    * @return
