@@ -92,6 +92,60 @@ public class SOMInitFns {
     int dims = dataset.getDimensions();
     Matrix m = findAutocorrelationMatrix(dataset);
 
+		//since the autocorrelation Matrix may have had divide by 0s (if std deviation = 0)
+		//we need to remove all row/columns that have a NAN or infinity
+		m.print(8, 2);
+		boolean dimsValidity[] = new boolean[dims];
+		for(int i = 0; i < dims; i++){
+			dimsValidity[i] = false;
+		}
+		for(int i = 0; i < m.getRowDimension(); i++){
+			for(int j = 0; j < m.getColumnDimension(); j++){
+				if(!Double.isNaN(m.get(i, j)) && !Double.isInfinite(m.get(i, j)) ){
+					if(i != j){
+						dimsValidity[i] = true;
+						dimsValidity[j] = true;
+					}
+				}
+			}
+		}
+		boolean areAnyInvalid = false;
+		for(int i = 0; i < dims; i++){
+			if(!dimsValidity[i]){
+				areAnyInvalid = true;
+			}
+		}
+
+		if(areAnyInvalid){//if some dimensions are invalid we need to remove them from the matrix
+			int numValid = 0;
+			for(int i = 0; i < dims; i++){
+				if(dimsValidity[i]){
+					numValid++;
+				}
+			}
+			int validDims[] = new int[numValid];
+			int validDimsI = 0;
+			for(int i = 0; i < dims; i++){
+				if(dimsValidity[i]){
+					validDims[validDimsI] = i;
+					validDimsI++;
+				}
+			}
+
+			//make a new matrix with just the valid dimensions and replace the old matrix with it
+			Matrix newM = new Matrix(numValid,numValid);
+			for(int i = 0; i < numValid; i++){
+				for(int j = 0; j < numValid; j++){
+					newM.set(i, j, m.get(validDims[i], validDims[j]));
+				}
+			}
+
+			m = newM;
+			System.out.println("New matrix:");
+			m.print(8, 2);
+		}
+
+
     EigenvalueDecomposition test = m.eig();
     double eigenvals[] = test.getRealEigenvalues();
     Matrix eigenvectors = test.getV();
@@ -110,10 +164,24 @@ public class SOMInitFns {
 
     double largestEigenV[] = new double[dims];
     double secondLargestEigenV[] = new double[dims];
-    for(int k = 0; k < dims; k++){ //the columns (second index) are the eigen vectors
-      largestEigenV[k] = eigenvectors.get(k, largestEigenIndex);
-      secondLargestEigenV[k] = eigenvectors.get(k, secondLargestEigenIndex);
-    }
+		if(areAnyInvalid){
+			int validI = 0;
+			for(int k = 0; k < dims; k++){ //the columns (second index) are the eigen vectors
+				if(dimsValidity[k]){
+					largestEigenV[k] = eigenvectors.get(validI, largestEigenIndex);
+					secondLargestEigenV[k] = eigenvectors.get(validI, secondLargestEigenIndex);
+					validI++;
+				}else{
+					largestEigenV[k] = dataset.getMean(k);
+					secondLargestEigenV[k] = dataset.getMean(k);
+				}
+			}
+		}else{
+			for(int k = 0; k < dims; k++){ //the columns (second index) are the eigen vectors
+				largestEigenV[k] = eigenvectors.get(k, largestEigenIndex);
+				secondLargestEigenV[k] = eigenvectors.get(k, secondLargestEigenIndex);
+			}
+		}
 
     Random r = new Random();
     int flipLargestEigen =1;
