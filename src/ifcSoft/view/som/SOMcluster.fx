@@ -58,7 +58,7 @@ public class SOMcluster {
     min:0
     max:.5
     vertical: false
-    value: .05
+    value: 0
     width: 150
     visibleAmount: .1
     blockIncrement:.05
