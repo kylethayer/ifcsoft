@@ -62,6 +62,7 @@ import ifcSoft.view.som.somtile.SOMTileDataSetsDense;
 import ifcSoft.view.som.somtile.SOMTileBlank;
 import ifcSoft.view.dialogBox.ifcDialogBox;
 import ifcSoft.view.dialogBox.ifcDialogStringInput;
+import ifcSoft.view.som.somtile.SOMTileDenseMap;
 
 /**
  *  @author Kyle Thayer <kthayer@emory.edu>
@@ -196,13 +197,10 @@ public class SOMmaps {
           mapTiles, 
           rightClickMenu = PopupMenu{
             items: [
-              //MenuItem { text: "Test File Against SOM", action: function() { mediator.testFileAgainstSOM(); } }
+              MenuItem { text: "Export SOM and Hit Histograms", action: function() { ExportSOMAndHit{app:app, mediator:mediator };} }
               Separator { }
               MenuItem { text: "Clustering Options", action: function() { mediator.clustOpt(); } }
               //MenuItem { text: "Save Cluster", action: function() { SaveClusterDialog{app:app, mediator:mediator }; } //in order for the menu not to be in the screenshot, must use the other button
-              //MenuItem { text: "Save Cluster", action: function() { mediator.saveCluster(); } }
-              //MenuItem { text: "Save Cluster Stats", action: saveClusterStats }
-              //MenuItem { text: "Save Cluster to File", action: function() {mediator.saveClusterToFile(); } }
               Separator { }
               removeTileMenuItem = MenuItem { text: "Remove Map Tile", disable:true }
               Menu{
@@ -497,11 +495,10 @@ public class SOMmaps {
           max: somHolder.dimMaxes[i]
         };
     }
-    denseMap = SOMTileSubsetDenseMap{
+    denseMap = SOMTileDenseMap{
           somMaps:this
-          densityMap: 0
           img: somHolder.blankmap
-          name: "Density Map"
+          name: "Hit Histogram"
           min: 0
           max: 1
         };
@@ -548,7 +545,7 @@ public class SOMmaps {
     if(denseMaps.size() == 0){
       displayedTiles = [euMap, displaydDimTiles, anotherBlankTile, denseMap];
     }else{
-      displayedTiles = [euMap, displaydDimTiles, anotherBlankTile, denseMaps];
+      displayedTiles = [euMap, displaydDimTiles, anotherBlankTile, denseMap, denseMaps];
       insert denseMapsDelta into notDisplayedTiles;
     }
 

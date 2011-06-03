@@ -36,12 +36,11 @@ public class SOMSettings {
   public static final String PCACOMP = "Principal Components";
   public static final String PCACOMPDECAY = "Principal Components (decaying comp. weight)";
 
-
   public static final String LINEARINIT = "Linear Initialization";
   public static final String RANDOMINIT = "Random Initialization";
   public static final String FILEINIT = "Load SOM file";
 
-  public static final String CLASSICSOM = "Classic SOM";
+  public static final String CLASSICSOM = "Incremental SOM";
   public static final String BATCHSOM = "Batch SOM";
 
   public DataSetProxy datasetproxy;

@@ -161,7 +161,7 @@ public abstract class SOMTile {
           hpos: HPos.CENTER
           translateY: bind - somMaps.tileWidth* somMaps.aspectratio / 2 + 10
           text: bind name
-          font: Font {name: "Arial" size: 16}
+          font: Font {name: "Arial" size: 12}
           textFill: Color.WHITE
           visible: bind not isEditingName
         },

@@ -116,57 +116,6 @@ public class SOM {
   protected BlockingQueue<ThreadJob> jobqueue = new LinkedBlockingQueue<ThreadJob>();
   
   
-  
-  /**
-   * Default constructor: creates a random map to start with.
-   * @param dims
-   * @param width
-   * @param height
-   * @param mapType
-   * @param weighting
-   * @param isLog
-   * @param dataSet
-   */
-  /*public SOM(int width, int height, int mapType, float[] weighting, DataSetScalar dataSet, Facade facade){
-    int dims = dataSet.getDimensions();
-    SOMnodes = new SOMNode[width][height];
-    this.mapType = mapType;
-    this.weighting = weighting;
-    //this.isLog = isLog;
-    this.datasetScalar = dataSet;
-    this.facade = facade;
-    
-    if(this.weighting == null || this.weighting.length < dims){
-      this.weighting = new float[dims];
-      for(int i = 0; i < dims; i++){
-        this.weighting[i] = 1;
-      }
-    }
-
-    SOMInitFns.linearInitialize(width, height, dataSet.getDataSet(), this);
-    checkWeighting();
-    /*try {
-      loadSOMfile(dims);
-    } catch (Exception ex) {
-      Logger.getLogger(SOM.class.getName()).log(Level.SEVERE, null, ex);
-    }*/
-
-
-    
-    
-    //TODO: should I just go ahead and start the threads to await jobs?
-    //what happens to threads just sitting out there? I probably should have 
-    //universal threads and jobQueue associated with the program, and pass it to the SOM
-    //have a listener to get the threads if they exist?
-    /*for(int i = 0; i < 4; i++){
-      Thread newthread = new Thread(new SOMThread(jobqueue, facade));
-      newthread.setPriority(newthread.getPriority() - 1);
-        //drop the priority by 1 so that it runs in background and doesn't
-        //interfere with the gui
-      newthread.start();
-    }
-  }*/
-
   public SOM(SOMSettings somSettings, Facade facade){
     int dims = somSettings.datasetscalar.getDimensions();
     SOMnodes = new SOMNode[somSettings.width][somSettings.height];
@@ -182,10 +131,10 @@ public class SOM {
         this.weighting[i] = 1;
       }
     }
+		checkWeighting();
 
     if(somSettings.initType == SOMSettings.LINEARINIT){
       SOMInitFns.linearInitialize(somSettings.width, somSettings.height, datasetScalar.getDataSet(), this);
-      checkWeighting();
     }else if (somSettings.initType == SOMSettings.RANDOMINIT){
       SOMInitFns.randomInitialize(somSettings.width, somSettings.height, this);
     }else if (somSettings.initType == SOMSettings.FILEINIT){
@@ -209,66 +158,6 @@ public class SOM {
     }
   }
 
-
-
-
-  
-  /**
-   * Constructor that loads the specific given SOM node values.
-   * @param dims
-   * @param width
-   * @param height
-   * @param isLog
-   * @param colWeights
-   * @param mapType
-   * @param dataSet
-   * @param oldNodes
-   */
-  /*public SOM(int dims, int width, int height, float colWeights[], int mapType, DataSetScalar dataSet, SOMNode[][] oldNodes, Facade facade){
-    SOMnodes = new SOMNode[width][height];
-    this.mapType = mapType;
-    this.datasetScalar = dataSet;
-    this.facade = facade;
-    
-    if(weighting == null || weighting.length < dims){
-      weighting = new float[dims];
-      for(int i = 0; i < dims; i++){
-        weighting[i] = colWeights[i];
-      }
-    }
-    
-    /*for now we'll do just square maps*/
-    //initialize the nodes
-    /*for(int i = 0; i < width; i++){
-      for(int j=0; j < height; j++){
-        SOMnodes[i][j] = new SOMNode(oldNodes[i][j].getWeights());
-      }
-    }
-
-    initDenseMap();
-    
-    for(int i = 0; i < 4; i++){
-      Thread newthread = new Thread(new SOMThread(jobqueue, facade));
-      newthread.start();
-    }
-
-    //add job to find membership of set
-    initMemberArray(dataSet.length());
-    int firstpt = 0;
-    while(firstpt < dataSet.length()){
-      int lastpt = firstpt + 1000 - 1;
-      if(lastpt >= dataSet.length()){
-        lastpt = dataSet.length() - 1;
-      }
-      FindMembershipsJob newjob = new FindMembershipsJob(-1, this, firstpt, lastpt, iscanceled, ispaused);
-      try {
-        jobqueue.put(newjob);
-      } catch (InterruptedException e) {
-        e.printStackTrace();
-      }
-      firstpt+= 1000;
-    }
-  }*/
 
   /**
    * This function saves information on the weighting used, allowing findBMU to run faster

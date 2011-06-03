@@ -30,6 +30,7 @@ import ifcSoft.model.dataSet.dataSetScalar.DataSetScalar;
 import ifcSoft.model.dataSet.dataSetScalar.LogScaleNormalized;
 import ifcSoft.model.dataSet.summaryData.SummaryData;
 import ifcSoft.model.dataSet.summaryData.SummaryDataPoint;
+import ifcSoft.model.som.SOMHelperFns;
 import ifcSoft.model.som.SOMProxy;
 import ifcSoft.model.som.SOMSettings;
 import ifcSoft.view.MainMediator;
@@ -535,7 +536,7 @@ public class SOMMediator extends Mediator implements IMediator, TabMediator {
   }
 
   /**
-   * Get the overall Density Map image.
+   * Get the overall Hit Histogram (Density Map) image.
    * @return
    */
   public BufferedImage getDenstiyMapImg(){
@@ -582,7 +583,7 @@ public class SOMMediator extends Mediator implements IMediator, TabMediator {
   }
 
   /**
-   * Get the Density Map of a combination of subsets and other sets.
+   * Get the Hit Histogram (Density Map) of a combination of subsets and other sets.
    * @param selectedSubSets
    * @param selectedDataSets
    * @return
@@ -792,6 +793,57 @@ public class SOMMediator extends Mediator implements IMediator, TabMediator {
     }else{
       return SOMp.getSubsetDenseMap(setNum)[cellMouseOver.x][cellMouseOver.y];
     }
+  }
+
+   /**
+   * Gets the hit histogram for a data set (by frequency rather than hits) and
+   * blurs it the given number of times.
+   * @param setNum - which data set to get hit hist of
+   * @param blurNum - number of passes of the blurring algorithm
+   * @return
+   */
+  public float[][] getDenseBlurred(int setNum, int blurNum){
+    int[][] hitHist = SOMp.getSubsetDenseMap(setNum);
+    float numPlaced = 0;
+    for(int i = 0; i < hitHist.length; i++){
+      for(int j = 0; j < hitHist[0].length; j++){
+        numPlaced += hitHist[i][j];
+      }
+    }
+
+    float[][] newHitHist = new float[hitHist.length][hitHist[0].length];
+    for(int i = 0; i < newHitHist.length; i++){
+      for(int j = 0; j < newHitHist[0].length; j++){
+        newHitHist[i][j] = hitHist[i][j] / numPlaced;
+      }
+    }
+
+    for(int i = 0; i < blurNum; i++){
+      newHitHist = blurHitHist(newHitHist);
+    }
+    System.out.println("Num placed was"+numPlaced);
+    System.out.println("getDenseBlurred "+setNum+" "+blurNum+" (0,0) is "+newHitHist[0][0]);
+    return newHitHist;
+  }
+
+  private float[][] blurHitHist(float[][] oldHitHist){
+    float[][] newHitHist = new float[oldHitHist.length][oldHitHist[0].length];
+    //make each node an average of itself and its neighbors
+   for(int i = 0; i < newHitHist.length; i++){
+      for(int j = 0; j < newHitHist[0].length; j++){
+        //find all neighbors at distance of 1
+        LinkedList<Point> neighborPoints = SOMHelperFns.neighborsAtDistance(new Point(i, j), 1, SOMp.getData());
+        double sumVal = oldHitHist[i][j];
+        int numToAvg = 1;
+        while(!neighborPoints.isEmpty()){
+          Point p = neighborPoints.removeFirst();
+          sumVal += oldHitHist[p.x][p.y];
+          numToAvg++;
+        }
+        newHitHist[i][j] = (float) sumVal / numToAvg;
+      }
+    }
+    return newHitHist;
   }
 
   /**
