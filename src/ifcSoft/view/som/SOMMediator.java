@@ -391,22 +391,17 @@ public class SOMMediator extends Mediator implements IMediator, TabMediator {
     }
   }
   
-  /**
-   * Check the progress of the SOM calculation.
-   */
-  public void checkProgress(){
+ 
+ public float getProgress(){
     float p = SOMp.getProgress();
     if(p == 100){ //if it is done, get the SOMs
       currentState = FINDINGDENSITIES;
       if(isTabOpen){
         somVC.dispSOM();
       }
-    }else{ //set the current progress
-      int prog = (int)  (p*100);
-      somVC.setProgress(prog);
     }
+    return p;
   }
-  
   
 
   /**
