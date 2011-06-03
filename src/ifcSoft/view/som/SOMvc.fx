@@ -35,7 +35,6 @@ import javafx.scene.control.*;
 import javafx.scene.layout.Container;
 import javafx.scene.layout.*;
 
-import ifcSoft.view.som.SOMInternDialogs;
 import ifcSoft.view.som.SOMcluster;
 import ifcSoft.view.som.SOMmaps;
 
@@ -58,7 +57,6 @@ public class SOMvc extends SOMvcI  {
   package var app:MainApp;
   package var mediator:SOMMediator;
 
-  package var SOMdlgs:SOMInternDialogs;
   package var SOMclstr:SOMcluster;
   package var SOMmps:SOMmaps;
 
@@ -91,7 +89,6 @@ public class SOMvc extends SOMvcI  {
   public function init(ap: MainApp, med:SOMMediator):Void{
     app = ap;
     mediator = med;
-    SOMdlgs = SOMInternDialogs{app:app  mediator:mediator};
     SOMclstr = SOMcluster{app:app mediator:mediator somvc:this};
     SOMmps = SOMmaps{app:app mediator:mediator SOMclstr:SOMclstr};    
   }
@@ -109,19 +106,14 @@ public class SOMvc extends SOMvcI  {
    * Informs the SOMvc the the SOM has started calculating (so it can put up the progress bar).
    */
   override public function SOMstarted(): Void{
-    SOMdlgs.SOMstarted(); 
+    var PRDB= SOMProgressBox{
+      mainApp:app
+      mediator:mediator
+    }
+    PRDB.SOMProgressBox()
   }
   
 
-  /**
-   * Sets the progress of the calculating SOM.
-   * @param p - progress % (0 - 1 if computing, 100 when done)
-   */
-  override public function setProgress(p: Integer): Void{
-    SOMdlgs.progress = p;
-    SOMdlgs.checkprogress();
-  }
-  
   /**
   * Initialize the SOM content box and set it as the main content box.
   */

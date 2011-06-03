@@ -33,11 +33,6 @@ public interface SOMvcI {
    */
   public void SOMstarted();
 
-  /**
-   * Sets the progress of the calculating SOM.
-   * @param p - progress % (0 - 1 if computing, 100 when done)
-   */
-  public void setProgress(int p);
 
   /**
    * Tells the SOMvc to draw the SOM maps in the current tab.
