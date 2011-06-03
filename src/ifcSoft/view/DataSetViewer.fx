@@ -68,6 +68,16 @@ public class DataSetViewer {
               text:"Shrink\nData Set"
               action:function(){mainApp.shrinkDatasetDialog(getCurrentDataSet());}
             },
+            ifcDialogButton{
+              text:"Show\nStatistics"
+              action: function(){
+                var SSD=ShowDataSetStatisticsDialog{
+                  mainApp:mainApp
+                  dsp:getCurrentDataSet()
+                }
+                SSD.ShowDataSetStatisticsDialog();
+                }
+            },
           ]
         },
         dataSetTable
