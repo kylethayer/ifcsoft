@@ -300,9 +300,6 @@ public class SOMvc extends SOMvcI  {
   function updateDensityProgress():Void{
     var placed:Integer = mediator.getDenstiyMapPlaced() + mediator.getOtherDataSetsPlaced(); 
     var dataLength:Integer = mediator.getDataLength() + mediator.getOtherDataSetLength();
-
-    var avgPlacedError = mediator.getAvfPlacedError(); 
-
     
     if(placed > lastTotalDenseProgress){
       var newPercent:Float;
@@ -328,7 +325,7 @@ public class SOMvc extends SOMvcI  {
 
     if(denseProgress != 100){
       checkDenseProgress();
-      infoText.content = "Calculating membership: { Math.round(denseProgress*100)}% Data pt Error: {avgPlacedError}";
+      infoText.content = "Calculating membership: { Math.round(denseProgress*100)}%";
       checkingDense = true;
     }else{
       checkingDense = false;
@@ -336,7 +333,7 @@ public class SOMvc extends SOMvcI  {
         //need to recalculate size
         infoText.content = "{clusterSize} of {TotalSize} chosen";
       }else{
-        infoText.content = "Done. Data pt Error: {avgPlacedError}";
+        infoText.content = "Done";
       }
     }
   }
