@@ -84,6 +84,7 @@ public class UnionData extends DataSet {
       }
     }
 
+		numValsInDim = new int[dimensions];
     mins = new float[dimensions];
     maxes = new float[dimensions];
     means = new double[dimensions];
@@ -246,15 +247,25 @@ public class UnionData extends DataSet {
   @Override
   protected void findstats() {
     for(int k = 0; k < getDimensions(); k++){
+			numValsInDim[k] = 0;
       mins[k] = Float.MAX_VALUE;
       maxes[k] = Float.MIN_VALUE;
       means[k] = 0; //for now we'll use it to keep sums
     }
 
+		//find numValsInDim of the final set
+		for(int i = 0; i < parentSets.size(); i++){
+      DataSet currentset = parentSets.get(i).getData();
+			for(int k = 0; k < getDimensions(); k++){
+				numValsInDim[k] += currentset.getNumValsInDim(k);
+			}
+		}
+
+
     for(int i = 0; i < parentSets.size(); i++){
       DataSet currentset = parentSets.get(i).getData();
       for(int k = 0; k < getDimensions(); k++){
-        means[k]+= (currentset.length()/(double) this.length)* currentset.means[k];
+        means[k]+= (currentset.getNumValsInDim(k)/(double) numValsInDim[k])* currentset.means[k];
 
         if(currentset.mins[k] < mins[k]){
           mins[k] = currentset.mins[k];

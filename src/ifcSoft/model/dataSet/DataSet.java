@@ -46,10 +46,11 @@ public abstract class DataSet {
 
   protected String name;
 
-  public float[] mins; //Probably bad to have it public, but for now it must be
-  public float[] maxes; //so that SummaryData can access it
-  public double[] means;
-  double[] stddevs;
+	protected int[] numValsInDim; //not counting missing numbers
+  protected float[] mins; //Probably bad to have it public, but for now it must be
+  protected float[] maxes; //so that SummaryData can access it
+  protected double[] means;
+  protected double[] stddevs;
 
   DataSetMask myMask = null;
 
@@ -113,6 +114,13 @@ public abstract class DataSet {
   public boolean hasPointNames(){
     return false;
   }
+
+	public int getNumValsInDim(int dimension){
+		if(myMask == null){
+			return numValsInDim[dimension];
+		}
+		return myMask.getNumValsInDim(dimension);
+	}
 
   /**
    * The maximum in the data set of the given dimension.
@@ -234,6 +242,7 @@ public abstract class DataSet {
    */
   protected void findstats() {
     for(int k = 0; k < getDimensions(); k++){
+			numValsInDim[k] = 0;
       mins[k] = Float.MAX_VALUE;
       maxes[k] = Float.MIN_VALUE;
       means[k] = 0; //for now we'll use it to keep sums
@@ -243,13 +252,16 @@ public abstract class DataSet {
       for(int k = 0; k < getDimensions(); k++){
         //compute averages(at each step it's the current avg. of pts given)
         double weight = getVals(i)[k];
-        means[k] = weight / (i+1) + (means[k]*i)/(i+1);
-        if(weight < mins[k]){
-          mins[k] = (float) weight;
-        }
-        if(weight > maxes[k]){
-          maxes[k] = (float)weight;
-        }
+				if(!Double.isNaN(weight)){ //if it is a missing value, ignore it
+					means[k] = weight / (numValsInDim[k]+1) + (means[k]*numValsInDim[k])/(numValsInDim[k]+1);
+					if(weight < mins[k]){
+						mins[k] = (float) weight;
+					}
+					if(weight > maxes[k]){
+						maxes[k] = (float)weight;
+					}
+					numValsInDim[k]++; //the dimension has one more valid value
+				}
       }
     }
   }
