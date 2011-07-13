@@ -19,6 +19,7 @@
 package ifcSoft.model.dataSet;
 
 import java.util.LinkedList;
+import java.util.Random;
 
 
 /**
@@ -183,58 +184,44 @@ public abstract class DataSet {
   private void findStandardDevs() {
     stddevs = new double[getDimensions()];
 
-    for(int i = 0; i < getDimensions(); i++){
-      stddevs[i] =0;
-    }
-
-    // find the variance (avg of [dist to mean]^2)
-    //do this on SegSize at a time, then average those values together, just to reduce rounding errors
-    int numSegs = (int) Math.ceil(length() / (double) DataSet.SEGSIZE);
-    int segLengths[] = new int[numSegs];
-    for(int i = 0; i < numSegs; i++){
-      if(i != numSegs-1){
-        segLengths[i] = DataSet.SEGSIZE;
-      }else{ //last one is remainder
-        segLengths[i] = length() -  DataSet.SEGSIZE*(numSegs-1);
-      }
-    }
-
-
-    double [][] segVars = new double[numSegs][getDimensions()];
-    //0 it out
-    for(int i = 0; i < numSegs; i++){
-      for(int k = 0; k < getDimensions(); k++){
-        segVars[i][k] = 0;
-      }
-    }
-    int sofar = 0;
-    for(int i = 0; i < numSegs; i++){
-      for(int j = 0; j < segLengths[i]; j++){
-        float[] vals = getVals(sofar);
-        sofar++;
-        for(int k = 0; k < getDimensions(); k++){
-          //compute average of the squares (at each step it's the current avg. of pts given)
-          double distToAvg = vals[k] - means[k];
-          segVars[i][k] = distToAvg*distToAvg / (j+1) + (segVars[i][k]*j)/(j+1);
-        }
-      }
-    }
-
-    //compute actual varience from the segments
-    double variance[] = new double[getDimensions()];
-    for(int k = 0; k < getDimensions(); k++){
+		double variance[] = new double[getDimensions()];
+		for(int k = 0; k < getDimensions(); k++){
       variance[k] = 0;
     }
-    for(int i = 0; i < numSegs; i++){
-      for(int k = 0; k < getDimensions(); k++){
-        variance[k] += segVars[i][k] * (segLengths[i] / (double) length());
-      }
-    }
+		
+		for(int k=0; k < getDimensions(); k++){
+			//in order to save time, we'll take data from no more than DataSet.SEGSIZE points
+			if(getNumValsInDim(k) <= DataSet.SEGSIZE){ //do them all
+				int pointsSoFar = 0;
+				for(int i = 0; i < length(); i++){
+				  //compute average of the squares (at each step it's the current avg. of pts given)
+					float[] vals = getVals(i);
+					if(!Float.isNaN(vals[k])){
+						double distToAvg = vals[k] - means[k];
+						variance[k] = distToAvg*distToAvg / (pointsSoFar+1) + (variance[k]*pointsSoFar)/(pointsSoFar+1);
+					  pointsSoFar++;
+					}
+				}
+			}else{ //randomly pick DataSet.SEGSIZE
+				int pointsSoFar = 0;
+				Random r = new Random();
+				while(pointsSoFar <  DataSet.SEGSIZE){
+				  //compute average of the squares (at each step it's the current avg. of pts given)
+					float[] vals = getVals(r.nextInt(length()));
+					if(!Float.isNaN(vals[k])){
+						double distToAvg = vals[k] - means[k];
+						variance[k] = distToAvg*distToAvg / (pointsSoFar+1) + (variance[k]*pointsSoFar)/(pointsSoFar+1);
+					  pointsSoFar++;
+					}
+				}
+			}
+		}
 
     //find actual standard devs from the variance we computed
     for(int k = 0; k < getDimensions(); k++){
       stddevs[k] = Math.sqrt(variance[k]);
     }
+
   }
 
   /**
