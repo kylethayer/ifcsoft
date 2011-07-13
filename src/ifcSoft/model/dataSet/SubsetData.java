@@ -40,6 +40,7 @@ public class SubsetData extends DataSet {
 
     dataSet.registerChild((DataSet) this);
 
+		numValsInDim = new int[parentSet.getDimensions()];
     mins = new float[parentSet.getDimensions()];
     maxes = new float[parentSet.getDimensions()];
     means = new double[parentSet.getDimensions()];

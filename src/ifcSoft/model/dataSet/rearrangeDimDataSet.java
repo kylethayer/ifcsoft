@@ -26,14 +26,16 @@ public class rearrangeDimDataSet extends DataSet {
 
     name = parentSet.name;
 
+		numValsInDim = new int[colIndeces.length];
     mins = new float[colIndeces.length];
     maxes= new float[colIndeces.length];
     means= new double[colIndeces.length];
 
     for(int i = 0; i < colIndeces.length; i++){
-      mins[i] = parentSet.mins[colIndeces[i]];
-      maxes[i] = parentSet.maxes[colIndeces[i]];
-      means[i] = parentSet.means[colIndeces[i]];
+			numValsInDim[i] = parentSet.getNumValsInDim(colIndeces[i]);
+      mins[i] = parentSet.getMin(colIndeces[i]);
+      maxes[i] = parentSet.getMax(colIndeces[i]);
+      means[i] = parentSet.getMean(colIndeces[i]);
     }
 
 

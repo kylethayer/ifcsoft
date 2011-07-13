@@ -110,7 +110,7 @@ public class RawData extends DataSet {
       }
       System.out.println();
 
-
+			numValsInDim = new int[columnLabels.length];
       mins = new float[columnLabels.length];
       maxes = new float[columnLabels.length];
       means = new double[columnLabels.length];
@@ -176,6 +176,7 @@ public class RawData extends DataSet {
     this.name = name;
     this.length = length;
 
+		numValsInDim = new int[columnLabels.length];
     mins = new float[colLabels.length];
     maxes = new float[colLabels.length];
     means = new double[colLabels.length];
@@ -476,6 +477,7 @@ public class RawData extends DataSet {
     String[] nameSeg = new String[dataRows];
 
     if(mins == null){
+			numValsInDim = new int[columnLabels.length];
       mins = new float[columnLabels.length];
       maxes = new float[columnLabels.length];
       means = new double[columnLabels.length];
