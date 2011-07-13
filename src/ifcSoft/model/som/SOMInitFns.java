@@ -80,9 +80,13 @@ public class SOMInitFns {
     for(int i = 0; i < width ; i++){
       for(int j = 0; j < height ; j++){
         //initialize with random points from the data
-        som.SOMnodes[i][j] = new SOMNode(
-            som.datasetScalar.getPoint((int) (Math.random() * (som.datasetScalar.length() - 1)))
-            );
+				float values[] = som.datasetScalar.getPoint((int) (Math.random() * (som.datasetScalar.length() - 1)));
+				for(int k=0; k < values.length; k++){
+					if(Float.isNaN(values[k])){//if it's a missing value, fill it in with the avg. value
+						values[k] = (float) som.datasetScalar.getMean(k);
+					}
+				}
+        som.SOMnodes[i][j] = new SOMNode(values);
       }
     }
   }
@@ -265,19 +269,29 @@ public class SOMInitFns {
   static private double approxAutoCor(DataSet data, int dim1, int dim2){
     double topAvg = 0;
     if(data.length() <= 10000){ //do all points
+			int ptsSoFar = 0;
       for(int i = 0; i < data.length(); i++){
-        double nextpt = (data.getVals(i)[dim1] - data.getMean(dim1))
-                  *(data.getVals(i)[dim2] - data.getMean(dim2));
-        //compute rolling average
-        topAvg = (topAvg*i)/(i+1) + nextpt / (i+1);
+				if(!Float.isNaN(data.getVals(i)[dim1]) && !Double.isNaN(data.getMean(dim1))
+								&& !Float.isNaN(data.getVals(i)[dim2]) && !Double.isNaN(data.getMean(dim2))){
+					double nextpt = (data.getVals(i)[dim1] - data.getMean(dim1))
+										*(data.getVals(i)[dim2] - data.getMean(dim2));
+					//compute rolling average
+					topAvg = (topAvg*ptsSoFar)/(ptsSoFar+1) + nextpt / (ptsSoFar+1);
+					ptsSoFar++;
+				}
       }
     }else{ //pick 10,000 random points
+			int ptsSoFar = 0;
       for(int i = 0; i < 10000; i++){
         int index = (int) (Math.random() * data.length());
         //compute rolling average
-        topAvg = (topAvg*i)/(i+1) +
-                  (data.getVals(index)[dim1] - data.getMean(dim1))
-                  *(data.getVals(index)[dim2] - data.getMean(dim2)) / (i+1);
+				if(!Float.isNaN(data.getVals(i)[dim1]) && !Double.isNaN(data.getMean(dim1))
+								&& !Float.isNaN(data.getVals(i)[dim2]) && !Double.isNaN(data.getMean(dim2))){
+					topAvg = (topAvg*ptsSoFar)/(ptsSoFar+1) +
+										(data.getVals(index)[dim1] - data.getMean(dim1))
+										*(data.getVals(index)[dim2] - data.getMean(dim2)) / (ptsSoFar+1);
+					ptsSoFar++;
+				}
       }
     }
 
