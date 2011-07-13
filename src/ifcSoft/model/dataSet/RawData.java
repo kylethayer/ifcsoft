@@ -361,6 +361,10 @@ public class RawData extends DataSet {
 		int fileRowCounter = 0;
     String st[];
     while(line != null){
+			line = line.replaceAll(",,", ", ,"); //make sure at least a space between each comma
+			if(line.endsWith(",")){//if it ends with a comma, an extra space will make
+				line = line + " ";    //sure the split gives the right number of elements
+			}
       st = line.split(",");
       //if the column labels aren't set, then this is the first read
       if(columnLabels == null){
@@ -396,9 +400,17 @@ public class RawData extends DataSet {
         try{
           for(int i = 0; i < columnLabels.length; i++){
 						if(hasNames){
-              thisrow[i] = Float.parseFloat(st[i+1]); //start one over on file if first is name
+							if(st[i+1].trim().length() == 0){ //if no number is empty
+								thisrow[i] = Float.NaN;
+							}else{
+								thisrow[i] = Float.parseFloat(st[i+1]); //start one over on file if first is name
+							}
 						}else{
-							thisrow[i] = Float.parseFloat(st[i]);
+							if(st[i].trim().length() == 0){ //if no number is empty
+								thisrow[i] = Float.NaN;
+							}else{
+								thisrow[i] = Float.parseFloat(st[i]);
+							}
 						}
           }
         }catch(Exception e){
