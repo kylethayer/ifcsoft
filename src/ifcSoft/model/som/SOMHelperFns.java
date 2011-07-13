@@ -142,11 +142,15 @@ public class SOMHelperFns {
       int weightLength = currentW.length;
       if(som.allUsedWeightsSame){
         for(int k = 0; k < weightLength; k++){
-          euclidD+= Math.pow(currentW[k] - testweight[k], 2);
+					if(!Float.isNaN(currentW[k]) && !Float.isNaN(testweight[k])){
+						euclidD+= Math.pow(currentW[k] - testweight[k], 2);
+					}
         }
       }else{ //some weights are different
         for(int k = 0; k < weightLength; k++){
-          euclidD+= Math.pow(som.weighting[k]*(currentW[k] - testweight[k]), 2);
+					if(!Float.isNaN(currentW[k]) && !Float.isNaN(testweight[k])){
+						euclidD+= Math.pow(som.weighting[k]*(currentW[k] - testweight[k]), 2);
+					}
         }
       }
     }else{ //only some channels used
@@ -154,12 +158,16 @@ public class SOMHelperFns {
       if(som.allUsedWeightsSame){
         for(int k = 0; k < channelsUsedLength; k++){
           int index = som.channelsUsed[k];
-          euclidD+= Math.pow(currentW[index] - testweight[index], 2);
+					if(!Float.isNaN(currentW[index]) && !Float.isNaN(testweight[index])){
+						euclidD+= Math.pow(currentW[index] - testweight[index], 2);
+					}
         }
       }else{ //some of the used weights are different
         for(int k = 0; k < channelsUsedLength; k++){
           int index = som.channelsUsed[k];
-          euclidD+= Math.pow(som.weighting[index]*(currentW[index] - testweight[index]), 2);
+					if(!Float.isNaN(currentW[index]) && !Float.isNaN(testweight[index])){
+						euclidD+= Math.pow(som.weighting[index]*(currentW[index] - testweight[index]), 2);
+					}
         }
       }
     }

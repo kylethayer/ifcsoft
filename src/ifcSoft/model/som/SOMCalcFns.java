@@ -207,8 +207,15 @@ public class SOMCalcFns {
       //update the SOM Nodes to be avg of weights placed in neighborsize
       for(int i = 0; i < nodeWeightPlaced.length; i++){
         for(int j = 0; j < nodeWeightPlaced[0].length; j++){
+					int[] numPtsPerDim = new int[job.SOMdata.getDimensions()];
+					for(int k = 0; k < numPtsPerDim.length; k++){
+						numPtsPerDim[k] = 0;
+					}
           double[] avgWeights = new double[job.SOMdata.getDimensions()];
-          double vectorsplaced = 0;
+          double vectorsplaced[] = new double[job.SOMdata.getDimensions()];
+					for(int k = 0; k < numPtsPerDim.length; k++){
+						vectorsplaced[k] = 0;
+					}
           Point currentpt = new Point(i, j);
           //go through all in neighborhoodsize putting in all the weights
           for(int nsize = 0; nsize <= neighborsize; nsize++){
@@ -221,21 +228,25 @@ public class SOMCalcFns {
               for(int m = 0; m < vectors.size(); m++){
                 float[] vector = vectors.get(m);
                 for(int k = 0; k < vector.length; k++){
-                  avgWeights[k] += vector[k] * factor;
+									if(!Float.isNaN(vector[k])){
+										avgWeights[k] += vector[k] * factor;
+										numPtsPerDim[k]++;
+										vectorsplaced[k] += factor;
+									}
                 }
-                vectorsplaced+= factor;
+                
               }
             }
           }
-          if(vectorsplaced > 0){
-            //System.out.println("  node: ("+i+","+j+")  vectorsplaced: "+ vectorsplaced);
-            //update the node with the new weight
-            float newWeights[] = new float[avgWeights.length];
-            for(int k = 0; k < avgWeights.length; k++){
-              newWeights[k] = (float) (avgWeights[k] / vectorsplaced);
-            }
-            job.som.SOMnodes[i][j].setWeights(newWeights);
-          }
+					for(int k=0; k < vectorsplaced.length; k++){
+						if(vectorsplaced[k] > 0){
+							//System.out.println("  node: ("+i+","+j+")  vectorsplaced: "+ vectorsplaced);
+							//update the node with the new weight
+							float newWeights[] = new float[avgWeights.length];
+							newWeights[k] = (float) (avgWeights[k] / vectorsplaced[k]);
+							job.som.SOMnodes[i][j].setWeights(newWeights);
+						}
+					}
         }
       }
 
