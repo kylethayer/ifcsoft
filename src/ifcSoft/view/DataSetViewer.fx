@@ -171,7 +171,10 @@ public class DataSetViewer {
           }
 
           for(j in [0..dsp.getColNames().length-1]){
-            bw.write("{dsp.getData().getVals(i)[j]}");
+            var val:Float = dsp.getData().getVals(i)[j];
+            if(not Float.isNaN(val)){ //if it isn't a missing data value
+              bw.write("{val}");
+            }//otherwise we write nothing (empty == missing)
             if(indexof j == dsp.getColNames().length-1){
               bw.newLine();
             }else{

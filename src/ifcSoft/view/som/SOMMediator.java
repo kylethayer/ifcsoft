@@ -1235,7 +1235,10 @@ public class SOMMediator extends Mediator implements IMediator, TabMediator {
           bw.write(dataSet.getPointName(membMap[i])+",");
         }
         for(int k = 0; k < dataSet.getDimensions(); k++){
-          bw.write(""+dataPt[k]);
+          float val = dataPt[k];
+          if(!Float.isNaN(val)){ //if it isn't a missing data value
+            bw.write(""+val);
+          }//otherwise we write nothing (empty == missing)
           if(k != dataSet.getDimensions() - 1){
             bw.write(",");
           }else{
