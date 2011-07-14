@@ -238,15 +238,16 @@ public class SOMCalcFns {
               }
             }
           }
+          float newWeights[] = new float[avgWeights.length];
           for(int k=0; k < vectorsplaced.length; k++){
             if(vectorsplaced[k] > 0){
-              //System.out.println("  node: ("+i+","+j+")  vectorsplaced: "+ vectorsplaced);
               //update the node with the new weight
-              float newWeights[] = new float[avgWeights.length];
               newWeights[k] = (float) (avgWeights[k] / vectorsplaced[k]);
-              job.som.SOMnodes[i][j].setWeights(newWeights);
+            }else{ //if no new info, keep old weight
+              newWeights[k] = job.som.SOMnodes[i][j].getWeights()[k];
             }
           }
+          job.som.SOMnodes[i][j].setWeights(newWeights);
         }
       }
 
