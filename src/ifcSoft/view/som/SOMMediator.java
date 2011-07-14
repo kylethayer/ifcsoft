@@ -1259,7 +1259,7 @@ public class SOMMediator extends Mediator implements IMediator, TabMediator {
       ImageIO.write(screenshot, "png", new File(selectedFile));
     }
     catch(Exception e){
-    	e.printStackTrace();
+      e.printStackTrace();
     }
   }
 
@@ -1271,7 +1271,7 @@ public class SOMMediator extends Mediator implements IMediator, TabMediator {
       return bufferedImage;
     }
     catch(Exception e){
-    	e.printStackTrace();
+      e.printStackTrace();
       return null;
     }
   }

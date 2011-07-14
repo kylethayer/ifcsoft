@@ -41,7 +41,7 @@ public class DataSetMask{
   private LinkedList<DataSetMaskRemoved> removedList;
   private DataSet parentSet;
 
-	private int[] numValsInDim;
+  private int[] numValsInDim;
   private float[] mins;
   private float[] maxes;
   private double[] means;
@@ -73,14 +73,14 @@ public class DataSetMask{
 
 
     //get stats from parent
-		numValsInDim = new int[parentSet.getDimensions()];
+    numValsInDim = new int[parentSet.getDimensions()];
     mins = new float[parentSet.getDimensions()];
     maxes = new float[parentSet.getDimensions()];
     means = new double[parentSet.getDimensions()];
     stddevs = new double[parentSet.getDimensions()];
 
     for(int i = 0; i < parentSet.getDimensions(); i++){
-			numValsInDim[i] = parentSet.numValsInDim[i];
+      numValsInDim[i] = parentSet.numValsInDim[i];
       mins[i] = parentSet.getMin(i);
       maxes[i] = parentSet.getMax(i);
       means[i] = parentSet.getMean(i);
@@ -111,9 +111,9 @@ public class DataSetMask{
     return length;
   }
 
-	int getNumValsInDim(int dimension){
-		return numValsInDim[dimension];
-	}
+  int getNumValsInDim(int dimension){
+    return numValsInDim[dimension];
+  }
 
   float getMin(int dimension) {
     return mins[dimension];
@@ -253,7 +253,7 @@ public class DataSetMask{
   private void findstats() {
     //parentSet.find
     for(int k = 0; k < parentSet.getDimensions(); k++){
-			numValsInDim[k] = 0;
+      numValsInDim[k] = 0;
       mins[k] = Float.MAX_VALUE;
       maxes[k] = Float.MIN_VALUE;
       means[k] = 0; 
@@ -264,54 +264,54 @@ public class DataSetMask{
         //compute averages(at each step it's the current avg. of pts given)
         double weight = getVals(i)[k];
         if(!Double.isNaN(weight)){ //if it is a missing value, ignore it
-					means[k] = weight / (numValsInDim[k]+1) + (means[k]*numValsInDim[k])/(numValsInDim[k]+1);
-					if(weight < mins[k]){
-						mins[k] = (float) weight;
-					}
-					if(weight > maxes[k]){
-						maxes[k] = (float)weight;
-					}
-					numValsInDim[k]++; //the dimension has one more valid value
-				}
+          means[k] = weight / (numValsInDim[k]+1) + (means[k]*numValsInDim[k])/(numValsInDim[k]+1);
+          if(weight < mins[k]){
+            mins[k] = (float) weight;
+          }
+          if(weight > maxes[k]){
+            maxes[k] = (float)weight;
+          }
+          numValsInDim[k]++; //the dimension has one more valid value
+        }
       }
     }
   }
 
   private void findStandardDevs() {
-		stddevs = new double[parentSet.getDimensions()];
+    stddevs = new double[parentSet.getDimensions()];
 
-		double variance[] = new double[parentSet.getDimensions()];
-		for(int k = 0; k < parentSet.getDimensions(); k++){
+    double variance[] = new double[parentSet.getDimensions()];
+    for(int k = 0; k < parentSet.getDimensions(); k++){
       variance[k] = 0;
     }
 
-		for(int k=0; k < parentSet.getDimensions(); k++){
-			//in order to save time, we'll take data from no more than DataSet.SEGSIZE points
-			if(getNumValsInDim(k) <= DataSet.SEGSIZE){ //do them all
-				int pointsSoFar = 0;
-				for(int i = 0; i < length(); i++){
-				  //compute average of the squares (at each step it's the current avg. of pts given)
-					float[] vals = getVals(i);
-					if(!Float.isNaN(vals[k])){
-						double distToAvg = vals[k] - means[k];
-						variance[k] = distToAvg*distToAvg / (pointsSoFar+1) + (variance[k]*pointsSoFar)/(pointsSoFar+1);
-					  pointsSoFar++;
-					}
-				}
-			}else{ //randomly pick DataSet.SEGSIZE
-				int pointsSoFar = 0;
-				Random r = new Random();
-				while(pointsSoFar <  DataSet.SEGSIZE){
-				  //compute average of the squares (at each step it's the current avg. of pts given)
-					float[] vals = getVals(r.nextInt(length()));
-					if(!Float.isNaN(vals[k])){
-						double distToAvg = vals[k] - means[k];
-						variance[k] = distToAvg*distToAvg / (pointsSoFar+1) + (variance[k]*pointsSoFar)/(pointsSoFar+1);
-					  pointsSoFar++;
-					}
-				}
-			}
-		}
+    for(int k=0; k < parentSet.getDimensions(); k++){
+      //in order to save time, we'll take data from no more than DataSet.SEGSIZE points
+      if(getNumValsInDim(k) <= DataSet.SEGSIZE){ //do them all
+        int pointsSoFar = 0;
+        for(int i = 0; i < length(); i++){
+          //compute average of the squares (at each step it's the current avg. of pts given)
+          float[] vals = getVals(i);
+          if(!Float.isNaN(vals[k])){
+            double distToAvg = vals[k] - means[k];
+            variance[k] = distToAvg*distToAvg / (pointsSoFar+1) + (variance[k]*pointsSoFar)/(pointsSoFar+1);
+            pointsSoFar++;
+          }
+        }
+      }else{ //randomly pick DataSet.SEGSIZE
+        int pointsSoFar = 0;
+        Random r = new Random();
+        while(pointsSoFar <  DataSet.SEGSIZE){
+          //compute average of the squares (at each step it's the current avg. of pts given)
+          float[] vals = getVals(r.nextInt(length()));
+          if(!Float.isNaN(vals[k])){
+            double distToAvg = vals[k] - means[k];
+            variance[k] = distToAvg*distToAvg / (pointsSoFar+1) + (variance[k]*pointsSoFar)/(pointsSoFar+1);
+            pointsSoFar++;
+          }
+        }
+      }
+    }
 
     //find actual standard devs from the variance we computed
     for(int k = 0; k < parentSet.getDimensions(); k++){

@@ -50,13 +50,13 @@ public class ifcDialogCheckBox extends ifcDialogItem{
     return checkBoxInput.selected;
   }
 
-	public function select():Void{
-		checkBoxInput.selected = true;
-	}
+  public function select():Void{
+    checkBoxInput.selected = true;
+  }
 
-	public function unSelect():Void{
-		checkBoxInput.selected = false;
-	}
+  public function unSelect():Void{
+    checkBoxInput.selected = false;
+  }
   
   override function getName():String{
     return name;

@@ -77,9 +77,9 @@ public class RawData extends DataSet {
         name = filename;
       }
     }
-		if(name.endsWith(".csv") || name.endsWith(".fcs")){
-			name = name.substring(0, name.length()-4);
-		}
+    if(name.endsWith(".csv") || name.endsWith(".fcs")){
+      name = name.substring(0, name.length()-4);
+    }
   }
 
   /**
@@ -110,7 +110,7 @@ public class RawData extends DataSet {
       }
       System.out.println();
 
-			numValsInDim = new int[columnLabels.length];
+      numValsInDim = new int[columnLabels.length];
       mins = new float[columnLabels.length];
       maxes = new float[columnLabels.length];
       means = new double[columnLabels.length];
@@ -176,7 +176,7 @@ public class RawData extends DataSet {
     this.name = name;
     this.length = length;
 
-		numValsInDim = new int[columnLabels.length];
+    numValsInDim = new int[columnLabels.length];
     mins = new float[colLabels.length];
     maxes = new float[colLabels.length];
     means = new double[colLabels.length];
@@ -359,13 +359,13 @@ public class RawData extends DataSet {
 
     length = 0;
     int dataRows = 0;
-		int fileRowCounter = 0;
+    int fileRowCounter = 0;
     String st[];
     while(line != null){
-			line = line.replaceAll(",,", ", ,"); //make sure at least a space between each comma
-			if(line.endsWith(",")){//if it ends with a comma, an extra space will make
-				line = line + " ";    //sure the split gives the right number of elements
-			}
+      line = line.replaceAll(",,", ", ,"); //make sure at least a space between each comma
+      if(line.endsWith(",")){//if it ends with a comma, an extra space will make
+        line = line + " ";    //sure the split gives the right number of elements
+      }
       st = line.split(",");
       //if the column labels aren't set, then this is the first read
       if(columnLabels == null){
@@ -384,42 +384,42 @@ public class RawData extends DataSet {
         boolean didLoadRow = true;
         String pointName = null;
         if(hasNames){
-					pointName = st[0];
-					if(st.length-1 != columnLabels.length){ //if it uses name, the file has one extra column
-						System.out.println("Error reading FCS, columns in row"
-								+dataRows+" didn't match");
-						didLoadRow = false;
-					}
+          pointName = st[0];
+          if(st.length-1 != columnLabels.length){ //if it uses name, the file has one extra column
+            System.out.println("Error reading FCS, columns in row"
+                +dataRows+" didn't match");
+            didLoadRow = false;
+          }
         }else{
-					if(st.length != columnLabels.length){
-						System.out.println("Error reading FCS, columns in row"
-								+dataRows+" didn't match");
-						didLoadRow = false;
-					}
-				}
+          if(st.length != columnLabels.length){
+            System.out.println("Error reading FCS, columns in row"
+                +dataRows+" didn't match");
+            didLoadRow = false;
+          }
+        }
 
         try{
           for(int i = 0; i < columnLabels.length; i++){
-						if(hasNames){
-							if(st[i+1].trim().length() == 0){ //if no number is empty
-								thisrow[i] = Float.NaN;
-							}else{
-								thisrow[i] = Float.parseFloat(st[i+1]); //start one over on file if first is name
-							}
-						}else{
-							if(st[i].trim().length() == 0){ //if no number is empty
-								thisrow[i] = Float.NaN;
-							}else{
-								thisrow[i] = Float.parseFloat(st[i]);
-							}
-						}
+            if(hasNames){
+              if(st[i+1].trim().length() == 0){ //if no number is empty
+                thisrow[i] = Float.NaN;
+              }else{
+                thisrow[i] = Float.parseFloat(st[i+1]); //start one over on file if first is name
+              }
+            }else{
+              if(st[i].trim().length() == 0){ //if no number is empty
+                thisrow[i] = Float.NaN;
+              }else{
+                thisrow[i] = Float.parseFloat(st[i]);
+              }
+            }
           }
         }catch(Exception e){
           didLoadRow = false;
           System.out.println("Error reading FCS, couldn't parse floats in row"
               +fileRowCounter);
         }
-				fileRowCounter++;
+        fileRowCounter++;
         if(didLoadRow){
           tempData.add(thisrow);
           if(hasNames){
@@ -477,7 +477,7 @@ public class RawData extends DataSet {
     String[] nameSeg = new String[dataRows];
 
     if(mins == null){
-			numValsInDim = new int[columnLabels.length];
+      numValsInDim = new int[columnLabels.length];
       mins = new float[columnLabels.length];
       maxes = new float[columnLabels.length];
       means = new double[columnLabels.length];
@@ -532,10 +532,10 @@ public class RawData extends DataSet {
       if(currentString == null){
         if(columnLabels[i].startsWith("\"")){ //start of a special case
           currentString = columnLabels[i];
-					if(columnLabels[i].endsWith("\"")){ //if it also ends with a "
-						newLabels.add(currentString);
-						currentString = null;
-					}
+          if(columnLabels[i].endsWith("\"")){ //if it also ends with a "
+            newLabels.add(currentString);
+            currentString = null;
+          }
         }else{ //normal string value
           newLabels.add(columnLabels[i]);
         }

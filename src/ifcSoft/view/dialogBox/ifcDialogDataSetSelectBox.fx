@@ -69,16 +69,16 @@ public class ifcDialogDataSetSelectBox extends ifcDialogBox {
             };
         };
 
-		selectAllButton = ifcDialogButton{
-			action: selectAll
-			text: "Select All"
-		}
+    selectAllButton = ifcDialogButton{
+      action: selectAll
+      text: "Select All"
+    }
 
 
     children = ifcDialogBox{
       name:"Select Data Set(s)"
       content:[
-				  selectAllButton,
+          selectAllButton,
           ifcDialogScrollView{
             node:ifcDialogVBox{content:dataSetCheckBoxes}
             maxWidth:400
@@ -92,27 +92,27 @@ public class ifcDialogDataSetSelectBox extends ifcDialogBox {
     };
   }
 
-	function selectAll():Void{
-		var someUnselected:Boolean = false;
-		for(checkBox in dataSetCheckBoxes){
-			if(not checkBox.getInput()){
-				someUnselected = true;
-			}
-		}
+  function selectAll():Void{
+    var someUnselected:Boolean = false;
+    for(checkBox in dataSetCheckBoxes){
+      if(not checkBox.getInput()){
+        someUnselected = true;
+      }
+    }
 
-		if(someUnselected){ //select all
-			for(checkBox in dataSetCheckBoxes){
-				checkBox.select();
-			}
-		}else{ //unselect all
-			for(checkBox in dataSetCheckBoxes){
-				checkBox.unSelect();
-			}
-		}
+    if(someUnselected){ //select all
+      for(checkBox in dataSetCheckBoxes){
+        checkBox.select();
+      }
+    }else{ //unselect all
+      for(checkBox in dataSetCheckBoxes){
+        checkBox.unSelect();
+      }
+    }
 
 
 
-	}
+  }
 
 
   function okPressed():Void{
