@@ -81,9 +81,9 @@ public class SOMNode {
    */
   protected void shiftWeights(float[] newWeight, float alpha){
     for(int k=0; k < weights.length; k++){
-			if(!Float.isNaN(newWeight[k])){
-				weights[k] = (1-alpha)*weights[k] + alpha*newWeight[k];
-			}
+      if(!Float.isNaN(newWeight[k])){
+        weights[k] = (1-alpha)*weights[k] + alpha*newWeight[k];
+      }
     }
   }
 }

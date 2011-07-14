@@ -407,8 +407,8 @@ public class SynchDataTable extends ifcDialogItem{
       }
     }
 
-		return false;
-	}
+    return false;
+  }
 
 
 

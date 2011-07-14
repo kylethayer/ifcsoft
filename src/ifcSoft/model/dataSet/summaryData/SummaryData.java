@@ -57,7 +57,7 @@ public class SummaryData extends DataSet {
       datasets.add(dataset);
     }
 
-		numValsInDim = new int[getDimensions()];
+    numValsInDim = new int[getDimensions()];
     mins = new float[getDimensions()];
     maxes = new float[getDimensions()];
     means = new double[getDimensions()];

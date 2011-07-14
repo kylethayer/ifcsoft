@@ -80,12 +80,12 @@ public class SOMInitFns {
     for(int i = 0; i < width ; i++){
       for(int j = 0; j < height ; j++){
         //initialize with random points from the data
-				float values[] = som.datasetScalar.getPoint((int) (Math.random() * (som.datasetScalar.length() - 1)));
-				for(int k=0; k < values.length; k++){
-					if(Float.isNaN(values[k])){//if it's a missing value, fill it in with the avg. value
-						values[k] = (float) som.datasetScalar.getMean(k);
-					}
-				}
+        float values[] = som.datasetScalar.getPoint((int) (Math.random() * (som.datasetScalar.length() - 1)));
+        for(int k=0; k < values.length; k++){
+          if(Float.isNaN(values[k])){//if it's a missing value, fill it in with the avg. value
+            values[k] = (float) som.datasetScalar.getMean(k);
+          }
+        }
         som.SOMnodes[i][j] = new SOMNode(values);
       }
     }
@@ -96,58 +96,58 @@ public class SOMInitFns {
     int dims = dataset.getDimensions();
     Matrix m = findAutocorrelationMatrix(dataset);
 
-		//since the autocorrelation Matrix may have had divide by 0s (if std deviation = 0)
-		//we need to remove all row/columns that have a NAN or infinity
-		m.print(8, 2);
-		boolean dimsValidity[] = new boolean[dims];
-		for(int i = 0; i < dims; i++){
-			dimsValidity[i] = false;
-		}
-		for(int i = 0; i < m.getRowDimension(); i++){
-			for(int j = 0; j < m.getColumnDimension(); j++){
-				if(!Double.isNaN(m.get(i, j)) && !Double.isInfinite(m.get(i, j)) ){
-					if(i != j){
-						dimsValidity[i] = true;
-						dimsValidity[j] = true;
-					}
-				}
-			}
-		}
-		boolean areAnyInvalid = false;
-		for(int i = 0; i < dims; i++){
-			if(!dimsValidity[i]){
-				areAnyInvalid = true;
-			}
-		}
+    //since the autocorrelation Matrix may have had divide by 0s (if std deviation = 0)
+    //we need to remove all row/columns that have a NAN or infinity
+    m.print(8, 2);
+    boolean dimsValidity[] = new boolean[dims];
+    for(int i = 0; i < dims; i++){
+      dimsValidity[i] = false;
+    }
+    for(int i = 0; i < m.getRowDimension(); i++){
+      for(int j = 0; j < m.getColumnDimension(); j++){
+        if(!Double.isNaN(m.get(i, j)) && !Double.isInfinite(m.get(i, j)) ){
+          if(i != j){
+            dimsValidity[i] = true;
+            dimsValidity[j] = true;
+          }
+        }
+      }
+    }
+    boolean areAnyInvalid = false;
+    for(int i = 0; i < dims; i++){
+      if(!dimsValidity[i]){
+        areAnyInvalid = true;
+      }
+    }
 
-		if(areAnyInvalid){//if some dimensions are invalid we need to remove them from the matrix
-			int numValid = 0;
-			for(int i = 0; i < dims; i++){
-				if(dimsValidity[i]){
-					numValid++;
-				}
-			}
-			int validDims[] = new int[numValid];
-			int validDimsI = 0;
-			for(int i = 0; i < dims; i++){
-				if(dimsValidity[i]){
-					validDims[validDimsI] = i;
-					validDimsI++;
-				}
-			}
+    if(areAnyInvalid){//if some dimensions are invalid we need to remove them from the matrix
+      int numValid = 0;
+      for(int i = 0; i < dims; i++){
+        if(dimsValidity[i]){
+          numValid++;
+        }
+      }
+      int validDims[] = new int[numValid];
+      int validDimsI = 0;
+      for(int i = 0; i < dims; i++){
+        if(dimsValidity[i]){
+          validDims[validDimsI] = i;
+          validDimsI++;
+        }
+      }
 
-			//make a new matrix with just the valid dimensions and replace the old matrix with it
-			Matrix newM = new Matrix(numValid,numValid);
-			for(int i = 0; i < numValid; i++){
-				for(int j = 0; j < numValid; j++){
-					newM.set(i, j, m.get(validDims[i], validDims[j]));
-				}
-			}
+      //make a new matrix with just the valid dimensions and replace the old matrix with it
+      Matrix newM = new Matrix(numValid,numValid);
+      for(int i = 0; i < numValid; i++){
+        for(int j = 0; j < numValid; j++){
+          newM.set(i, j, m.get(validDims[i], validDims[j]));
+        }
+      }
 
-			m = newM;
-			System.out.println("New matrix:");
-			m.print(8, 2);
-		}
+      m = newM;
+      System.out.println("New matrix:");
+      m.print(8, 2);
+    }
 
 
     EigenvalueDecomposition test = m.eig();
@@ -168,24 +168,24 @@ public class SOMInitFns {
 
     double largestEigenV[] = new double[dims];
     double secondLargestEigenV[] = new double[dims];
-		if(areAnyInvalid){
-			int validI = 0;
-			for(int k = 0; k < dims; k++){ //the columns (second index) are the eigen vectors
-				if(dimsValidity[k]){
-					largestEigenV[k] = eigenvectors.get(validI, largestEigenIndex);
-					secondLargestEigenV[k] = eigenvectors.get(validI, secondLargestEigenIndex);
-					validI++;
-				}else{
-					largestEigenV[k] = dataset.getMean(k);
-					secondLargestEigenV[k] = dataset.getMean(k);
-				}
-			}
-		}else{
-			for(int k = 0; k < dims; k++){ //the columns (second index) are the eigen vectors
-				largestEigenV[k] = eigenvectors.get(k, largestEigenIndex);
-				secondLargestEigenV[k] = eigenvectors.get(k, secondLargestEigenIndex);
-			}
-		}
+    if(areAnyInvalid){
+      int validI = 0;
+      for(int k = 0; k < dims; k++){ //the columns (second index) are the eigen vectors
+        if(dimsValidity[k]){
+          largestEigenV[k] = eigenvectors.get(validI, largestEigenIndex);
+          secondLargestEigenV[k] = eigenvectors.get(validI, secondLargestEigenIndex);
+          validI++;
+        }else{
+          largestEigenV[k] = dataset.getMean(k);
+          secondLargestEigenV[k] = dataset.getMean(k);
+        }
+      }
+    }else{
+      for(int k = 0; k < dims; k++){ //the columns (second index) are the eigen vectors
+        largestEigenV[k] = eigenvectors.get(k, largestEigenIndex);
+        secondLargestEigenV[k] = eigenvectors.get(k, secondLargestEigenIndex);
+      }
+    }
 
     Random r = new Random();
     int flipLargestEigen =1;
@@ -269,29 +269,29 @@ public class SOMInitFns {
   static private double approxAutoCor(DataSet data, int dim1, int dim2){
     double topAvg = 0;
     if(data.length() <= 10000){ //do all points
-			int ptsSoFar = 0;
+      int ptsSoFar = 0;
       for(int i = 0; i < data.length(); i++){
-				if(!Float.isNaN(data.getVals(i)[dim1]) && !Double.isNaN(data.getMean(dim1))
-								&& !Float.isNaN(data.getVals(i)[dim2]) && !Double.isNaN(data.getMean(dim2))){
-					double nextpt = (data.getVals(i)[dim1] - data.getMean(dim1))
-										*(data.getVals(i)[dim2] - data.getMean(dim2));
-					//compute rolling average
-					topAvg = (topAvg*ptsSoFar)/(ptsSoFar+1) + nextpt / (ptsSoFar+1);
-					ptsSoFar++;
-				}
+        if(!Float.isNaN(data.getVals(i)[dim1]) && !Double.isNaN(data.getMean(dim1))
+                && !Float.isNaN(data.getVals(i)[dim2]) && !Double.isNaN(data.getMean(dim2))){
+          double nextpt = (data.getVals(i)[dim1] - data.getMean(dim1))
+                    *(data.getVals(i)[dim2] - data.getMean(dim2));
+          //compute rolling average
+          topAvg = (topAvg*ptsSoFar)/(ptsSoFar+1) + nextpt / (ptsSoFar+1);
+          ptsSoFar++;
+        }
       }
     }else{ //pick 10,000 random points
-			int ptsSoFar = 0;
+      int ptsSoFar = 0;
       for(int i = 0; i < 10000; i++){
         int index = (int) (Math.random() * data.length());
         //compute rolling average
-				if(!Float.isNaN(data.getVals(i)[dim1]) && !Double.isNaN(data.getMean(dim1))
-								&& !Float.isNaN(data.getVals(i)[dim2]) && !Double.isNaN(data.getMean(dim2))){
-					topAvg = (topAvg*ptsSoFar)/(ptsSoFar+1) +
-										(data.getVals(index)[dim1] - data.getMean(dim1))
-										*(data.getVals(index)[dim2] - data.getMean(dim2)) / (ptsSoFar+1);
-					ptsSoFar++;
-				}
+        if(!Float.isNaN(data.getVals(i)[dim1]) && !Double.isNaN(data.getMean(dim1))
+                && !Float.isNaN(data.getVals(i)[dim2]) && !Double.isNaN(data.getMean(dim2))){
+          topAvg = (topAvg*ptsSoFar)/(ptsSoFar+1) +
+                    (data.getVals(index)[dim1] - data.getMean(dim1))
+                    *(data.getVals(index)[dim2] - data.getMean(dim2)) / (ptsSoFar+1);
+          ptsSoFar++;
+        }
       }
     }
 

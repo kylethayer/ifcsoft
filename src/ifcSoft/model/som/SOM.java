@@ -131,7 +131,7 @@ public class SOM {
         this.weighting[i] = 1;
       }
     }
-		checkWeighting();
+    checkWeighting();
 
     if(somSettings.initType == SOMSettings.LINEARINIT){
       SOMInitFns.linearInitialize(somSettings.width, somSettings.height, datasetScalar.getDataSet(), this);

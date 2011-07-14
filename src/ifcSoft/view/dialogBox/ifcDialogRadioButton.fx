@@ -54,13 +54,13 @@ public class ifcDialogRadioButton extends ifcDialogItem{
     return radioButtonInput.selected;
   }
 
-	public function select():Void{
-		radioButtonInput.selected = true;
-	}
+  public function select():Void{
+    radioButtonInput.selected = true;
+  }
 
-	public function unSelect():Void{
-		radioButtonInput.selected = false;
-	}
+  public function unSelect():Void{
+    radioButtonInput.selected = false;
+  }
 
   override function getName():String{
     return name;
