@@ -62,7 +62,11 @@ public class ifcDialogDataTable extends ifcDialogItem{
             content:[
               Label{text:dataset.getColLabels()[i]},
               for(j in [0..numDataPnts-1]){
-                Label{text: "{dataset.getVals(j)[i]}" };
+                if(Float.isNaN(dataset.getVals(j)[i])){
+                  Label{text: "" };
+                }else{
+                  Label{text: "{dataset.getVals(j)[i]}" };
+                }
               }
               ]
           }
