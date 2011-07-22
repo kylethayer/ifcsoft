@@ -43,6 +43,10 @@ public class SOMSettings {
   public static final String CLASSICSOM = "Incremental SOM";
   public static final String BATCHSOM = "Batch SOM";
 
+  public static final String USEALLPOINTS = "Use All";
+  public static final String HALFMISSING = "At least half the used dimensions present";
+  public static final String COMPLETEPOINTS = "Only points with all dimensions";
+
   public DataSetProxy datasetproxy;
   public DataSetScalar datasetscalar;
   public String scaleType;
@@ -51,6 +55,8 @@ public class SOMSettings {
   public String initType;
 
   public String SOMType;
+
+  public String allowMissingPointsType;
 
   public int width;
   public int height;
@@ -90,5 +96,7 @@ public class SOMSettings {
     batchMaxNeighborhood = -1; //default is max dimension / 4
     batchMinNeighborhood = 2;
     batchPointsPerNode = 100;
+
+    allowMissingPointsType = HALFMISSING;
   }
 }
