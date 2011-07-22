@@ -41,6 +41,9 @@ import ifcSoft.model.dataSet.dataSetScalar.PCANormalized;
 import ifcSoft.model.som.SOMSettings;
 import javafx.util.Math;
 import ifcSoft.view.dialogBox.ifcDialogItem;
+import ifcSoft.model.dataSet.DataSet;
+import java.util.LinkedList;
+import ifcSoft.model.dataSet.SubsetData;
 
 
 /**
@@ -114,12 +117,16 @@ public class CalcSOMDialog {
       return;
     }
 
-    var finaldsp:DataSetProxy = mainMediator.getDataSet(dataSetSelect.getDataSets(), dataSetSelect.getSynchColumns());
-    if(finaldsp == null){
+    var combineddsp:DataSetProxy = mainMediator.getDataSet(dataSetSelect.getDataSets(), dataSetSelect.getSynchColumns());
+    if(combineddsp == null){
       println("Error in data set combination");
       return;
     }
+
+    //given the selected way of handling missing data, possibly generate a new subset of the data
+    var finaldsp:DataSetProxy = handleMissingValsType(combineddsp, somSettings.allowMissingPointsType, SOMWeights);
     somSettings.datasetproxy = finaldsp;
+
     //pick the correct scalar
     //var datasetscalar:DataSetScalar;
     if(somSettings.scaleType == SOMSettings.UNSCALED){
@@ -291,6 +298,9 @@ public class CalcSOMDialog {
   var batchPntsPerNode:ifcDialogIntInput;
 
 
+  var allowMissingValsInput:ifcDialogChoiceBox;
+  var missingValOptions:String[] = [SOMSettings.USEALLPOINTS, SOMSettings.HALFMISSING, SOMSettings.COMPLETEPOINTS];
+
   var advancedContent:ifcDialogItem[] = bind [
         rowsInput, colsInput,
         scaleTypeInput,
@@ -299,7 +309,8 @@ public class CalcSOMDialog {
           [classIterInput, classicMaxNbrInput, classicMinNbrInput]
         }else{
           [batchStepInput,batchMaxNbrInput,batchMinNbrInput, batchPntsPerNode]
-        }
+        },
+        allowMissingValsInput
         ];
 
   function getAdvancedSettings():Void{
@@ -378,6 +389,12 @@ public class CalcSOMDialog {
       initialInt: somSettings.batchPointsPerNode
     };
 
+    allowMissingValsInput = ifcDialogChoiceBox{
+      name:"Allow points with missing values:"
+      items: missingValOptions
+      initialSelectedItem: somSettings.allowMissingPointsType
+    };
+
     AdvancedBox =ifcDialogBox{
       name: "Advanced Settings"
       content: bind advancedContent
@@ -411,8 +428,155 @@ public class CalcSOMDialog {
       somSettings.batchMinNeighborhood = batchMinNbrInput.getInput();
       somSettings.batchPointsPerNode = batchPntsPerNode.getInput();
     }
+    somSettings.allowMissingPointsType = allowMissingValsInput.getInput() as String;
+
     SOMDialogDisabled = false;
     app.removeDialog(AdvancedBox)
+  }
+
+
+  /**
+   * Given the user options about what data points to allow given what missing values
+   * they have, this function returns a DataSetProxy of only data the user allows.
+   *
+   * @param dsp - the original data set
+   * @param allowMissingPointsType - the setting for what to allow
+   * @param weights - the weighting used with the data
+   * @return A DataSetProxy with only points fitting the setting
+   */
+  function handleMissingValsType(dsp:DataSetProxy, allowMissingPointsType:String, inputweights:Float[]):DataSetProxy{
+    if(allowMissingPointsType == SOMSettings.USEALLPOINTS){ //if we don't change anything
+      println("Use all points, return old");
+      return dsp;
+    }
+    var weights:Number[] = [];
+    if(inputweights == null){
+      for (names in dsp.getColNames()){
+        insert 1 into weights; //set initial weights all to 1
+      }
+    }else{
+      weights = inputweights;
+    }
+
+
+    var dataset:DataSet = dsp.getData();
+    var numDimsWithMissingVals = 0;
+    var numDimsUsed = 0;
+    println("weights length = {weights.size()}");
+    for(weight in weights){
+      if(weight != 0){ //if the dimension is weighted
+        numDimsUsed++;
+        if(dataset.length() > dataset.getNumValsInDim(indexof weight)){ //if there are missing values
+          numDimsWithMissingVals++;
+        }
+      }
+    }
+
+    //member list
+    var pointsToKeep:LinkedList = new LinkedList(); //this will be of int[], but JavaFX doesn't allow generics
+    var numPointsRemoved = 0;
+    var numPointsKept = 0;
+    if(allowMissingPointsType == SOMSettings.HALFMISSING){
+      if(numDimsWithMissingVals <= numDimsUsed/2.0){
+        println("less than half missing({numDimsWithMissingVals} of {numDimsUsed}), return old");
+        return dsp;
+      }
+      //check each point
+      var nextValsToKeep = [];
+      for(i in [0..dataset.length()-1]){
+        if(doesPointHaveHalfDimensions(dataset.getVals(i), weights)){ //if a valid point
+          numPointsKept++;
+          nextValsToKeep = [nextValsToKeep,i];
+          if(nextValsToKeep.size() > 500){ //if our array is too big, put it in the linked list and start over
+            pointsToKeep.add(nextValsToKeep);
+            nextValsToKeep = [];
+          }
+        }else{ //the point isn't valid
+          numPointsRemoved++;
+        }
+      }
+      if(nextValsToKeep.size() > 0){
+        pointsToKeep.add(nextValsToKeep);
+      }
+
+    }else if(allowMissingPointsType == SOMSettings.COMPLETEPOINTS){
+      if(numDimsWithMissingVals == 0){
+        println("none missing, return old");
+        return dsp;
+      }
+      //check each point
+      var nextValsToKeep = [];
+      for(i in [0..dataset.length()-1]){
+        if(doesPointHaveAllDimensions(dataset.getVals(i), weights)){ //if a valid point
+          numPointsKept++;
+          nextValsToKeep = [nextValsToKeep,i];
+          if(nextValsToKeep.size() > 500){ //if our array is too big, put it in the linked list and start over
+            pointsToKeep.add(nextValsToKeep);
+            nextValsToKeep = [];
+          }
+        }else{ //the point isn't valid
+          numPointsRemoved++;
+        }
+      }
+      if(nextValsToKeep.size() > 0){
+        pointsToKeep.add(nextValsToKeep);
+      }
+    }
+
+    if(numPointsRemoved == 0){ //if nothing was removed, we are done
+      println("none removed, return old");
+      return dsp;
+    }
+
+    //if we get here, then points were removed and we must create a new "members"
+    //array for making the new subset data set
+    var members:Integer[] =
+      for(array in pointsToKeep){
+        array as Integer[];
+      };
+
+    var newDataSet = new SubsetData(dataset, members);
+
+    var newdsp:DataSetProxy = new DataSetProxy();
+    newdsp.setDataSet(newDataSet);
+
+    println("{numPointsRemoved} removed, return new");
+    return newdsp;
+  }
+
+  function doesPointHaveHalfDimensions(point:Float[], weights:Float[]):Boolean{
+    var numDims = 0;
+    var numDimsPresent = 0;
+    for(weight in weights){
+      if(weight != 0){
+        numDims++;
+        if(not Float.isNaN(point[indexof weight])){// if number is present
+          numDimsPresent++;
+        }
+      }
+    }
+    if(numDimsPresent >= numDims/2.0){
+      return true;
+    }
+    return false;
+
+  }
+
+  function doesPointHaveAllDimensions(point:Float[], weights:Float[]):Boolean{
+    var numDims = 0;
+    var numDimsPresent = 0;
+    for(weight in weights){
+      if(weight != 0){
+        numDims++;
+        if(not Float.isNaN(point[indexof weight])){// if number is present
+          numDimsPresent++;
+        }
+      }
+    }
+    if(numDimsPresent == numDims){
+      return true;
+    }
+    return false;
   }
 
 

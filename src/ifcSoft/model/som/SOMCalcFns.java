@@ -161,7 +161,6 @@ public class SOMCalcFns {
     SOM som = job.som;
     DataSetScalar SOMScaledData = job.SOMdata;
 
-    float[][] test = new float[job.som.SOMnodes.length][job.som.SOMnodes[0].length];
 
     for(int iter = 0; iter < job.iterations; iter++){
       //making a 2d array of linked lists is a pain because of generics
