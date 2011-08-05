@@ -25,9 +25,7 @@ import ifcSoft.view.MainMediator;
 import javafx.util.Sequences;
 import javafx.stage.Alert;
 import ifcSoft.view.synchDataSets.SynchDataSetDialog;
-import javafx.scene.control.ScrollView;
 import ifcSoft.view.synchDataSets.synchedColumn;
-import ifcSoft.view.synchDataSets.synchedColumnFX;
 
 /**
  * @author Kyle Thayer
@@ -146,7 +144,7 @@ public class ifcDialogDataSetSelectBox extends ifcDialogBox {
     if(isDataSetSelected){
       if(doDataColumnsMatch){
         okAction();
-      }else{
+      }else{ //data sets don't align
         var synchD:SynchDataSetDialog = SynchDataSetDialog{
           mainMediator:mainApp.getMainMediator()
           mainApp:mainApp

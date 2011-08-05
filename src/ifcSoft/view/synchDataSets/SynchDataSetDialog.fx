@@ -22,13 +22,8 @@ package ifcSoft.view.synchDataSets;
 import ifcSoft.MainApp;
 import ifcSoft.view.dialogBox.ifcDialogBox;
 import ifcSoft.view.dialogBox.ifcDialogText;
-import ifcSoft.view.dialogBox.ifcDialogHBox;
-import ifcSoft.view.dialogBox.ifcDialogButton;
 import ifcSoft.view.MainMediator;
 
-/**
- * @author Kyle Thayer
- */
 
 public class SynchDataSetDialog {
   public-init var mainMediator:MainMediator;
@@ -45,7 +40,10 @@ public class SynchDataSetDialog {
       name: "Synchronize Data Sets"
       content:[
         ifcDialogText{
-          text:"The data sets selected have different dimension labels. (Note: This is only partially functional)"
+          text:"The data sets selected have different dimension labels. Drag source names to appropriate column."
+        },
+        ifcDialogText{
+          text:"Double click to change dimension titles. Control+click a dimension column to delete column."
         }
         //interactive table with what column names are equivalent
         synchTable = SynchDataTable{
@@ -115,70 +113,7 @@ public class SynchDataSetDialog {
   }
 
 
-  //var shrinkAmtInput:ifcDialogFloatInput;
-  /*var dataSetSelect:ifcDialogDataSetSelect= ifcDialogDataSetSelect{
-            mainApp:mainApp,
-            okAction: function():Void{dataSetTable = getTable()}
-            };
-  var dataSetTable:ifcDialogDataTable = getTable();*/
-  //var saveAsNewDS:ifcDialogRadioButtons;
-  /*var dataSetViewerDlg:ifcDialogBox =
-    ifcDialogBox{
-      name: "Data Set Viewer"
-      content:bind [
-        dataSetSelect,
-        ifcDialogHBox{
-          content:[
-            ifcDialogButton{
-              text:"Save\nData Set"
-              action:function(){saveDataSet();}
-            },
-            ifcDialogButton{
-              text:"Remove\nOutliers"
-              action: function(){mainApp.outliersDialog(getCurrentDataSet());}
-            },
-            ifcDialogButton{
-              text:"Shrink\nData Set"
-              action:function(){mainApp.shrinkDatasetDialog(getCurrentDataSet());}
-            },
-          ]
-        },
-        dataSetTable
-        ]
-      cancelName: "Close"
-      cancelAction: function():Void{mainApp.removeDialog(dataSetViewerDlg)}
-    };*/
-
-
-
-
-  /**
-  * Create and display the data Set Viewer.
-  */
-  /*public function dataSetViewer():Void{
-    if(mainMediator.getDSP(0) == null){
-      mainApp.alert("No Data Set Loaded");
-      return;
-    }
-    mainApp.addDialog(dataSetViewerDlg);
-  }*/
-
-/*  public function getCurrentDataSet():DataSetProxy{
-    var datasets = (dataSetSelect.getDataSets());
-    if(datasets.size() == 0){
-      mainApp.alert("No data set selected");
-      mainApp.unblockContent();
-      return null;
-    }
-
-    var finaldsp:DataSetProxy = mainMediator.getDataSet(dataSetSelect.getDataSets());
-    if(finaldsp == null){
-      println("Error in data set combination");
-      return null;
-    }
-
-    return finaldsp;
-  }*/
+  
 
 
 

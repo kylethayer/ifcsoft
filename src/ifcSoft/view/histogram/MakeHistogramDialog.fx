@@ -58,14 +58,8 @@ public class MakeHistogramDialog {
   }
 
   function histOK():Void{
-    var datasets = (dataSetSelect.getDataSets());
-    if(datasets.size() == 0){
-      app.alert("No data set selected");
-      app.unblockContent();
-      return;
-    }
 
-    var finaldsp:DataSetProxy = mainMediator.getDataSet(dataSetSelect.getDataSets());
+    var finaldsp:DataSetProxy = dataSetSelect.getDataSet();
     if(finaldsp == null){
       println("Error in data set combination");
       return;

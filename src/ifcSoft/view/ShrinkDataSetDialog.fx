@@ -72,7 +72,7 @@ public class ShrinkDataSetDialog {
 
   function shrinkDatsetOK():Void{
     if(dsp == null){
-      dsp = mainMediator.getDataSet(dataSetSelect.getDataSets());
+      dsp = dataSetSelect.getDataSet();
     }
 
     mainMediator.shrinkDatset(dsp, shrinkAmtInput.getInput());

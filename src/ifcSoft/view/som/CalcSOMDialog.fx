@@ -110,14 +110,7 @@ public class CalcSOMDialog {
 
   function SOMOK(){
 
-    var datasets = (dataSetSelect.getDataSets());
-    if(datasets.size() == 0){
-      app.alert("No data set selected");
-      app.unblockContent();
-      return;
-    }
-
-    var combineddsp:DataSetProxy = mainMediator.getDataSet(dataSetSelect.getDataSets(), dataSetSelect.getSynchColumns());
+    var combineddsp:DataSetProxy = dataSetSelect.getDataSet();
     if(combineddsp == null){
       println("Error in data set combination");
       return;
@@ -206,25 +199,13 @@ public class CalcSOMDialog {
   var SOMWeightsTextBoxes:ifcDialogFloatInput[];
 
   function getSOMWeights(){
-    var dataSets = dataSetSelect.getDataSets();    
-    if(dataSets.size() == 0){
+    var dataSet = dataSetSelect.getDataSet();    
+    if(dataSet == null){
       app.alert("Error: No data set selected");
       return;
     }
 
-    var SOMColNames:String[];
-
-    if(dataSetSelect.getSynchColumns() == null){
-      SOMColNames = dataSets.get(0).getColNames();
-    }else{
-      for(col in dataSetSelect.getSynchColumns()){
-        insert col.colName into SOMColNames;
-      }
-
-    }
-
-
-    
+    var SOMColNames:String[] = dataSet.getColNames();
 
     if(SOMWeights == null or SOMColNames.size() != SOMWeights.size()){
       for (names in SOMColNames){
@@ -477,8 +458,7 @@ public class CalcSOMDialog {
     var numPointsRemoved = 0;
     var numPointsKept = 0;
     if(allowMissingPointsType == SOMSettings.HALFMISSING){
-      if(numDimsWithMissingVals <= numDimsUsed/2.0){
-        println("less than half missing({numDimsWithMissingVals} of {numDimsUsed}), return old");
+      if(numDimsWithMissingVals <= numDimsUsed/2.0){ //over half fully present, so original dsp is safe
         return dsp;
       }
       //check each point

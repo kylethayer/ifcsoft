@@ -1359,16 +1359,6 @@ public class SOMMediator extends Mediator implements IMediator, TabMediator {
   }
   
   /**
-   * Returns (and creates if needed) a combination of the given data sets.
-   * @param selectedDataSets
-   * @return
-   */
-  public DataSetProxy getDataSet(Boolean[] selectedDataSets){
-    return mainMed.getDataSet(selectedDataSets);
-    
-  }
-
-  /**
    * Returns the MainApp object
    * @return
    */
