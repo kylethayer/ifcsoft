@@ -25,6 +25,7 @@ import javafx.scene.input.MouseEvent;
 import javafx.scene.layout.Stack;
 import javafx.scene.layout.VBox;
 import javafx.scene.text.Text;
+import javafx.geometry.VPos;
 
 
 public class synchedColumnFX {
@@ -38,10 +39,12 @@ public class synchedColumnFX {
 
   public var colRectangle:Rectangle;
 
-  public var entryRectangle:Rectangle[] =
+  public var entryText:Text[];
+
+  public var entryRectangle:Rectangle[] =  //both for detecting mouse events on entries and highlighting
     bind for (name in sourceNames){
       Rectangle{
-        height: 20
+        height: bind entryText[indexof name].boundsInLocal.height
         width: bind boxWidth - 30
         fill: Color.LIGHTGRAY
         opacity: 0
@@ -61,7 +64,15 @@ public class synchedColumnFX {
   public var entryColumn:Stack = makeEntryColumn();
 
   public function makeEntryColumn():Stack{
+    entryText = for(string in sourceNames){
+      Text{
+        content:string
+        wrappingWidth:boxWidth - 30
+      }
+    }
+
     Stack{
+      nodeVPos: VPos.TOP
       content: [
         colRectangle = Rectangle{
           height:200
@@ -70,15 +81,15 @@ public class synchedColumnFX {
           stroke: Color.BLACK
         },
         VBox{
+              //prevent the VBox from stretching out to fill the whole space (keeps items at top)
+          height: bind sumList(for(text in entryText){text.boundsInLocal.height + 3})
+          spacing: 3
           translateX:5
           content: bind for(string in sourceNames){
               Stack{
                 content:[
                   entryRectangle[indexof string],
-                  Text{
-                    content:string
-                    wrappingWidth:boxWidth - 30
-                  }
+                  entryText[indexof string]
                 ]
               }
           }
@@ -88,7 +99,22 @@ public class synchedColumnFX {
 
   }
 
- 
+  function sumList(list:Number[]){
+    var sum:Number = 0;
+    for(num in list){
+      sum+= num;
+    }
+    return sum;
+  }
+
+
+
+  var testStack:Stack = Stack{};
+  //var test = testStack.managed; //possibly set to false
+  //var test = testStack.
+
+  //var testBox:VBox = VBox{};
+  //var temp = testBox.
     
 
 
