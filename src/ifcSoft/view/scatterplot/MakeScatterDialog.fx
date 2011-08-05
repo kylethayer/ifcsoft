@@ -43,10 +43,13 @@ public class MakeScatterDialog {
   var scatterDialog:ifcDialogBox;
   var dimensions:String[];
   var dataSetSelect:ifcDialogDataSetSelect;
-  var datasets:DataSetProxy[] = bind dataSetSelect.getDataSets();
-  var dataset1:DataSetProxy = bind datasets[0] on replace{
-    dimensions = dataset1.getColNames();
-    };
+  var dsp:DataSetProxy = bind dataSetSelect.getDataSet() on replace{
+    dimensions = dsp.getColNames();
+    };;
+ // var datasets:DataSetProxy[] = bind dataSetSelect.getDataSets();
+ // var dataset1:DataSetProxy = bind datasets[0] on replace{
+ //   dimensions = dataset1.getColNames();
+ //   };
 
 
   var dim1Input:ifcDialogChoiceBox;
@@ -80,14 +83,7 @@ public class MakeScatterDialog {
   }
 
   function scatterOK():Void{
-    var datasets = (dataSetSelect.getDataSets());
-    if(datasets.size() == 0){
-      app.alert("No data set selected");
-      app.unblockContent();
-      return;
-    }
-
-    var finaldsp:DataSetProxy = mainMediator.getDataSet(dataSetSelect.getDataSets());
+    var finaldsp:DataSetProxy = dataSetSelect.getDataSet();
     if(finaldsp == null){
       println("Error in data set combination");
       return;

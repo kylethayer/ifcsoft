@@ -88,7 +88,7 @@ public class DataSetViewer {
 
   function  getTable():ifcDialogDataTable{
     return ifcDialogDataTable{
-          dataset: dataSetSelect.getDataSets()[0].getData()
+          dataset: dataSetSelect.getDataSet().getData()
           }
   }
 
@@ -105,14 +105,8 @@ public class DataSetViewer {
   }
 
   public function getCurrentDataSet():DataSetProxy{
-    var datasets = (dataSetSelect.getDataSets());
-    if(datasets.size() == 0){
-      mainApp.alert("No data set selected");
-      mainApp.unblockContent();
-      return null;
-    }
-
-    var finaldsp:DataSetProxy = mainMediator.getDataSet(dataSetSelect.getDataSets(), dataSetSelect.getSynchColumns());
+    
+    var finaldsp:DataSetProxy = dataSetSelect.getDataSet();
     if(finaldsp == null){
       println("Error in data set combination");
       return null;

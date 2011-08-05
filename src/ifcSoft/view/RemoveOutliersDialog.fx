@@ -84,7 +84,7 @@ public class RemoveOutliersDialog {
     var finaldsp:DataSetProxy;
 
    if(dsp == null){
-     finaldsp = mainMediator.getDataSet(dataSetSelect.getDataSets());
+     finaldsp = dataSetSelect.getDataSet();
    }else{
      finaldsp = dsp;
    }

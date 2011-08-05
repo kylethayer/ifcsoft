@@ -430,30 +430,22 @@ public class MainMediator extends Mediator implements IMediator {
    * @return
    */
   public DataSetProxy getDataSet(Boolean[] selectedDataSets, synchedColumn[] synchCols){
-    LinkedList<DataSetProxy> dataSets = new LinkedList<DataSetProxy>();
+    LinkedList<DataSetProxy> dataSetsLL = new LinkedList<DataSetProxy>();
     for(int i = 0; i < selectedDataSets.length; i++){
       if(selectedDataSets[i]){
-        dataSets.add(getDSP(i));
+        dataSetsLL.add(getDSP(i));
       }
     }
-    System.out.println(dataSets.size() +" data set selected");
-    if(dataSets.size() == 0){
+    if(dataSetsLL.size() == 0){
       return null;
     }
-    if(dataSets.size() == 1){
-      return dataSets.get(0);
-    }
-    DataSetProxy newDSP;
-    try {
-      newDSP = new DataSetProxy();
-      newDSP.setDataSet(new UnionData(dataSets));
 
-    } catch (Exception ex) {
-      newDSP = null;
-      facade.sendNotification(ApplicationFacade.EXCEPTIONALERT, ex, null);
+    DataSetProxy[] dataSetArray = new DataSetProxy[dataSetsLL.size()];
+    for(int i = 0; i < dataSetsLL.size(); i++){
+      dataSetArray[i] = dataSetsLL.get(i);
     }
 
-    return newDSP;
+    return getDataSet(dataSetArray, synchCols);
 
   }
 
@@ -471,6 +463,10 @@ public class MainMediator extends Mediator implements IMediator {
       if(synchCols != null && synchCols.length > 0){
         selectedDataSets = synchronizeDataSets(selectedDataSets, synchCols);
       }
+      if(selectedDataSets.length == 0){
+        getApp().alert("Error: No data sets to combine.");
+        return null;
+      }
       newDSP.setDataSet(new UnionData(selectedDataSets));
 
     } catch (Exception ex) {
@@ -487,37 +483,41 @@ public class MainMediator extends Mediator implements IMediator {
       DataSet ds = selectedDataSets[i].getData();
       String[] newColNames = new String[synchCols.length];
       int[] colIndeces = new int[synchCols.length];
-      boolean matched = true;
-      String missingCol = "";
+      boolean columnDoubled = false;
+      String doubleColumnMessage = "";
       for(int j = 0; j < synchCols.length; j++){
         boolean colPlaced = false;
+        String colMatchString = "";
         newColNames[j] = synchCols[j].colName;
         for(int k = 0; k < synchCols[j].sourceNames.length; k++){
           for(int m=0; m < ds.getDimensions(); m++){
             if(ds.getColLabels()[m].equals(synchCols[j].sourceNames[k])){
-              colIndeces[j] = m;
-              colPlaced = true;
-              break;
+              if(!colPlaced){ // if this is the first value we are adding
+                colIndeces[j] = m;
+                colMatchString = ds.getColLabels()[m];
+                colPlaced = true;
+                break;
+              }else{
+                columnDoubled = true;
+                doubleColumnMessage+="Column "+synchCols[j].colName+" had both " +
+                        colMatchString + " and " + ds.getColLabels()[m]+".\n";
+              }
             }
-          }
-          if(colPlaced){
-            break;
           }
         }
         if(!colPlaced){
-          matched = false;
-          missingCol = newColNames[j];
+          colIndeces[j] = -1; //if nothing matched, we will return NaNss
           break;
         }
       }
 
-      if(matched){
+      if(!columnDoubled){
         DataSet newds = new rearrangeDimDataSet(ds, newColNames, colIndeces);
         DataSetProxy newdsp = new DataSetProxy();
         newdsp.setDataSet(newds);
         ll.add(newdsp);
       }else{
-        getApp().alert("Couldn't add "+ ds.getName() +" because it was missing "+missingCol);
+        getApp().alert("Couldn't add "+ ds.getName() +" because: "+doubleColumnMessage);
       }
     }
 

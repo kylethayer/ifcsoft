@@ -32,10 +32,17 @@ public class rearrangeDimDataSet extends DataSet {
     means= new double[colIndeces.length];
 
     for(int i = 0; i < colIndeces.length; i++){
-      numValsInDim[i] = parentSet.getNumValsInDim(colIndeces[i]);
-      mins[i] = parentSet.getMin(colIndeces[i]);
-      maxes[i] = parentSet.getMax(colIndeces[i]);
-      means[i] = parentSet.getMean(colIndeces[i]);
+      if(colIndeces[i] == -1){
+        numValsInDim[i] = 0;
+        mins[i] = Float.NaN;
+        maxes[i] = Float.NaN;
+        means[i] = Float.NaN;
+      }else{
+        numValsInDim[i] = parentSet.getNumValsInDim(colIndeces[i]);
+        mins[i] = parentSet.getMin(colIndeces[i]);
+        maxes[i] = parentSet.getMax(colIndeces[i]);
+        means[i] = parentSet.getMean(colIndeces[i]);
+      }
     }
 
 
@@ -47,7 +54,11 @@ public class rearrangeDimDataSet extends DataSet {
 
     System.out.print("from old:");
     for(int i = 0; i < colIndeces.length; i++){
-      System.out.print(parentSet.getColLabels()[colIndeces[i]] + ", ");
+      if(colIndeces[i] == -1){
+        System.out.print("Missing Dimension,");
+      }else{
+        System.out.print(parentSet.getColLabels()[colIndeces[i]] + ", ");
+      }
     }
     System.out.println();
 
@@ -64,7 +75,11 @@ public class rearrangeDimDataSet extends DataSet {
     float[] parentvals = parentSet.getVals(index);
     float[] newvals = new float[getDimensions()];
     for(int i = 0; i < colIndeces.length; i++){
-      newvals[i] = parentvals[colIndeces[i]];
+      if(colIndeces[i] == -1){
+        newvals[i] = Float.NaN;
+      }else{
+        newvals[i] = parentvals[colIndeces[i]];
+      }
     }
     return newvals;
   }

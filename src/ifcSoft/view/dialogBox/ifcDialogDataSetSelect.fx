@@ -109,8 +109,9 @@ public class ifcDialogDataSetSelect extends ifcDialogItem{
   }
 
 
-  public function getDataSets():DataSetProxy[]{
-    return datasets;
+  public function getDataSet():DataSetProxy{
+    return mainApp.mainMediator.getDataSet(datasets,synchColumns);
+    //return datasets;
   }
 
    public function getSynchColumns():synchedColumn[]{

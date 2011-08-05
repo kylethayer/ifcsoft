@@ -24,7 +24,6 @@ import javafx.scene.layout.VBox;
 import javafx.scene.layout.HBox;
 import javafx.scene.shape.Rectangle;
 import ifcSoft.view.dialogBox.ifcDialogScrollView;
-import javafx.scene.Node;
 import javafx.scene.paint.Color;
 import javafx.scene.layout.Stack;
 import javafx.scene.text.Text;
@@ -32,6 +31,7 @@ import javafx.scene.layout.LayoutInfo;
 import javafx.scene.input.MouseEvent;
 import javafx.scene.control.TextBox;
 import javafx.scene.input.InputMethodEvent;
+import javafx.stage.Alert;
 
 
 
@@ -40,17 +40,15 @@ public class SynchDataTable extends ifcDialogItem{
   public-init var initialColNames:String[];
   public var width:Integer = 600;
   var cols:synchedColumnFX[];
-  var notPlaced:String[];
-  //how do I store current col thingies?
-
-  //put editable labels at top for final column titles.
-
-  //below that have places where you can drag around the different column names
-  //that match up with it
-
-  //option needed to replace column names in data sets
-
-  //put the whole thing in a scrollable area? have input max size thingies?
+  var notPlacedCol:synchedColumnFX =
+    synchedColumnFX{
+      colName: "Unused"
+      sourceNames: []
+      boxWidth:bind boxWidth
+      highlightBox: highlightBox
+      moveString: moveString
+    };
+  var scrollArea:ifcDialogScrollView;
 
   var boxWidth:Integer = 85;
   var unusedBoxWidth:Integer = bind boxWidth;
@@ -81,6 +79,7 @@ public class SynchDataTable extends ifcDialogItem{
       }
 
     }
+
 
   function updateDimText(colNum:Integer):Void{
     cols[colNum].colName = dimInputTextBoxes[colNum].rawText;
@@ -114,7 +113,7 @@ public class SynchDataTable extends ifcDialogItem{
                   }else if (e.controlDown) {
                     delete col from cols;
                     for(name in col.sourceNames){
-                      insert name into notPlaced;
+                      insert name into notPlacedCol.sourceNames;
                     }
 
                   }
@@ -155,38 +154,16 @@ public class SynchDataTable extends ifcDialogItem{
         HBox{ //col labels associated with dimension name
           layoutInfo:LayoutInfo{hfill:false} //so it doesn't widen this
           content: bind for(col in cols){
-              Stack{
-                content:[
-                  Rectangle{
-                    height:200
-                    width: boxWidth
-                    fill: Color.rgb(179,159,132)
-                    stroke: Color.BLACK
-                    onMouseClicked: tableClicked
-                  },
-                  VBox{
-                    translateX:5
-                    content: bind for(string in col.sourceNames){
-                        Text{
-                          content:string
-                          wrappingWidth:boxWidth - 30
-                        }
-                    }
-                  }
-
-
-
-                ]
-              }
+              col.entryColumn
             }
         }
-
       ]
     }
 
     var unPlacedColNode = VBox{
+      blocksMouse:true
       layoutInfo:LayoutInfo{vfill:false} //so it doesn't widen this
-      content:[
+      content:bind [
         Stack{
           content:[
             Rectangle{
@@ -197,51 +174,30 @@ public class SynchDataTable extends ifcDialogItem{
             },
             Text{
               x:5
-              content:"Unused"
+              content:notPlacedCol.colName
               wrappingWidth:boxWidth - 10
               onMouseClicked: tableClicked
             }
           ]
         },
-        Stack{
-          content:[
-            Rectangle{
-              height:200
-              width: boxWidth
-              fill: Color.rgb(179,159,132)
-              stroke: Color.BLACK
-              onMouseClicked: tableClicked
-            },
-            VBox{
-              translateX:5
-              content: bind for(string in notPlaced){
-                  Text{
-                    content:string
-                    wrappingWidth:boxWidth - 10
-                  }
-              }
-            }
-          ]
-        }
+        notPlacedCol.entryColumn
       ]
     }
+
+    scrollArea = ifcDialogScrollView{
+        maxHeight: 300;
+        maxWidth: usedBoxesSpaceLeft
+        node:colNodes
+      }
 
 
     children =
       VBox{
         spacing: 4
         content:[
-          //Text {content: name},
-          //description line?
-          //editable column labels, with ability to add new one and a place for unused
           HBox{
-            content:[
-              ifcDialogScrollView{
-                
-                maxHeight: 300;
-                maxWidth: usedBoxesSpaceLeft
-                node:colNodes
-              },
+            content: bind[
+              scrollArea,
               Rectangle{
                 onMouseClicked: tableClicked
                 height:1
@@ -270,16 +226,68 @@ public class SynchDataTable extends ifcDialogItem{
 
 
   function addColumn(e:MouseEvent):Void{
-    insert synchedColumnFX{colName: "Dim {cols.size()}"  sourceNames: []} into cols;
+    insert synchedColumnFX{
+            colName: "Dim {cols.size()}"
+            sourceNames: []
+            boxWidth:bind boxWidth
+            highlightBox: highlightBox
+            moveString: moveString
+        } into cols;
   }
 
 
- function tableClicked(e:MouseEvent):Void{
-   if(dimLabelBeingEdited != -1){
-     updateDimText(dimLabelBeingEdited);
-   }
+  function tableClicked(e:MouseEvent):Void{
+    if(dimLabelBeingEdited != -1){
+      updateDimText(dimLabelBeingEdited);
+    }
+  }
 
- }
+  function highlightBox(sourceCol:synchedColumnFX, e:MouseEvent):Void{
+    for(col in cols){
+      //see if it is over the column
+      if(e != null and sourceCol != col
+            and scrollArea.contains(scrollArea.sceneToLocal(e.sceneX, e.sceneY))
+            and col.colRectangle.contains(col.colRectangle.sceneToLocal(e.sceneX, e.sceneY))){
+        col.colRectangle.fill = Color.LIGHTGRAY
+      }else{
+        col.colRectangle.fill = Color.rgb(179,159,132)
+      }
+    }
+
+    if(e != null and sourceCol != notPlacedCol
+        and notPlacedCol.colRectangle.contains(notPlacedCol.colRectangle.sceneToLocal(e.sceneX, e.sceneY))){
+      notPlacedCol.colRectangle.fill = Color.LIGHTGRAY
+    }else{
+      notPlacedCol.colRectangle.fill = Color.rgb(179,159,132)
+    }
+
+
+
+  }
+
+  function moveString(sourceCol:synchedColumnFX, name:String, e:MouseEvent):Void{
+    var columnIn = -1;
+    if(scrollArea.contains(scrollArea.sceneToLocal(e.sceneX, e.sceneY))){ // if it's in the scroll area
+      for(col in cols){ //check to see if it's over any of the columns
+        if(e != null and sourceCol != col
+              and col.colRectangle.contains(col.colRectangle.sceneToLocal(e.sceneX, e.sceneY))){
+          columnIn = indexof col;
+        }
+      }
+    }
+
+    if(columnIn != -1){ //if we need to move it to one of the main columns
+      insert name into cols[columnIn].sourceNames;
+      delete name from sourceCol.sourceNames;
+
+    }else if(e != null and sourceCol != notPlacedCol   //if moved to not placed column
+        and notPlacedCol.colRectangle.contains(notPlacedCol.colRectangle.sceneToLocal(e.sceneX, e.sceneY))){
+
+      insert name into notPlacedCol.sourceNames;
+      delete name from sourceCol.sourceNames;
+    }
+  }
+
 
 
   public function getInput():synchedColumnFX[]{
@@ -288,7 +296,17 @@ public class SynchDataTable extends ifcDialogItem{
   }
 
   override function validate():Boolean{
-    //check if all files will have all columns
+    //check to make sure each column has at least one thing linked to it
+    var emptyCols:synchedColumnFX[] = [];
+    for(col in cols){
+      if(col.sourceNames.size() == 0){
+        insert col into emptyCols;
+      }
+    }
+    if(emptyCols.size() > 0){
+      Alert.inform("Error: Some Dimensions Empty: {for(col in emptyCols){"{col.colName},"}}");
+      return false;
+    }
     return true;
   }
 
@@ -298,6 +316,9 @@ public class SynchDataTable extends ifcDialogItem{
       var newCol = synchedColumnFX{
         colName: colName
         sourceNames: colName
+        boxWidth: bind boxWidth
+        highlightBox: highlightBox
+        moveString: moveString
        };
       insert newCol into cols;
     }
@@ -327,9 +348,8 @@ public class SynchDataTable extends ifcDialogItem{
       }
 
       if(not hasBeenPlaced){
-        println("Not placed: {dimName}");
         var isInCol:Boolean = false;
-        for(name in notPlaced){
+        for(name in notPlacedCol.sourceNames){
           if(dimName.equalsIgnoreCase(name)){
             hasBeenPlaced = true;
             isInCol = true;
@@ -337,22 +357,23 @@ public class SynchDataTable extends ifcDialogItem{
           }
         }
         if(not isInCol){
-          if(notPlaced.size() < 1){
-            notPlaced = [dimName];
-            println("length: {notPlaced.size()} and for fun: {[dimName].size()}");
+          if(notPlacedCol.sourceNames.size() < 1){
+            notPlacedCol.sourceNames = [dimName];
           }else{
-            insert dimName into notPlaced;
+            insert dimName into notPlacedCol.sourceNames;
           }
-          println("adding: {dimName}");
         }
       }
     }
 
-    println("All unplaced: {for(string in notPlaced){"{string}, "}}");
-    println("length: {notPlaced.size()}");
-
   }
 
+
+ /**
+  * This function checks to see if two dimension names are close enough for the
+  * program to guess that they are really the same. This is particularly made
+  * to handle names that come with Flow Cytometry files.
+  */
   function areAproxSame(s1:String, s2:String):Boolean{
     if(s1.equalsIgnoreCase(s2)){//first, normal equals
       return true;

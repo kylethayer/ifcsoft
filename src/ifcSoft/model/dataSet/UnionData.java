@@ -19,7 +19,6 @@
 package ifcSoft.model.dataSet;
 
 import ifcSoft.model.DataSetProxy;
-import ifcSoft.view.synchDataSets.synchedColumn;
 import java.util.Arrays;
 
 import java.util.LinkedList;
@@ -265,13 +264,14 @@ public class UnionData extends DataSet {
     for(int i = 0; i < parentSets.size(); i++){
       DataSet currentset = parentSets.get(i).getData();
       for(int k = 0; k < getDimensions(); k++){
-        means[k]+= (currentset.getNumValsInDim(k)/(double) numValsInDim[k])* currentset.means[k];
-
-        if(currentset.mins[k] < mins[k]){
-          mins[k] = currentset.mins[k];
-        }
-        if(currentset.maxes[k] > maxes[k]){
-          maxes[k] = currentset.maxes[k];
+        if(currentset.getNumValsInDim(k) > 0){
+          means[k]+= (currentset.getNumValsInDim(k)/(double) numValsInDim[k])* currentset.means[k];
+          if(currentset.mins[k] < mins[k]){
+            mins[k] = currentset.mins[k];
+          }
+          if(currentset.maxes[k] > maxes[k]){
+            maxes[k] = currentset.maxes[k];
+          }
         }
       }
     }
