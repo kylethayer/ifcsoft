@@ -124,7 +124,7 @@ public class MainApp extends MainAppI {
   
 
   var stage:Stage = Stage {
-    title: "IFCSoft Version 0.4"
+    title: "IFCSoft Version 0.4.1"
     scene:  scene = Scene {
       width: 750
       height: 600
