@@ -371,7 +371,7 @@ public class CalcSOMDialog {
     };
 
     allowMissingValsInput = ifcDialogChoiceBox{
-      name:"Allow points with missing values:"
+      name:"Use points depending on missing dimensions:"
       items: missingValOptions
       initialSelectedItem: somSettings.allowMissingPointsType
     };

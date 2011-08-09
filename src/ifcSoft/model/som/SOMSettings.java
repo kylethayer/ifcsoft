@@ -43,9 +43,9 @@ public class SOMSettings {
   public static final String CLASSICSOM = "Incremental SOM";
   public static final String BATCHSOM = "Batch SOM";
 
-  public static final String USEALLPOINTS = "Use All";
-  public static final String HALFMISSING = "At least half the used dimensions present";
-  public static final String COMPLETEPOINTS = "Only points with all dimensions";
+  public static final String USEALLPOINTS = "Use all points regardless.";
+  public static final String HALFMISSING = "Only points with at least half the used dimensions";
+  public static final String COMPLETEPOINTS = "Only points with all used dimensions present";
 
   public DataSetProxy datasetproxy;
   public DataSetScalar datasetscalar;
