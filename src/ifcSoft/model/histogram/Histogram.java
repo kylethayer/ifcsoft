@@ -199,25 +199,27 @@ public class Histogram {
     double min = lowerLimits[0];
     double max = lowerLimits[numBars];
     for(int i = 0; i < ds.length(); i++){
-      int barNum = (int) ((ds.getVals(i)[dimension] - min) / barWidth);
+      if(!Float.isNaN(ds.getVals(i)[dimension])){
+        int barNum = (int) ((ds.getVals(i)[dimension] - min) / barWidth);
 
-      if(barNum >= numBars){ //if it placed it out of our range
-        if(ds.getVals(i)[dimension] > max){
-          System.out.println("point "+i+" truly too large");
+        if(barNum >= numBars){ //if it placed it out of our range
+          if(ds.getVals(i)[dimension] > max){
+            System.out.println("point "+i+" truly too large");
+          }
+          barNum = numBars - 1;
         }
-        barNum = numBars - 1;
-      }
-      if(barNum < 0){
-        if(ds.getVals(i)[dimension] < min){
-          System.out.println("point "+i+" truly too small");
+        if(barNum < 0){
+          if(ds.getVals(i)[dimension] < min){
+            System.out.println("point "+i+" truly too small");
+          }
+          barNum = 0;
         }
-        barNum = 0;
-      }
 
-      barTotalSizes[barNum]++;
-      String set = ds.getPointSetName(i);
-      int setNum = rawSetNames.indexOf(set);
-      barSetSizes[setNum][barNum]++;
+        barTotalSizes[barNum]++;
+        String set = ds.getPointSetName(i);
+        int setNum = rawSetNames.indexOf(set);
+        barSetSizes[setNum][barNum]++;
+      }
     }
   }
 
@@ -225,28 +227,30 @@ public class Histogram {
     double min = lowerLimits[0];
     double max = lowerLimits[numBars];
     for(int i = 0; i < ds.length(); i++){
-      int barNum = (int) (
-          Math.log10(
-            (ds.getVals(i)[dimension] - min)*9.0 / (max - min) + 1
-          ) 
-        / logBarWidth);
-      if(barNum >= numBars){ //if it placed it out of our range
-        if(ds.getVals(i)[dimension] > max){
-          System.out.println("point "+i+" truly too large");
+      if(!Float.isNaN(ds.getVals(i)[dimension])){
+        int barNum = (int) (
+            Math.log10(
+              (ds.getVals(i)[dimension] - min)*9.0 / (max - min) + 1
+            )
+          / logBarWidth);
+        if(barNum >= numBars){ //if it placed it out of our range
+          if(ds.getVals(i)[dimension] > max){
+            System.out.println("point "+i+" truly too large");
+          }
+          barNum = numBars - 1;
         }
-        barNum = numBars - 1;
-      }
-      if(barNum < 0){
-        if(ds.getVals(i)[dimension] < min){
-          System.out.println("point "+i+" truly too small");
+        if(barNum < 0){
+          if(ds.getVals(i)[dimension] < min){
+            System.out.println("point "+i+" truly too small");
+          }
+          barNum = 0;
         }
-        barNum = 0;
-      }
 
-      barTotalSizes[barNum]++;
-      String set = ds.getPointSetName(i);
-      int setNum = rawSetNames.indexOf(set);
-      barSetSizes[setNum][barNum]++;
+        barTotalSizes[barNum]++;
+        String set = ds.getPointSetName(i);
+        int setNum = rawSetNames.indexOf(set);
+        barSetSizes[setNum][barNum]++;
+      }
     }
   }
 
