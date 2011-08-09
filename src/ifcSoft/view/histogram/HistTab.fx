@@ -90,7 +90,7 @@ public class HistTab extends HistTabI{
       }
     };
 
-  var numBars = 40; //defualt is 20
+  var numBars = 40; //defualt is 40
 
 
   /*********** Interactive Selection Elements ***********/
@@ -395,7 +395,7 @@ public class HistTab extends HistTabI{
     var axisVals:Node[];
     if(scaleType == 0){//linear scale
       var min = histogram.getBarLowerLim(0);
-      var max = histogram.getBarUpperLim(numBars-1);
+      var max = histogram.getBarUpperLim(histogram.numBars()-1);
 
       var delta = max-min;
       var maxGap = delta / 5; // min of 5 labeled points
@@ -425,7 +425,7 @@ public class HistTab extends HistTabI{
       }
     }else if (scaleType == 1){//log scale
       var min = histogram.getBarLowerLim(0);
-      var max = histogram.getBarUpperLim(numBars-1);
+      var max = histogram.getBarUpperLim(histogram.numBars()-1);
 
       var delta = max-min;
       //var logDelta = Math.log10(delta);

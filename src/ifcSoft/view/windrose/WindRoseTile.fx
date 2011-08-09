@@ -190,12 +190,13 @@ public class WindRoseTile extends CustomNode{
             Arc {
               centerX: bind unitRadius + explodeAmt * Math.cos( (dim+.5)*6.28318531/dimensions )
               centerY: bind unitRadius - explodeAmt * Math.sin( (dim+.5)*6.28318531/dimensions )
-              radiusX: bind unitRadius*lengths[dim]
-              radiusY: bind unitRadius*lengths[dim]
+              radiusX: bind if(not Float.isNaN(lengths[dim])){unitRadius*lengths[dim]} else{unitRadius*.5}
+              radiusY: bind if(not Float.isNaN(lengths[dim])){unitRadius*lengths[dim]} else{unitRadius*.5}
               startAngle: (dim*1.0)/dimensions * 360.0
               length: 360.0 / dimensions
               fill: colors[dim]
               type: ArcType.ROUND
+              opacity: if(not Float.isNaN(lengths[dim])){1} else{.15}
             }
           }
         ]

@@ -264,39 +264,40 @@ public class ScatterPlot {
     double yWidth = ylowerLimits[1] - ylowerLimits[0];
 
     for(int i = 0; i < ds.length(); i++){
+      if(!Float.isNaN(ds.getVals(i)[xDim])|| !Float.isNaN(ds.getVals(i)[yDim])){
+        int xNum = (int) ((ds.getVals(i)[xDim] - minX) / xWidth);
+        int yNum = (int) ((ds.getVals(i)[yDim] - minY) / yWidth);
 
-      int xNum = (int) ((ds.getVals(i)[xDim] - minX) / xWidth);
-      int yNum = (int) ((ds.getVals(i)[yDim] - minY) / yWidth);
+        if(xNum >= xRes){ //if it placed it out of our range on x
+          if(ds.getVals(i)[xDim] > maxX){
+            //System.out.println("point "+i+" truly too large");
+          }
+          xNum = xRes - 1;
+        }
+        if(xNum < 0){
+          if(ds.getVals(i)[xDim] < minX){
+            //System.out.println("point "+i+" truly too small");
+          }
+          xNum = 0;
+        }
+        if(yNum >= yRes){ //if it placed it out of our range on x
+          if(ds.getVals(i)[yDim] > maxY){
+            //System.out.println("point "+i+" truly too large");
+          }
+          yNum = yRes - 1;
+        }
+        if(yNum < 0){
+          if(ds.getVals(i)[yDim] < minY){
+            //System.out.println("point "+i+" truly too small");
+          }
+          yNum = 0;
+        }
 
-      if(xNum >= xRes){ //if it placed it out of our range on x
-        if(ds.getVals(i)[xDim] > maxX){
-          //System.out.println("point "+i+" truly too large");
-        }
-        xNum = xRes - 1;
+        pntTotalSizes[xNum][yNum]++;
+        String set = ds.getPointSetName(i);
+        int setNum = rawSetNames.indexOf(set);
+        pntSetSizes[setNum][xNum][yNum]++;
       }
-      if(xNum < 0){
-        if(ds.getVals(i)[xDim] < minX){
-          //System.out.println("point "+i+" truly too small");
-        }
-        xNum = 0;
-      }
-      if(yNum >= yRes){ //if it placed it out of our range on x
-        if(ds.getVals(i)[yDim] > maxY){
-          //System.out.println("point "+i+" truly too large");
-        }
-        yNum = yRes - 1;
-      }
-      if(yNum < 0){
-        if(ds.getVals(i)[yDim] < minY){
-          //System.out.println("point "+i+" truly too small");
-        }
-        yNum = 0;
-      }
-
-      pntTotalSizes[xNum][yNum]++;
-      String set = ds.getPointSetName(i);
-      int setNum = rawSetNames.indexOf(set);
-      pntSetSizes[setNum][xNum][yNum]++;
     }
   }
 
